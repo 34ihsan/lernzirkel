@@ -1,0 +1,251 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Department {
+  id           String         @id @default(uuid())
+  name         String
+  description  String?
+  email        String?
+  phone        String?
+  openingHours OpeningHours[]
+  teamMembers  TeamMember[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model OpeningHours {
+  id           String     @id @default(uuid())
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  dayOfWeek    Int // 1 (Montag) bis 7 (Sonntag)
+  openTime     String? // z.B. "09:00"
+  closeTime    String? // z.B. "17:00"
+  isClosed     Boolean    @default(false)
+  note         String? // z.B. "Nur nach Terminvereinbarung"
+}
+
+enum CourseCategory {
+  INTEGRATION
+  SPRACHE
+  NACHHILFE
+  GRUNDBILDUNG
+  ANDERE
+}
+
+model Course {
+  id             String         @id @default(uuid())
+  category       CourseCategory
+  title          String
+  description    String
+  targetAudience String?
+  requirements   String?
+  costsInfo      String?
+  startDate      DateTime?
+  endDate        DateTime?
+  isActive       Boolean        @default(true)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  registrations  Registration[]
+}
+
+enum ProjectStatus {
+  AKTIV
+  ABGESCHLOSSEN
+}
+
+model Project {
+  id              String        @id @default(uuid())
+  title           String
+  status          ProjectStatus @default(AKTIV)
+  description     String
+  goals           String?
+  targetGroup     String?
+  contactPersonId String?
+  contactPerson   TeamMember?   @relation(fields: [contactPersonId], references: [id], onDelete: SetNull)
+  imageUrl        String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model TeamMember {
+  id           String      @id @default(uuid())
+  name         String
+  role         String
+  bio          String?
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  email        String?
+  phone        String?
+  photoUrl     String?
+  adminRole    String?     // "ADMIN" | "EDITOR" | "VIEWER" | null
+  permissions  Json?       // { pages: bool, news: bool, courses: bool, team: bool, gallery: bool, projects: bool, design: bool }
+  projects     Project[]
+}
+
+model GalleryImage {
+  id        String   @id @default(uuid())
+  title     String
+  imageUrl  String
+  category  String?
+  createdAt DateTime @default(now())
+}
+
+model News {
+  id          String    @id @default(uuid())
+  title       String
+  content     String
+  publishDate DateTime  @default(now())
+  archiveDate DateTime?
+  imageUrl    String?
+  design      Json?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model SiteSettings {
+  id              String   @id @default("global")
+  siteName        String   @default("Lernzirkel Ludwigshafen e.V.")
+  description     String   @default("Bildung, Beratung und soziale Projekte")
+  primaryColor    String   @default("#0F4761")
+  primaryLight    String   @default("#1a6d92")
+  secondaryColor  String   @default("#e8f4f8")
+  accentColor     String   @default("#e63946")
+  backgroundColor String   @default("#fbfbfb")
+  foregroundColor String   @default("#333333")
+  mutedColor      String   @default("#f1f1f1")
+  headerConfig    Json?
+  footerConfig    Json?
+  designConfig    Json?
+  marketingConfig Json?
+  aiConfig        Json?
+  securityConfig  Json?
+  updatedAt       DateTime @default(now()) @updatedAt
+}
+
+model Page {
+  id          String    @id @default(uuid())
+  title       String
+  slug        String    @unique
+  description String?
+  isPublished Boolean   @default(true)
+  parentId    String?
+  parent      Page?     @relation("PageHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children    Page[]    @relation("PageHierarchy")
+  order       Int       @default(0)
+  sections    Section[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Section {
+  id        String   @id @default(uuid())
+  pageId    String
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  type      String
+  content   Json
+  design    Json?
+  order     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Announcement {
+  id              String    @id @default(uuid())
+  title           String
+  message         String
+  isActive        Boolean   @default(true)
+  isCloseable     Boolean   @default(true)
+  startDate       DateTime?
+  endDate         DateTime?
+  // Hedefleme: "ALL" | "HOME" | "SELECTED"
+  targetScope     String    @default("ALL")
+  targetPageSlugs String[]
+  // Görünüm tipi: "banner" | "sticky-bar" | "toast" | "popup"
+  type            String    @default("banner")
+  // Konum: "top" | "bottom"
+  position        String    @default("top")
+  // Stil
+  backgroundColor String    @default("#1a6d92")
+  textColor       String    @default("#ffffff")
+  borderColor     String    @default("transparent")
+  fontSize        String    @default("14px")
+  fontWeight      String    @default("normal")
+  padding         String    @default("12px 16px")
+  // İkon: "none" | "info" | "warning" | "megaphone"
+  icon            String    @default("none")
+  animation       String    @default("none")
+  animationSpeed  String    @default("normal")
+  duration        Int       @default(7)
+  isInline        Boolean   @default(true)
+  linkUrl         String?
+  linkText        String?
+  translations    Json?     // { "tr": { title, message, linkText }, "en": { ... }, "ar": { ... } }
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+// -----------------------------------------
+// NEW MODELS FOR ADVANCED FEATURES & ADMIN APPROVALS
+// -----------------------------------------
+
+model Registration {
+  id        String   @id @default(uuid())
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  name      String
+  email     String
+  phone     String?
+  message   String?
+  language  String   @default("de")
+  status    String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LeadApplication {
+  id             String    @id @default(uuid())
+  name           String
+  email          String
+  phone          String?
+  serviceType    String    // BAMF_INTEGRATION, NACHHILFE_BUT, TELC_PRUEFUNG, OTHER
+  benefitType    String?   // BUERGERGELD, WOHNGELD, KINDERZUSCHLAG, ASYLBLG, NONE, UNKNOWN
+  city           String?
+  estimatedGrant String?   // e.g. "100% Kostenlos (BAMF / BuT)"
+  message        String?
+  fileUrl        String?   // Yüklenen belge dosya yolu (PDF, JPG, PNG)
+  fileName       String?   // Orijinal dosya adı
+  fileSize       Int?      // Boyut (bytes)
+  consentGiven   Boolean   @default(true) // DSGVO Açık Rıza
+  consentText    String?   // Verilen onay metni
+  expiresAt      DateTime? // Yasal imha tarihi (Retention expiration)
+  isPurged       Boolean   @default(false) // Veri imha edildi mi?
+  purgedAt       DateTime? // İmha edilme zamanı
+  language       String    @default("de")
+  status         String    @default("PENDING") // PENDING (Onay Bekliyor), APPROVED (Onaylandı), CONTACTED (İletişime Geçildi), REJECTED (Reddedildi)
+  adminNote      String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model EventLog {
+  id        String   @id @default(uuid())
+  eventName String   // e.g. "whatsapp_click", "phone_call", "grant_wizard_complete", "course_view"
+  url       String
+  locale    String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  action    String   // e.g. "UPDATE_MARKETING_SETTINGS", "APPROVE_APPLICATION", "TOGGLE_AI"
+  adminUser String   @default("Admin")
+  details   Json?
+  createdAt DateTime @default(now())
+}
+
