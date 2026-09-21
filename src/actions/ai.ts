@@ -2,15 +2,9 @@
 
 import prisma from "@/lib/prisma";
 import { revalidatePath, updateTag } from "next/cache";
+import { AIConfig, DEFAULT_KNOWLEDGE_TOPICS } from "@/lib/ai-config";
 
-export interface AIConfig {
-  aiEnabled: boolean;
-  provider: "builtin" | "gemini" | "openai";
-  apiKey?: string;
-  model?: string;
-  customInstructions?: string;
-  allowedLanguages?: string[];
-}
+export type { AIConfig, KnowledgeTopic } from "@/lib/ai-config";
 
 export async function getAISettings(): Promise<AIConfig> {
   const settings = await prisma.siteSettings.findUnique({
@@ -26,6 +20,9 @@ export async function getAISettings(): Promise<AIConfig> {
     model: config.model || "gemini-1.5-flash",
     customInstructions: config.customInstructions || "",
     allowedLanguages: config.allowedLanguages || ["de", "tr", "ar", "en"],
+    knowledgeTopics: Array.isArray(config.knowledgeTopics) && config.knowledgeTopics.length > 0
+      ? config.knowledgeTopics
+      : DEFAULT_KNOWLEDGE_TOPICS,
   };
 }
 
@@ -49,6 +46,7 @@ export async function updateAISettings(config: AIConfig) {
         details: {
           aiEnabled: config.aiEnabled,
           provider: config.provider,
+          topicsCount: config.knowledgeTopics?.length || 0,
           hasCustomInstructions: Boolean(config.customInstructions),
         },
       },

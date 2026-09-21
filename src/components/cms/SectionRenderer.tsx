@@ -188,9 +188,7 @@ export default function SectionRenderer({ section }: { section: any }) {
                       </h3>
                     )}
                     {item.description && (
-                      <p className="text-gray-500 text-sm mb-4 leading-relaxed flex-grow">
-                        {item.description}
-                      </p>
+                      <div className="text-gray-500 text-sm mb-4 leading-relaxed flex-grow" dangerouslySetInnerHTML={{ __html: item.description }} />
                     )}
                     {item.linkText && (
                       <span className="text-primary text-sm flex items-center font-semibold mt-auto pt-2">
@@ -301,7 +299,7 @@ export default function SectionRenderer({ section }: { section: any }) {
                 )}
                 {content.title && <h2 className="text-3xl md:text-4xl font-bold mb-6 text-primary">{content.title}</h2>}
                 {content.text && (
-                  <div className="prose max-w-none text-gray-700 mb-6 leading-relaxed" dangerouslySetInnerHTML={{ __html: content.text.replace(/\n/g, '<br/>') }} />
+                  <div className="prose max-w-none text-gray-700 mb-6 leading-relaxed" dangerouslySetInnerHTML={{ __html: content.text }} />
                 )}
                 {Array.isArray(content.bullets) && content.bullets.length > 0 && (
                   <ul className="space-y-3 mb-8">
@@ -338,7 +336,7 @@ export default function SectionRenderer({ section }: { section: any }) {
             {content.title && <h2 className="text-3xl md:text-4xl font-bold mb-6 text-primary">{content.title}</h2>}
             {content.leadText && <p className="text-xl text-gray-600 mb-6 font-light leading-relaxed">{content.leadText}</p>}
             {content.text && (
-              <div className="prose max-w-none text-gray-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: content.text.replace(/\n/g, '<br/>') }} />
+              <div className="prose max-w-none text-gray-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: content.text }} />
             )}
           </div>
         </section>
@@ -360,7 +358,7 @@ export default function SectionRenderer({ section }: { section: any }) {
                     </div>
                   )}
                   {item.title && <h3 className="text-xl font-bold mb-3 text-foreground">{item.title}</h3>}
-                  {item.text && <p className="text-gray-600 text-sm leading-relaxed">{item.text}</p>}
+                  {item.text && <div className="text-gray-600 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: item.text }} />}
                 </div>
               ))}
             </div>
@@ -605,9 +603,10 @@ function FaqSection({ content, isCustomBg, hasGradient, bgColor, textColor, isCu
                 <ChevronDown className={`w-5 h-5 shrink-0 ml-4 transition-transform duration-200 ${openIndex === i ? 'rotate-180 text-primary' : 'text-gray-400'}`} />
               </button>
               {openIndex === i && (
-                <div className="px-6 py-4 bg-gray-50/60 border-t border-gray-100 text-gray-600 text-sm leading-relaxed animate-in fade-in">
-                  {faq.answer}
-                </div>
+                <div 
+                  className="px-6 py-4 bg-gray-50/60 border-t border-gray-100 text-gray-600 text-sm leading-relaxed animate-in fade-in prose max-w-none"
+                  dangerouslySetInnerHTML={{ __html: faq.answer }}
+                />
               )}
             </div>
           ))}
@@ -918,10 +917,9 @@ function TestimonialsSection({ content, design, sectionStyle, bgColor, textColor
                     <Star key={i} size={16} className="fill-current" />
                   ))}
                 </div>
-                {/* Quote text */}
-                <p className="text-gray-700 text-sm sm:text-base italic leading-relaxed mb-6">
-                  &ldquo;{item.quote}&rdquo;
-                </p>
+                <div className="text-gray-700 text-sm sm:text-base italic leading-relaxed mb-6">
+                  &ldquo;<span dangerouslySetInnerHTML={{ __html: item.quote }} />&rdquo;
+                </div>
               </div>
 
               {/* Author info */}
@@ -1003,9 +1001,7 @@ function TimelineSection({ content, design, sectionStyle, bgColor, textColor, pa
               <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
                 {step.title}
               </h3>
-              <p className="text-gray-500 text-xs sm:text-sm leading-relaxed mb-4 flex-1">
-                {step.description}
-              </p>
+              <div className="text-gray-500 text-xs sm:text-sm leading-relaxed mb-4 flex-1" dangerouslySetInnerHTML={{ __html: step.description }} />
 
               {step.badge && (
                 <span className="text-[11px] font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg w-fit">
@@ -1159,9 +1155,7 @@ function PricingSection({ content, design, sectionStyle, bgColor, textColor, pad
                   {plan.title}
                 </h3>
                 {plan.description && (
-                  <p className={`text-xs mb-6 ${isFeatured ? 'text-blue-100' : 'text-gray-500'}`}>
-                    {plan.description}
-                  </p>
+                  <div className={`text-xs mb-6 ${isFeatured ? 'text-blue-100' : 'text-gray-500'}`} dangerouslySetInnerHTML={{ __html: plan.description }} />
                 )}
 
                 <div className="mb-6 flex items-baseline gap-1.5">

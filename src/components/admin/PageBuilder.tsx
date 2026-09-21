@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import ImageUploadInput from "@/components/admin/ImageUploadInput";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import { 
   Plus, GripVertical, Trash2, Settings, ChevronDown, ChevronUp, 
   Save, X, Eye, EyeOff, Copy, ExternalLink, Sliders, Type, 
@@ -639,13 +640,14 @@ export default function PageBuilder({
                                           className="border rounded px-2.5 py-1.5 text-sm"
                                         />
                                       </div>
-                                      <textarea
-                                        rows={2}
-                                        placeholder="Kart Açıklaması..."
-                                        value={card.description || ''}
-                                        onChange={e => updateArrayItem(section.id, 'items', cIdx, 'description', e.target.value)}
-                                        className="w-full border rounded px-2.5 py-1.5 text-sm text-gray-600"
-                                      />
+                                      <div className="mt-2">
+                                        <RichTextEditor
+                                          label="Kart Açıklaması"
+                                          rows={2}
+                                          value={card.description || ''}
+                                          onChange={v => updateArrayItem(section.id, 'items', cIdx, 'description', v)}
+                                        />
+                                      </div>
                                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                         <input
                                           type="text"
@@ -701,7 +703,7 @@ export default function PageBuilder({
                               <div className="space-y-4">
                                 <Input label="Üst Başlık (Eyebrow)" value={section.content?.eyebrow} onChange={v => updateSectionData(section.id, 'content', 'eyebrow', v)} />
                                 <Input label="Ana Başlık" value={section.content?.title} onChange={v => updateSectionData(section.id, 'content', 'title', v)} />
-                                <TextArea label="Ana Metin" value={section.content?.text} onChange={v => updateSectionData(section.id, 'content', 'text', v)} />
+                                <RichTextEditor label="Ana Metin" value={section.content?.text} onChange={v => updateSectionData(section.id, 'content', 'text', v)} />
                                 <div><label className="block text-xs font-semibold text-gray-700 mb-1">Görsel URL</label><ImageUploadInput value={section.content?.imageUrl || ""} onChange={v => updateSectionData(section.id, 'content', 'imageUrl', v)} /></div>
                                 <div>
                                   <label className="block text-xs font-semibold text-gray-600 mb-1">Görsel Konumu</label>
@@ -727,7 +729,7 @@ export default function PageBuilder({
                                 <Input label="Üst Başlık (Eyebrow)" value={section.content?.eyebrow} onChange={v => updateSectionData(section.id, 'content', 'eyebrow', v)} />
                                 <Input label="Başlık" value={section.content?.title} onChange={v => updateSectionData(section.id, 'content', 'title', v)} />
                                 <TextArea label="Vurgulu Giriş Paragrafı (Lead Text)" value={section.content?.leadText} onChange={v => updateSectionData(section.id, 'content', 'leadText', v)} />
-                                <TextArea rows={8} label="Ana İçerik (HTML veya Düz Metin)" value={section.content?.text} onChange={v => updateSectionData(section.id, 'content', 'text', v)} />
+                                <RichTextEditor rows={8} label="Ana İçerik (HTML veya Düz Metin)" value={section.content?.text} onChange={v => updateSectionData(section.id, 'content', 'text', v)} />
                               </div>
                             )}
 
@@ -774,13 +776,14 @@ export default function PageBuilder({
                                           ))}
                                         </select>
                                       </div>
-                                      <textarea
-                                        rows={2}
-                                        placeholder="Açıklama"
-                                        value={item.text || ''}
-                                        onChange={e => updateArrayItem(section.id, 'items', iIdx, 'text', e.target.value)}
-                                        className="w-full border rounded px-2.5 py-1 text-sm text-gray-600"
-                                      />
+                                      <div className="mt-2">
+                                        <RichTextEditor
+                                          label="Açıklama"
+                                          rows={2}
+                                          value={item.text || ''}
+                                          onChange={v => updateArrayItem(section.id, 'items', iIdx, 'text', v)}
+                                        />
+                                      </div>
                                     </div>
                                   ))}
                                 </div>
@@ -873,13 +876,14 @@ export default function PageBuilder({
                                         onChange={e => updateArrayItem(section.id, 'items', qIdx, 'question', e.target.value)}
                                         className="w-full border rounded px-2.5 py-1 text-sm font-semibold"
                                       />
-                                      <textarea
-                                        rows={3}
-                                        placeholder="Cevap..."
-                                        value={item.answer || ''}
-                                        onChange={e => updateArrayItem(section.id, 'items', qIdx, 'answer', e.target.value)}
-                                        className="w-full border rounded px-2.5 py-1 text-sm text-gray-600"
-                                      />
+                                      <div className="mt-2">
+                                        <RichTextEditor
+                                          label="Cevap"
+                                          rows={3}
+                                          value={item.answer || ''}
+                                          onChange={v => updateArrayItem(section.id, 'items', qIdx, 'answer', v)}
+                                        />
+                                      </div>
                                     </div>
                                   ))}
                                 </div>
@@ -1014,13 +1018,14 @@ export default function PageBuilder({
                                           className="border rounded px-2.5 py-1.5 text-sm"
                                         />
                                       </div>
-                                      <textarea
-                                        rows={2}
-                                        placeholder="Yorum / Deneyim Metni..."
-                                        value={item.quote || ''}
-                                        onChange={e => updateArrayItem(section.id, 'items', qIdx, 'quote', e.target.value)}
-                                        className="w-full border rounded px-2.5 py-1.5 text-sm text-gray-600"
-                                      />
+                                      <div className="mt-2">
+                                        <RichTextEditor
+                                          label="Yorum / Deneyim Metni"
+                                          rows={2}
+                                          value={item.quote || ''}
+                                          onChange={v => updateArrayItem(section.id, 'items', qIdx, 'quote', v)}
+                                        />
+                                      </div>
                                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                         <input
                                           type="text"
@@ -1107,13 +1112,14 @@ export default function PageBuilder({
                                           className="border rounded px-2.5 py-1.5 text-sm"
                                         />
                                       </div>
-                                      <textarea
-                                        rows={2}
-                                        placeholder="Adım Açıklaması..."
-                                        value={step.description || ''}
-                                        onChange={e => updateArrayItem(section.id, 'items', sIdx, 'description', e.target.value)}
-                                        className="w-full border rounded px-2.5 py-1.5 text-sm text-gray-600"
-                                      />
+                                      <div className="mt-2">
+                                        <RichTextEditor
+                                          label="Adım Açıklaması"
+                                          rows={2}
+                                          value={step.description || ''}
+                                          onChange={v => updateArrayItem(section.id, 'items', sIdx, 'description', v)}
+                                        />
+                                      </div>
                                       <div>
                                         <label className="text-xs text-gray-500 mr-2">İkon:</label>
                                         <select
@@ -1302,6 +1308,14 @@ export default function PageBuilder({
                                           <span>Öne Çıkan Vurgu (Featured)</span>
                                         </label>
                                       </div>
+                                      <div className="mt-2">
+                                        <RichTextEditor
+                                          label="Paket Açıklaması"
+                                          rows={2}
+                                          value={p.description || ''}
+                                          onChange={v => updateArrayItem(section.id, 'items', pIdx, 'description', v)}
+                                        />
+                                      </div>
                                       <textarea
                                         rows={3}
                                         placeholder="Özellikler (Her satıra bir özellik yazın)..."
@@ -1341,8 +1355,8 @@ export default function PageBuilder({
                                 <TextArea label="Bölüm Açıklaması" value={section.content?.subtitle} onChange={v => updateSectionData(section.id, 'content', 'subtitle', v)} />
                                 <Input label="YouTube / Video URL" value={section.content?.videoUrl} onChange={v => updateSectionData(section.id, 'content', 'videoUrl', v)} />
                                 <Input label="Yan Panel Başlığı" value={section.content?.leadTitle} onChange={v => updateSectionData(section.id, 'content', 'leadTitle', v)} />
-                                <TextArea label="Yan Panel Metni" value={section.content?.text} onChange={v => updateSectionData(section.id, 'content', 'text', v)} />
-                                <div>
+                                <RichTextEditor label="Yan Panel Metni" value={section.content?.text} onChange={v => updateSectionData(section.id, 'content', 'text', v)} />
+                                <div className="space-y-3 pt-2">
                                   <label className="block text-xs font-semibold text-gray-700 mb-1">Önemli Kazanımlar (Her satıra bir madde)</label>
                                   <textarea
                                     rows={3}

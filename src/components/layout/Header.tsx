@@ -175,7 +175,7 @@ export default function Header({
             } : undefined}
           >
             <div 
-              className="flex items-center hidden md:flex"
+              className="flex items-center hidden xl:flex"
               style={{ gap: `${itemGap}px` }}
             >
               {header.topBar.links?.map((item, idx) => (
@@ -219,7 +219,7 @@ export default function Header({
               style={{ gap: `${Math.max(10, itemGap - 4)}px` }}
             >
               {/* Live Opening Status Indicator */}
-              <LiveOpeningStatus className="text-white/95 hidden sm:inline-flex" />
+              <LiveOpeningStatus className="text-white/95 hidden sm:inline-flex whitespace-nowrap shrink-0" />
               {showDividers && (
                 <span className="opacity-25 select-none hidden sm:inline">|</span>
               )}
@@ -227,7 +227,7 @@ export default function Header({
               {activeTagline && (
                 <>
                   <span 
-                    className="opacity-90 hidden md:inline whitespace-nowrap"
+                    className="opacity-90 hidden lg:inline whitespace-nowrap"
                     style={{ fontSize: header.topBar.fontSize ? `${Math.max(10, header.topBar.fontSize - 1)}px` : undefined }}
                   >
                     {activeTagline}
@@ -239,7 +239,7 @@ export default function Header({
               )}
               {designConfig?.social && (designConfig.social.showInHeader ?? true) && (
                 <>
-                  <div className="hidden md:flex items-center">
+                  <div className="hidden lg:flex items-center">
                     <SocialLinksBar social={designConfig.social} variant="header" />
                   </div>
                   {showDividers && (
@@ -322,13 +322,13 @@ export default function Header({
           </Link>
 
           {header.logo?.showDivider && (
-            <div className="hidden lg:block h-6 w-px bg-gray-300 ml-3 mr-1 shrink-0" />
+            <div className="hidden xl:block h-6 w-px bg-gray-300 ml-3 mr-1 shrink-0" />
           )}
         </div>
 
         {/* 2. Desktop Navigation (Kesinlikle alt satıra kaymaz, tek satırda pürüzsüz kalır) */}
         <div 
-          className={`hidden lg:flex items-center flex-1 min-w-0 px-1 overflow-visible no-scrollbar ${
+          className={`hidden xl:flex items-center flex-1 min-w-0 px-1 overflow-visible no-scrollbar ${
             logoAlign === 'center' 
               ? 'order-2 lg:order-1' 
               : logoAlign === 'right' 
@@ -581,7 +581,7 @@ export default function Header({
                 <button
                   type="button"
                   onClick={() => setIsSearchOpen(true)}
-                  className="hidden lg:flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-gray-600 hover:text-primary hover:bg-gray-100 transition-all border border-gray-200 hover:border-gray-300 shadow-2xs"
+                  className="hidden xl:flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-gray-600 hover:text-primary hover:bg-gray-100 transition-all border border-gray-200 hover:border-gray-300 shadow-2xs"
                   title="Website durchsuchen (Strg+K / ⌘K)"
                   aria-label="Suche öffnen"
                 >
@@ -594,7 +594,7 @@ export default function Header({
               )}
 
               {ctaEnabled && (
-                <div className="hidden lg:flex items-center">
+                <div className="hidden xl:flex items-center">
                   {isCtaExternal ? (
                     <a
                       href={ctaUrl}
@@ -625,7 +625,7 @@ export default function Header({
               {header.design?.showSearch !== false && (
                 <button 
                   type="button"
-                  className="lg:hidden p-2 text-foreground hover:text-primary focus:outline-none rounded-lg hover:bg-gray-100 transition-colors"
+                  className="xl:hidden p-2 text-foreground hover:text-primary focus:outline-none rounded-lg hover:bg-gray-100 transition-colors"
                   onClick={() => setIsSearchOpen(true)}
                   aria-label="Suche öffnen"
                 >
@@ -635,7 +635,7 @@ export default function Header({
 
               {/* Mobile Hamburger Toggle */}
               <button 
-                className="lg:hidden p-2 text-foreground focus:outline-none rounded-lg hover:bg-gray-100 transition-colors"
+                className="xl:hidden p-2 text-foreground focus:outline-none rounded-lg hover:bg-gray-100 transition-colors"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label="Menü öffnen"
               >
@@ -648,7 +648,7 @@ export default function Header({
 
       {/* Mobile Menu Dropdown (Supports Responsive Hover & Tap Accordion) */}
       {mobileMenuOpen && (
-        <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-gray-100 flex flex-col p-4 z-50 max-h-[85vh] overflow-y-auto">
+        <div className="xl:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-gray-100 flex flex-col p-4 z-50 max-h-[85vh] overflow-y-auto">
           {/* Mobile Search Bar Trigger */}
           {header.design?.showSearch !== false && (
             <div className="pb-3 mb-3 border-b border-gray-100">

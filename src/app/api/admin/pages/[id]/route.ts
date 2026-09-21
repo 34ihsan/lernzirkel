@@ -112,6 +112,10 @@ export async function PUT(
       }
     });
 
+    // Automatically sync hierarchy in case slug changed to something like "parent/child"
+    const { syncPageHierarchy } = await import("@/actions/admin");
+    await syncPageHierarchy();
+
     revalidatePath("/", "layout");
     if (updated?.slug) {
       revalidatePath(`/${updated.slug}`);

@@ -3,6 +3,8 @@
 import prisma from "@/lib/prisma";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
+import fs from "fs";
+import path from "path";
 
 // Design Settings (Legacy form support)
 export async function updateSiteSettings(formData: FormData) {
@@ -243,6 +245,59 @@ export async function deleteAnnouncement(id: string) {
   revalidatePath("/", "layout");
 }
 
+function findPhysicalPages(dir: string, baseDir: string): string[] {
+  let pages: string[] = [];
+  try {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
+        if (entry.name.startsWith('[') || entry.name.startsWith('(') && entry.name !== '(site)') {
+          continue;
+        }
+        pages = pages.concat(findPhysicalPages(path.join(dir, entry.name), baseDir));
+      } else if (entry.name === 'page.tsx') {
+        let relPath = path.relative(baseDir, dir).replace(/\\/g, '/');
+        // If it's directly inside (site), relPath is empty. We can skip home or map it.
+        // Actually, we only care about real slugs. Let's map empty to 'home'.
+        if (!relPath) relPath = 'home';
+        pages.push(relPath);
+      }
+    }
+  } catch (err) {
+    console.error("Error reading physical pages:", err);
+  }
+  return pages;
+}
+
+export async function syncPhysicalPages() {
+  const siteDir = path.join(process.cwd(), 'src', 'app', '(site)');
+  const physicalSlugs = findPhysicalPages(siteDir, siteDir);
+  
+  for (const slug of physicalSlugs) {
+    if (slug === 'home') continue; // Usually handled by SYSTEM_PAGES
+    
+    const existing = await prisma.page.findUnique({
+      where: { slug }
+    });
+    
+    if (!existing) {
+      // Extract a basic title from the slug (e.g. "beratung/mfd" -> "Mfd")
+      const parts = slug.split('/');
+      const lastPart = parts[parts.length - 1];
+      const title = lastPart.charAt(0).toUpperCase() + lastPart.slice(1).replace(/-/g, ' ');
+      
+      await prisma.page.create({
+        data: {
+          slug,
+          title: title,
+          description: "Otomatik eklenen sayfa",
+          isPublished: true,
+        }
+      });
+    }
+  }
+}
+
 export async function syncSystemPages() {
   const { SYSTEM_PAGES } = await import("@/lib/default-pages-data");
   const { defaultHeaderConfig, defaultFooterConfig } = await import("@/lib/site-defaults");
@@ -328,6 +383,9 @@ export async function syncSystemPages() {
       });
     }
   }
+  
+  // Ekle: Fiziksel (kodlu) sayfaları tarayıp CMS'ye ekleyelim
+  await syncPhysicalPages();
 
   // Auto-sync page hierarchy
   await syncPageHierarchy();
@@ -352,7 +410,7 @@ export async function syncPageHierarchy() {
   for (const page of allPages) {
     if (page.slug === 'home') continue;
     
-    // Check if slug contains path segments: e.g. "ueber-uns/hakkimizda"
+    // 1. Check if slug contains path segments: e.g. "ueber-uns/hakkimizda"
     if (page.slug.includes('/')) {
       const parts = page.slug.split('/');
       const parentSlug = parts.slice(0, -1).join('/');
@@ -375,6 +433,30 @@ export async function syncPageHierarchy() {
     let headerUpdated = false;
 
     if (Array.isArray(headerConfig.navLinks)) {
+      // 2. Use Nav Menu to heal parent-child relationships for pages without slashes
+      for (const navItem of headerConfig.navLinks) {
+        if (!navItem.url) continue;
+        const parentSlug = navItem.url.replace(/^\/+/, "");
+        const parentId = slugToIdMap.get(parentSlug);
+        
+        if (parentId && Array.isArray(navItem.children)) {
+          for (const childItem of navItem.children) {
+            if (!childItem.url) continue;
+            const childSlug = childItem.url.replace(/^\/+/, "");
+            const childPage = allPages.find(p => p.slug === childSlug);
+            
+            // If the child page exists, and doesn't already have this parent, and doesn't have a slash slug
+            if (childPage && childPage.id !== parentId && childPage.parentId !== parentId && !childPage.slug.includes('/')) {
+              await prisma.page.update({
+                where: { id: childPage.id },
+                data: { parentId: parentId }
+              });
+              updatedCount++;
+            }
+          }
+        }
+      }
+
       const canonicalizeUrl = (rawUrl?: string): string | undefined => {
         if (!rawUrl || rawUrl.startsWith('http') || rawUrl.startsWith('#') || rawUrl === '/') {
           return rawUrl;
