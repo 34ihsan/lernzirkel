@@ -175,7 +175,7 @@ export default function Header({
             } : undefined}
           >
             <div 
-              className="flex items-center hidden xl:flex"
+              className="flex items-center hidden lg:flex"
               style={{ gap: `${itemGap}px` }}
             >
               {header.topBar.links?.map((item, idx) => (
@@ -273,10 +273,10 @@ export default function Header({
       )}
 
       {/* Main Navigation Bar */}
-      <div className={`w-full py-2.5 flex items-center justify-between gap-3 xl:gap-6 ${
+      <div className={`w-full py-2.5 flex items-center justify-between gap-1 lg:gap-1 xl:gap-6 ${
         (header.design?.fullWidth !== false)
-          ? 'w-full px-3 sm:px-4 lg:px-0'
-          : 'max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8'
+          ? 'w-full px-2 sm:px-4 lg:px-2 xl:px-4'
+          : 'max-w-[1600px] mx-auto px-2 sm:px-6 lg:px-4 xl:px-8'
       } ${logoAlign === 'center' ? 'relative' : ''}`}>
         {/* 1. Dedicated Logo Bay (Sol / Merkez / Sağ Esnek Konumlandırma) */}
         <div 
@@ -322,13 +322,13 @@ export default function Header({
           </Link>
 
           {header.logo?.showDivider && (
-            <div className="hidden xl:block h-6 w-px bg-gray-300 ml-3 mr-1 shrink-0" />
+            <div className="hidden lg:block h-6 w-px bg-gray-300 ml-3 mr-1 shrink-0" />
           )}
         </div>
 
-        {/* 2. Desktop Navigation (Kesinlikle alt satıra kaymaz, tek satırda pürüzsüz kalır) */}
+        {/* 2. Desktop Navigation (Artık taşmaları önlemek için wrap yapabilir ve zorunlu küçülür) */}
         <div 
-          className={`hidden xl:flex items-center flex-1 min-w-0 px-1 overflow-visible no-scrollbar ${
+          className={`hidden lg:flex items-center flex-1 min-w-0 px-1 overflow-visible no-scrollbar ${
             logoAlign === 'center' 
               ? 'order-2 lg:order-1' 
               : logoAlign === 'right' 
@@ -342,12 +342,13 @@ export default function Header({
           }`}
         >
           <nav 
-            className="flex items-center flex-nowrap whitespace-nowrap overflow-visible no-scrollbar" 
+            className="flex items-center justify-center lg:flex-wrap xl:flex-nowrap overflow-visible no-scrollbar w-full" 
             style={{ 
               color: navTextColor,
-              fontSize: navFontSize ? `${navFontSize}px` : 'clamp(11px, 0.88vw, 13.5px)',
+              fontSize: `clamp(11px, 1vw, ${parseFloat(navFontSize?.toString() || '14')}px)`,
               fontWeight: navFontWeight,
-              gap: header.design?.navGap ? `${header.design.navGap}px` : 'clamp(6px, 0.7vw, 16px)'
+              gap: `clamp(4px, 0.8vw, ${parseFloat(header.design?.navGap?.toString() || '16')}px)`,
+              rowGap: '4px' // Add a small row gap in case it wraps to next line
             }}
           >
           {header.navLinks?.map((item, idx) => {
@@ -362,7 +363,7 @@ export default function Header({
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`hover:opacity-85 transition-colors py-1.5 px-1.5 xl:px-2.5 flex items-center gap-1 rounded-md hover:bg-black/5 shrink-0 ${item.isHighlight ? 'text-accent font-bold' : ''}`}
+                  className={`hover:opacity-85 transition-colors py-1 px-1 lg:px-2 flex items-center gap-1 rounded-md hover:bg-black/5 shrink text-center leading-tight break-words ${item.isHighlight ? 'text-accent font-bold' : ''}`}
                   style={{ color: item.isHighlight ? undefined : navTextColor }}
                 >
                   <span>{item.label}</span>
@@ -376,7 +377,7 @@ export default function Header({
                 <Link
                   key={idx}
                   href={item.url}
-                  className={`hover:opacity-85 transition-colors py-1.5 px-1.5 xl:px-2.5 flex items-center gap-1 rounded-md hover:bg-black/5 shrink-0 ${item.isHighlight ? 'text-accent font-bold' : ''}`}
+                  className={`hover:opacity-85 transition-colors py-1 px-1 lg:px-2 flex items-center gap-1 rounded-md hover:bg-black/5 shrink text-center leading-tight break-words ${item.isHighlight ? 'text-accent font-bold' : ''}`}
                   style={{ color: item.isHighlight ? undefined : navTextColor }}
                 >
                   <span>{item.label}</span>
@@ -393,14 +394,14 @@ export default function Header({
             return (
               <div 
                 key={idx} 
-                className="relative py-1.5 group shrink-0"
+                className="relative py-1.5 group shrink"
                 onMouseEnter={() => handleDesktopMouseEnter(idx)}
                 onMouseLeave={handleDesktopMouseLeave}
               >
                 <Link
                   href={item.url}
                   onClick={() => setActiveDesktopDropdown(null)}
-                  className={`flex items-center gap-1 py-1.5 px-1.5 xl:px-2.5 rounded-md hover:bg-black/5 transition-all select-none shrink-0 ${
+                  className={`flex items-center gap-0.5 py-1 px-1 lg:px-2 rounded-md hover:bg-black/5 transition-all select-none shrink text-center leading-tight break-words ${
                     isOpen ? 'font-bold bg-black/5' : ''
                   } ${item.isHighlight ? 'text-accent font-bold' : ''}`}
                   style={{
@@ -560,7 +561,7 @@ export default function Header({
 
           return (
             <div 
-              className={`flex items-center gap-2.5 shrink-0 z-10 ${
+              className={`flex items-center gap-1.5 xl:gap-2.5 shrink-0 z-10 ${
                 isCtaFarRight ? 'ml-auto' : ''
               } ${
                 logoAlign === 'center' 
@@ -573,7 +574,7 @@ export default function Header({
                 marginRight: cta?.marginRight !== undefined 
                   ? `${cta.marginRight}px` 
                   : ((header.design?.fullWidth !== false) ? '16px' : undefined),
-                marginLeft: cta?.marginLeft !== undefined ? `${cta.marginLeft}px` : undefined,
+                marginLeft: cta?.marginLeft !== undefined ? `${Math.max(4, cta.marginLeft - 10)}px` : undefined,
               }}
             >
               {/* Site Search Trigger (Desktop) */}
@@ -581,26 +582,26 @@ export default function Header({
                 <button
                   type="button"
                   onClick={() => setIsSearchOpen(true)}
-                  className="hidden xl:flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-gray-600 hover:text-primary hover:bg-gray-100 transition-all border border-gray-200 hover:border-gray-300 shadow-2xs"
+                  className="hidden lg:flex items-center gap-1.5 lg:gap-2 px-2 lg:px-3 py-1.5 lg:py-2 rounded-xl text-xs font-medium text-gray-600 hover:text-primary hover:bg-gray-100 transition-all border border-gray-200 hover:border-gray-300 shadow-2xs"
                   title="Website durchsuchen (Strg+K / ⌘K)"
                   aria-label="Suche öffnen"
                 >
                   <Search className="w-3.5 h-3.5 text-primary" />
-                  <span className="hidden xl:inline text-xs text-gray-500 font-medium">Suchen...</span>
-                  <kbd className="hidden xl:inline-flex items-center text-[10px] font-mono bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded border border-gray-200">
+                  <span className="hidden lg:inline text-xs text-gray-500 font-medium">Suchen...</span>
+                  <kbd className="hidden lg:inline-flex items-center text-[10px] font-mono bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded border border-gray-200">
                     ⌘K
                   </kbd>
                 </button>
               )}
 
               {ctaEnabled && (
-                <div className="hidden xl:flex items-center">
+                <div className="hidden lg:flex items-center">
                   {isCtaExternal ? (
                     <a
                       href={ctaUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`group text-xs xl:text-sm font-bold px-4 xl:px-5 py-2 xl:py-2.5 transition-all whitespace-nowrap flex items-center justify-center ${ctaRadiusClass} ${ctaThemeClass}`}
+                      className={`group text-[10px] lg:text-sm font-bold px-2.5 lg:px-4 py-1.5 lg:py-2 transition-all whitespace-nowrap flex items-center justify-center ${ctaRadiusClass} ${ctaThemeClass}`}
                       style={ctaCustomStyle}
                     >
                       {(cta?.icon === 'mail' || cta?.icon === 'phone' || cta?.icon === 'sparkles') && renderCtaIcon()}
@@ -610,7 +611,7 @@ export default function Header({
                   ) : (
                     <Link 
                       href={ctaUrl} 
-                      className={`group text-xs xl:text-sm font-bold px-4 xl:px-5 py-2 xl:py-2.5 transition-all whitespace-nowrap flex items-center justify-center ${ctaRadiusClass} ${ctaThemeClass}`}
+                      className={`group text-[10px] lg:text-sm font-bold px-2.5 lg:px-4 py-1.5 lg:py-2 transition-all whitespace-nowrap flex items-center justify-center ${ctaRadiusClass} ${ctaThemeClass}`}
                       style={ctaCustomStyle}
                     >
                       {(cta?.icon === 'mail' || cta?.icon === 'phone' || cta?.icon === 'sparkles') && renderCtaIcon()}
@@ -625,7 +626,7 @@ export default function Header({
               {header.design?.showSearch !== false && (
                 <button 
                   type="button"
-                  className="xl:hidden p-2 text-foreground hover:text-primary focus:outline-none rounded-lg hover:bg-gray-100 transition-colors"
+                  className="lg:hidden p-2 text-foreground hover:text-primary focus:outline-none rounded-lg hover:bg-gray-100 transition-colors"
                   onClick={() => setIsSearchOpen(true)}
                   aria-label="Suche öffnen"
                 >
@@ -635,7 +636,7 @@ export default function Header({
 
               {/* Mobile Hamburger Toggle */}
               <button 
-                className="xl:hidden p-2 text-foreground focus:outline-none rounded-lg hover:bg-gray-100 transition-colors"
+                className="lg:hidden p-2 text-foreground focus:outline-none rounded-lg hover:bg-gray-100 transition-colors"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label="Menü öffnen"
               >
@@ -648,7 +649,7 @@ export default function Header({
 
       {/* Mobile Menu Dropdown (Supports Responsive Hover & Tap Accordion) */}
       {mobileMenuOpen && (
-        <div className="xl:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-gray-100 flex flex-col p-4 z-50 max-h-[85vh] overflow-y-auto">
+        <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-gray-100 flex flex-col p-4 z-50 max-h-[85vh] overflow-y-auto">
           {/* Mobile Search Bar Trigger */}
           {header.design?.showSearch !== false && (
             <div className="pb-3 mb-3 border-b border-gray-100">
