@@ -227,7 +227,7 @@ export const SYSTEM_PAGES: DefaultPageDefinition[] = [
               badge: "Patenschaften",
               description: "Bundesprogramm für Chancenpatenschaften zwischen geflüchteten und einheimischen Bürgern.",
               linkText: "Mehr erfahren",
-              linkUrl: "/menschen-staerken",
+              linkUrl: "/projekte/menschen-staerken",
               icon: "HeartHandshake"
             },
             {
@@ -235,7 +235,7 @@ export const SYSTEM_PAGES: DefaultPageDefinition[] = [
               badge: "Offener Treff",
               description: "Niedrigschwelliger Austausch bei Kaffee und Tee, um Deutschkenntnisse im Alltag praktisch anzuwenden.",
               linkText: "Treffzeiten ansehen",
-              linkUrl: "/sprach-cafe",
+              linkUrl: "/projekte/sprach-cafe",
               icon: "MessageCircle"
             },
             {
@@ -243,7 +243,7 @@ export const SYSTEM_PAGES: DefaultPageDefinition[] = [
               badge: "Workshops",
               description: "Gewaltprävention und interkulturelle Mediation für Jugendliche und Familien.",
               linkText: "Details",
-              linkUrl: "/konfliktmanagement",
+              linkUrl: "/projekte/konfliktmanagement",
               icon: "Shield"
             },
             {
@@ -251,7 +251,7 @@ export const SYSTEM_PAGES: DefaultPageDefinition[] = [
               badge: "Demokratie",
               description: "Initiative für interkulturellen Dialog, gesellschaftlichen Zusammenhalt und Toleranz.",
               linkText: "Mehr erfahren",
-              linkUrl: "/wir-sind-vielfalt",
+              linkUrl: "/projekte/wettbewerbe/wir-sind-vielfalt",
               icon: "Users2"
             },
             {
@@ -524,7 +524,7 @@ export const SYSTEM_PAGES: DefaultPageDefinition[] = [
               badge: "Patenschaften",
               description: "Chancenpatenschaften für ein solidarisches Miteinander und gegenseitiges Lernen.",
               linkText: "Details",
-              linkUrl: "/menschen-staerken",
+              linkUrl: "/projekte/menschen-staerken",
               icon: "HeartHandshake"
             },
             {
@@ -532,7 +532,7 @@ export const SYSTEM_PAGES: DefaultPageDefinition[] = [
               badge: "Treffpunkt",
               description: "Offener Begegnungsort für ungezwungenen sprachlichen und kulturellen Austausch.",
               linkText: "Details",
-              linkUrl: "/sprach-cafe",
+              linkUrl: "/projekte/sprach-cafe",
               icon: "MessageCircle"
             },
             {
@@ -540,7 +540,7 @@ export const SYSTEM_PAGES: DefaultPageDefinition[] = [
               badge: "Prävention",
               description: "Workshops und Beratung für konstruktive Konfliktbewältigung.",
               linkText: "Details",
-              linkUrl: "/konfliktmanagement",
+              linkUrl: "/projekte/konfliktmanagement",
               icon: "Shield"
             },
             {
@@ -548,7 +548,7 @@ export const SYSTEM_PAGES: DefaultPageDefinition[] = [
               badge: "Gemeinschaft",
               description: "Förderung von interkulturellem Verständnis und gesellschaftlicher Teilhabe.",
               linkText: "Details",
-              linkUrl: "/wir-sind-vielfalt",
+              linkUrl: "/projekte/wettbewerbe/wir-sind-vielfalt",
               icon: "Users2"
             },
             {

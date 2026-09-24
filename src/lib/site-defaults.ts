@@ -5,6 +5,7 @@ export interface NavSubItem {
   icon?: string;
   badge?: string;
   isExternal?: boolean;
+  children?: NavSubItem[];
 }
 
 export interface NavLinkItem {
@@ -283,35 +284,50 @@ export const defaultHeaderConfig: HeaderConfig = {
       children: [
         {
           label: "Future Connect",
-          url: "/future-connect",
-          description: "Digitale Medienkompetenz und IT-Workshops für Jugendliche",
+          url: "/projekte/future-connect",
+          description: "Generationen vernetzen für morgen – Digitales Lernen auf Augenhöhe",
           badge: "Digital",
           icon: "Globe"
         },
         {
           label: "Menschen stärken Menschen",
-          url: "/menschen-staerken",
+          url: "/projekte/menschen-staerken",
           description: "Bundesweites Patenschafts- und Mentoringprogramm",
           icon: "Users"
         },
         {
           label: "Sprach-Café",
-          url: "/sprach-cafe",
+          url: "/projekte/sprach-cafe",
           description: "Offener Treffpunkt zum Deutsch sprechen bei Tee & Kaffee",
           badge: "Offen",
           icon: "Coffee"
         },
         {
           label: "Konfliktmanagement",
-          url: "/konfliktmanagement",
+          url: "/projekte/konfliktmanagement",
           description: "Trainings und Workshops für Engagierte und Ehrenamtliche",
           icon: "Shield"
         },
         {
-          label: "Wir sind Vielfalt",
-          url: "/wir-sind-vielfalt",
-          description: "Wettbewerbe und Aktionen für Zusammenhalt und Vielfalt",
-          icon: "Heart"
+          label: "Wettbewerbe",
+          url: "/projekte/wettbewerbe",
+          description: "Schülerwettbewerbe, Aktionen und jährliche Bildungsmesse",
+          icon: "Trophy",
+          badge: "Wettbewerbe",
+          children: [
+            {
+              label: "Wir sind Vielfalt",
+              url: "/projekte/wettbewerbe/wir-sind-vielfalt",
+              description: "Wettbewerbe und Aktionen für Zusammenhalt und Vielfalt",
+              icon: "Heart"
+            },
+            {
+              label: "Bildungsmesse",
+              url: "/projekte/wettbewerbe/bildungsmesse",
+              description: "Jährliche Leistungsschau mit Schüler-Experimenten und Prämierung",
+              icon: "Sparkles"
+            }
+          ]
         }
       ]
     },
@@ -321,28 +337,46 @@ export const defaultHeaderConfig: HeaderConfig = {
       children: [
         {
           label: "Unser Leitbild & Profil",
-          url: "/ueber-uns",
-          description: "Werte, Vision und soziale Verantwortung seit 2002",
-          icon: "Info"
+          url: "/ueber-uns/leitbild",
+          description: "Werte, Vision, Chancengleichheit und soziale Verantwortung seit 2002",
+          icon: "Target"
+        },
+        {
+          label: "Entstehung und Intention",
+          url: "/ueber-uns/philosophie",
+          description: "Von der Eltern- und Bürgerinitiative zum anerkannten Bildungsträger",
+          icon: "Lightbulb"
         },
         {
           label: "Satzung & Organisation",
-          url: "/satzung",
-          description: "Rechtliche Grundlagen und Vereinsstruktur",
-          icon: "FileText"
+          url: "/ueber-uns/satzung",
+          description: "Gemeinnützigkeit nach § 52 AO und offizielle Vereinssatzung",
+          icon: "Scale"
+        },
+        {
+          label: "Organigramm & Team",
+          url: "/ueber-uns/organigramm",
+          description: "Die organisatorische Aufteilung unseres Vereins",
+          icon: "Network"
+        },
+        {
+          label: "Räumlichkeiten",
+          url: "/ueber-uns/raeumlichkeiten",
+          description: "12 moderne Unterrichtsräume und Bibliothek am Ludwigsplatz 9a",
+          icon: "Building2"
         },
         {
           label: "Bildergalerie",
-          url: "/galerie",
-          description: "Einblicke in Räumlichkeiten, Kurse und Veranstaltungen",
-          icon: "Image"
+          url: "/ueber-uns/galerie",
+          description: "Einblicke in unsere Räumlichkeiten, Kurse und Veranstaltungen",
+          icon: "Camera"
         },
         {
           label: "Spenden & Unterstützen",
           url: "/spenden",
-          description: "Helfen Sie mit, Bildungschancen für alle zu schaffen",
+          description: "Helfen Sie mit, Bildungschancen für alle zu sichern",
           badge: "Spenden",
-          icon: "HandHeart"
+          icon: "HeartHandshake"
         }
       ]
     },

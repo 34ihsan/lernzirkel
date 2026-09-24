@@ -133,8 +133,8 @@ const STATIC_CATALOG: SearchResultItem[] = [
   {
     id: "cat-future",
     title: "Future Connect",
-    description: "Digitale Medienkompetenz, IT-Workshops und Medienpädagogik für junge Menschen.",
-    url: "/future-connect",
+    description: "Generationen vernetzen für morgen – Digitales Lernen auf Augenhöhe zwischen Jugendlichen und Senior:innen.",
+    url: "/projekte/future-connect",
     category: "Beratung & Projekte",
     badge: "Digital",
     icon: "Globe"
@@ -143,7 +143,7 @@ const STATIC_CATALOG: SearchResultItem[] = [
     id: "cat-menschen",
     title: "Menschen stärken Menschen",
     description: "Bundesweites Patenschafts- und Mentoringprogramm für Chancengleichheit und Zusammenhalt.",
-    url: "/menschen-staerken",
+    url: "/projekte/menschen-staerken",
     category: "Beratung & Projekte",
     badge: "Patenschaft",
     icon: "Users"
@@ -152,7 +152,7 @@ const STATIC_CATALOG: SearchResultItem[] = [
     id: "cat-cafe",
     title: "Sprach-Café Ludwigshafen",
     description: "Offener Begegnungsort zum Deutsch sprechen bei Tee & Kaffee – ohne Anmeldung.",
-    url: "/sprach-cafe",
+    url: "/projekte/sprach-cafe",
     category: "Beratung & Projekte",
     badge: "Offen",
     icon: "Coffee"
@@ -161,19 +161,37 @@ const STATIC_CATALOG: SearchResultItem[] = [
     id: "cat-konflikt",
     title: "Konfliktmanagement",
     description: "Workshops und Deeskalationstrainings für Engagierte, Jugendliche und Ehrenamtliche.",
-    url: "/konfliktmanagement",
+    url: "/projekte/konfliktmanagement",
     category: "Beratung & Projekte",
     badge: "Training",
     icon: "Shield"
   },
   {
+    id: "cat-wettbewerbe",
+    title: "Wettbewerbe & Schülerinitiativen",
+    description: "Übersicht unserer Wettbewerbe: „Wir sind Vielfalt“ und die jährliche „Bildungsmesse“ für Schülerteams.",
+    url: "/projekte/wettbewerbe",
+    category: "Beratung & Projekte",
+    badge: "Wettbewerbe",
+    icon: "Trophy"
+  },
+  {
     id: "cat-vielfalt",
     title: "Wir sind Vielfalt",
     description: "Aktionen, Wettbewerbe und Projekte für ein vorurteilsfreies und tolerantes Miteinander.",
-    url: "/wir-sind-vielfalt",
+    url: "/projekte/wettbewerbe/wir-sind-vielfalt",
     category: "Beratung & Projekte",
     badge: "Vielfalt",
     icon: "Heart"
+  },
+  {
+    id: "cat-bildungsmesse",
+    title: "Bildungsmesse",
+    description: "Lernen, Experimentieren und Forschen: Schülerteams präsentieren eigene Experimente an Messeständen mit Projektprämierung.",
+    url: "/projekte/wettbewerbe/bildungsmesse",
+    category: "Beratung & Projekte",
+    badge: "Messe",
+    icon: "Sparkles"
   },
   {
     id: "cat-ueber-uns",
@@ -183,6 +201,15 @@ const STATIC_CATALOG: SearchResultItem[] = [
     category: "Seiten & Verein",
     badge: "Verein",
     icon: "Info"
+  },
+  {
+    id: "cat-leitbild",
+    title: "Leitbild des Lernzirkel Ludwigshafen e.V.",
+    description: "Werte, Vision, Chancengleichheit, Bildungsangebote und soziale Verantwortung seit 2002.",
+    url: "/ueber-uns/leitbild",
+    category: "Seiten & Verein",
+    badge: "Leitbild",
+    icon: "Target"
   },
   {
     id: "cat-philosophie",

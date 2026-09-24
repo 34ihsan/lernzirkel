@@ -93,7 +93,7 @@ const MODEL_PUBLIC_PATHS: Record<string, string[]> = {
   News: ['/aktuelles', '/'],
   GalleryImage: ['/galerie', '/'],
   TeamMember: ['/ueber-uns', '/organigramm', '/'],
-  Project: ['/projekte', '/wir-sind-vielfalt', '/menschen-staerken', '/future-connect', '/'],
+  Project: ['/projekte', '/projekte/wettbewerbe', '/projekte/wettbewerbe/wir-sind-vielfalt', '/projekte/wettbewerbe/bildungsmesse', '/projekte/menschen-staerken', '/projekte/future-connect', '/projekte/konfliktmanagement', '/projekte/sprach-cafe', '/'],
   Department: ['/kontakt', '/'],
 };
 

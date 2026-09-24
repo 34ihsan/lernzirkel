@@ -21,9 +21,43 @@ function getEffectiveNavLinks(configuredLinks?: NavLinkItem[]): NavLinkItem[] {
     : defaultHeaderConfig.navLinks;
 
   return (baseLinks || []).map(link => {
-    // If it has children already defined, preserve them!
+    // If it has children already defined, sanitize and ensure all default children are present
     if (link.children && link.children.length > 0) {
-      return link;
+      // Fix outdated URLs (e.g. Leitbild url pointing to /ueber-uns instead of /ueber-uns/leitbild)
+      const sanitizedChildren = link.children.map(child => {
+        if (
+          (child.label.toLowerCase().includes('leitbild') || child.url === '#leitbild' || (link.url === '/ueber-uns' && child.url === '/ueber-uns')) &&
+          child.url !== '/ueber-uns/leitbild'
+        ) {
+          return { ...child, url: '/ueber-uns/leitbild' };
+        }
+        return child;
+      });
+
+      // For Über uns, ensure all 7 subpages exist if any were missing from DB
+      if (link.label.trim().toLowerCase().includes('über uns') || link.url === '/ueber-uns') {
+        const defaultUeberUns = defaultHeaderConfig.navLinks?.find(
+          def => def.url === '/ueber-uns' || def.label.toLowerCase().includes('über uns')
+        );
+        if (defaultUeberUns?.children) {
+          const existingUrls = new Set(sanitizedChildren.map(c => c.url));
+          const existingLabels = new Set(sanitizedChildren.map(c => c.label.toLowerCase()));
+          const missing = defaultUeberUns.children.filter(
+            defChild => !existingUrls.has(defChild.url) && !existingLabels.has(defChild.label.toLowerCase())
+          );
+          if (missing.length > 0) {
+            return {
+              ...link,
+              children: [...sanitizedChildren, ...missing]
+            };
+          }
+        }
+      }
+
+      return {
+        ...link,
+        children: sanitizedChildren
+      };
     }
     // Fallback to default submenus by matching label or url
     const fallback = defaultHeaderConfig.navLinks?.find(
@@ -474,24 +508,79 @@ export default function Header({
                           </div>
                         );
 
-                        return isSubExt ? (
-                          <a 
-                            key={subIdx} 
-                            href={sub.url} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            onClick={() => setActiveDesktopDropdown(null)}
-                          >
-                            {subContent}
-                          </a>
-                        ) : (
-                          <Link 
-                            key={subIdx} 
-                            href={sub.url}
-                            onClick={() => setActiveDesktopDropdown(null)}
-                          >
-                            {subContent}
-                          </Link>
+                        return (
+                          <div key={subIdx} className="flex flex-col">
+                            {isSubExt ? (
+                              <a 
+                                href={sub.url} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                onClick={() => setActiveDesktopDropdown(null)}
+                              >
+                                {subContent}
+                              </a>
+                            ) : (
+                              <Link 
+                                href={sub.url}
+                                onClick={() => setActiveDesktopDropdown(null)}
+                              >
+                                {subContent}
+                              </Link>
+                            )}
+
+                            {/* Nested Sub-items (Level 2: e.g. Wettbewerbe -> Wir sind Vielfalt & Bildungsmesse) */}
+                            {sub.children && sub.children.length > 0 && (
+                              <div className="border-l-2 border-blue-200/90 ml-6 pl-3 py-1 space-y-1 my-0.5">
+                                {sub.children.map((child, cIdx) => {
+                                  const isChildExt = child.isExternal || child.url.startsWith('http');
+                                  const childContent = (
+                                    <div className="flex items-start gap-2.5 p-1.5 rounded-lg hover:bg-blue-50/80 transition-colors group/child">
+                                      <div className="w-5 h-5 rounded-md bg-blue-100/60 text-blue-700 flex items-center justify-center shrink-0 group-hover/child:bg-blue-600 group-hover/child:text-white transition-colors mt-0.5">
+                                        <DynamicIcon name={child.icon || 'Sparkles'} className="w-3 h-3" />
+                                      </div>
+                                      <div className="flex-1 min-w-0">
+                                        <div className="flex items-center gap-1.5">
+                                          <span className="font-semibold text-[11px] text-gray-800 group-hover/child:text-blue-700 transition-colors">
+                                            {child.label}
+                                          </span>
+                                          {child.badge && (
+                                            <span className="text-[8px] font-bold px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 shrink-0">
+                                              {child.badge}
+                                            </span>
+                                          )}
+                                        </div>
+                                        {child.description && (
+                                          <p className="text-[10px] text-gray-500 line-clamp-1 mt-0.5">
+                                            {child.description}
+                                          </p>
+                                        )}
+                                      </div>
+                                    </div>
+                                  );
+
+                                  return isChildExt ? (
+                                    <a
+                                      key={cIdx}
+                                      href={child.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      onClick={() => setActiveDesktopDropdown(null)}
+                                    >
+                                      {childContent}
+                                    </a>
+                                  ) : (
+                                    <Link
+                                      key={cIdx}
+                                      href={child.url}
+                                      onClick={() => setActiveDesktopDropdown(null)}
+                                    >
+                                      {childContent}
+                                    </Link>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
                         );
                       })}
                     </div>
@@ -781,45 +870,96 @@ export default function Header({
 
                     {item.children?.map((sub, subIdx) => {
                       const isSubExt = sub.isExternal || sub.url.startsWith('http');
-                      return isSubExt ? (
-                        <a
-                          key={subIdx}
-                          href={sub.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={() => setMobileMenuOpen(false)}
-                          className="flex items-center justify-between p-2 rounded-lg text-sm text-gray-700 hover:text-blue-600 hover:bg-white transition-all"
-                        >
-                          <div className="flex items-center gap-2.5">
-                            {sub.icon && <DynamicIcon name={sub.icon} className="w-4 h-4 text-blue-600 shrink-0" />}
-                            <span className="font-medium">{sub.label}</span>
-                          </div>
-                          {sub.badge && (
-                            <span className="text-[10px] bg-blue-100 text-blue-800 font-semibold px-2 py-0.5 rounded-full">
-                              {sub.badge}
-                            </span>
+                      return (
+                        <div key={subIdx} className="flex flex-col">
+                          {isSubExt ? (
+                            <a
+                              href={sub.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center justify-between p-2 rounded-lg text-sm text-gray-700 hover:text-blue-600 hover:bg-white transition-all"
+                            >
+                              <div className="flex items-center gap-2.5">
+                                {sub.icon && <DynamicIcon name={sub.icon} className="w-4 h-4 text-blue-600 shrink-0" />}
+                                <span className="font-medium">{sub.label}</span>
+                              </div>
+                              {sub.badge && (
+                                <span className="text-[10px] bg-blue-100 text-blue-800 font-semibold px-2 py-0.5 rounded-full">
+                                  {sub.badge}
+                                </span>
+                              )}
+                            </a>
+                          ) : (
+                            <Link
+                              href={sub.url}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center justify-between p-2 rounded-lg text-sm text-gray-700 hover:text-blue-600 hover:bg-white transition-all"
+                            >
+                              <div className="flex items-center gap-2.5">
+                                {sub.icon && <DynamicIcon name={sub.icon} className="w-4 h-4 text-blue-600 shrink-0" />}
+                                <div>
+                                  <div className="font-medium text-gray-900">{sub.label}</div>
+                                  {sub.description && <div className="text-[11px] text-gray-500">{sub.description}</div>}
+                                </div>
+                              </div>
+                              {sub.badge && (
+                                <span className="text-[10px] bg-blue-100 text-blue-800 font-semibold px-2 py-0.5 rounded-full shrink-0">
+                                  {sub.badge}
+                                </span>
+                              )}
+                            </Link>
                           )}
-                        </a>
-                      ) : (
-                        <Link
-                          key={subIdx}
-                          href={sub.url}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className="flex items-center justify-between p-2 rounded-lg text-sm text-gray-700 hover:text-blue-600 hover:bg-white transition-all"
-                        >
-                          <div className="flex items-center gap-2.5">
-                            {sub.icon && <DynamicIcon name={sub.icon} className="w-4 h-4 text-blue-600 shrink-0" />}
-                            <div>
-                              <div className="font-medium text-gray-900">{sub.label}</div>
-                              {sub.description && <div className="text-[11px] text-gray-500">{sub.description}</div>}
+
+                          {/* Nested Sub-items on Mobile */}
+                          {sub.children && sub.children.length > 0 && (
+                            <div className="border-l-2 border-blue-300 ml-6 pl-2.5 space-y-1 my-1">
+                              {sub.children.map((child, cIdx) => {
+                                const isChildExt = child.isExternal || child.url.startsWith('http');
+                                return isChildExt ? (
+                                  <a
+                                    key={cIdx}
+                                    href={child.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="flex items-center justify-between p-1.5 rounded-lg text-xs text-gray-700 hover:text-blue-600 hover:bg-white transition-all"
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      {child.icon && <DynamicIcon name={child.icon} className="w-3.5 h-3.5 text-blue-600 shrink-0" />}
+                                      <span className="font-medium text-gray-900">{child.label}</span>
+                                    </div>
+                                    {child.badge && (
+                                      <span className="text-[9px] bg-emerald-100 text-emerald-800 font-semibold px-1.5 py-0.2 rounded-full shrink-0">
+                                        {child.badge}
+                                      </span>
+                                    )}
+                                  </a>
+                                ) : (
+                                  <Link
+                                    key={cIdx}
+                                    href={child.url}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="flex items-center justify-between p-1.5 rounded-lg text-xs text-gray-700 hover:text-blue-600 hover:bg-white transition-all"
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      {child.icon && <DynamicIcon name={child.icon} className="w-3.5 h-3.5 text-blue-600 shrink-0" />}
+                                      <div>
+                                        <div className="font-medium text-gray-900">{child.label}</div>
+                                        {child.description && <div className="text-[10px] text-gray-500">{child.description}</div>}
+                                      </div>
+                                    </div>
+                                    {child.badge && (
+                                      <span className="text-[9px] bg-emerald-100 text-emerald-800 font-semibold px-1.5 py-0.2 rounded-full shrink-0">
+                                        {child.badge}
+                                      </span>
+                                    )}
+                                  </Link>
+                                );
+                              })}
                             </div>
-                          </div>
-                          {sub.badge && (
-                            <span className="text-[10px] bg-blue-100 text-blue-800 font-semibold px-2 py-0.5 rounded-full shrink-0">
-                              {sub.badge}
-                            </span>
                           )}
-                        </Link>
+                        </div>
                       );
                     })}
                   </div>

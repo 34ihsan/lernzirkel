@@ -149,6 +149,17 @@ export default function UeberUnsSatzungPage() {
               <p>Ludwigshafen am Rhein, Fassung vom 01.01.2013 (zuletzt geändert am 18.10.2018).</p>
             </div>
 
+            <h3 className="text-2xl font-bold text-foreground mt-16 mb-8 text-center">
+              Organigramm des Lernzirkel Ludwigshafen e.V.
+            </h3>
+            <div className="flex justify-center mb-8">
+              <img 
+                src="/uploads/organigramm.png" 
+                alt="Organigramm des Lernzirkel Ludwigshafen e.V." 
+                className="max-w-full h-auto rounded-xl border border-gray-200 shadow-md" 
+              />
+            </div>
+
           </div>
 
           <div className="mt-12 pt-8 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">

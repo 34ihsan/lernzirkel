@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Heart, Users, Euro, ArrowRight, Phone } from 'lucide-react';
+import { Heart, Users, Euro, ArrowRight, Phone, CreditCard } from 'lucide-react';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 export default function SpendenPage() {
@@ -103,6 +103,49 @@ export default function SpendenPage() {
                        <EmailObfuscator user="info" domain="lernzirkel-online.de" />
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bank Account Card */}
+            <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100 flatsome-card relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-5">
+                <Euro className="w-24 h-24" />
+              </div>
+              <h3 className="text-2xl font-bold text-primary mb-6 flex items-center">
+                <div className="bg-blue-50 p-2 rounded-lg mr-3">
+                  <CreditCard className="w-6 h-6 text-accent" />
+                </div>
+                Spendenkonto
+              </h3>
+              
+              <div className="space-y-4 text-gray-700 relative z-10">
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Kontoinhaber</p>
+                  <p className="font-bold text-lg">Lernzirkel Ludwigshafen e.V.</p>
+                </div>
+                
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Bankinstitut</p>
+                  <p className="font-semibold text-gray-400 italic">[Name der Bank]</p>
+                </div>
+                
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 font-mono relative group cursor-all-scroll">
+                  <p className="text-sm text-gray-500 mb-1 font-sans">IBAN</p>
+                  <p className="font-bold text-lg tracking-widest text-primary break-all">
+                    DEXX XXXX XXXX XXXX XXXX XX
+                  </p>
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs bg-white border border-gray-200 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity text-gray-400">IBAN hier eintragen</span>
+                </div>
+                
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">BIC</p>
+                  <p className="font-semibold tracking-wider text-gray-400 italic">[BIC / SWIFT]</p>
+                </div>
+                
+                <div className="pt-2">
+                  <p className="text-sm text-gray-500 mb-1">Verwendungszweck</p>
+                  <p className="font-semibold bg-blue-50/50 inline-block px-3 py-1 rounded text-primary">Spende + [Ihr Name]</p>
                 </div>
               </div>
             </div>

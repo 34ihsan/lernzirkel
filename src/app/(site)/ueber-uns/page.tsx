@@ -8,6 +8,7 @@ import {
   MapPin, Clock, Phone, Sparkles, Building2, CheckCircle2, ChevronRight
 } from 'lucide-react';
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
+import HashRedirect from '@/components/common/HashRedirect';
 
 export const metadata = {
   title: 'Über uns | Lernzirkel Ludwigshafen e.V.',
@@ -56,9 +57,9 @@ export default function UeberUnsPage() {
       badgeColor: 'bg-sky-100 text-sky-800 border-sky-200',
       description: 'Werte, Vision, Chancengleichheit und soziale Verantwortung seit 2002 im Dienst der Menschen in Ludwigshafen.',
       icon: Target,
-      link: '#leitbild',
+      link: '/ueber-uns/leitbild',
       ctaText: 'Leitbild lesen',
-      isInternalAnchor: true,
+      isInternalAnchor: false,
     },
     {
       id: 'philosophie',
@@ -108,6 +109,8 @@ export default function UeberUnsPage() {
 
   return (
     <div className="bg-slate-50/50 min-h-screen">
+      {/* Auto-redirect #leitbild hash to /ueber-uns/leitbild */}
+      <HashRedirect targetHash="#leitbild" redirectTo="/ueber-uns/leitbild" />
       {/* Top Breadcrumb Bar */}
       <div className="border-b border-gray-200 bg-white">
         <div className="container mx-auto px-4 max-w-6xl py-3">
@@ -256,18 +259,27 @@ export default function UeberUnsPage() {
 
         {/* SECTION 1: UNSER LEITBILD & PROFIL */}
         <section id="leitbild" className="scroll-mt-24 bg-white rounded-3xl p-8 md:p-14 shadow-sm border border-gray-200">
-          <div className="max-w-3xl mb-8">
-            <span className="inline-block px-3.5 py-1 bg-sky-100 text-sky-800 font-bold rounded-full text-xs uppercase tracking-wider mb-3">
-              Unser Profil & Werte
-            </span>
-            <h2 className="text-3xl font-extrabold text-gray-900 leading-tight">
-              Unser Leitbild – Chancengleichheit und Vielfalt als Auftrag
-            </h2>
-            <p className="text-gray-600 text-sm md:text-base mt-3 leading-relaxed">
-              Mit unseren Angeboten wollen wir unserer gesellschaftlichen Verantwortung in Ludwigshafen und in der Region gerecht werden. 
-              Denn nur wenn Menschen ausreichend Möglichkeiten geboten werden, ihre Stärken und Potenziale zu entfalten, 
-              können sie aktiv am gesellschaftlichen Leben teilhaben.
-            </p>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+            <div className="max-w-2xl">
+              <span className="inline-block px-3.5 py-1 bg-sky-100 text-sky-800 font-bold rounded-full text-xs uppercase tracking-wider mb-3">
+                Unser Profil & Werte
+              </span>
+              <h2 className="text-3xl font-extrabold text-gray-900 leading-tight">
+                Unser Leitbild – Chancengleichheit und Vielfalt als Auftrag
+              </h2>
+              <p className="text-gray-600 text-sm md:text-base mt-3 leading-relaxed">
+                Mit unseren Angeboten wollen wir unserer gesellschaftlichen Verantwortung in Ludwigshafen und in der Region gerecht werden. 
+                Denn nur wenn Menschen ausreichend Möglichkeiten geboten werden, ihre Stärken und Potenziale zu entfalten, 
+                können sie aktiv am gesellschaftlichen Leben teilhaben.
+              </p>
+            </div>
+            <Link
+              href="/ueber-uns/leitbild"
+              className="inline-flex items-center justify-center px-5 py-2.5 bg-sky-800 hover:bg-sky-900 text-white rounded-xl text-xs font-semibold shadow-xs transition shrink-0 group"
+            >
+              <span>Vollständiges Leitbild lesen</span>
+              <ArrowRight className="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-1" />
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">

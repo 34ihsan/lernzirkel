@@ -1,0 +1,493 @@
+import React from 'react';
+import Link from 'next/link';
+import { 
+  ArrowLeft, Calendar, Users, Sparkles, 
+  CheckCircle2, ShieldCheck, MapPin, 
+  Phone, Mail, ArrowRight, Award,
+  Lightbulb, Trophy, Presentation, Beaker,
+  Compass, Flame, HelpCircle
+} from 'lucide-react';
+import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
+import EmailObfuscator from '@/components/common/EmailObfuscator';
+import prisma from '@/lib/prisma';
+import SectionRenderer from '@/components/cms/SectionRenderer';
+
+export const metadata = {
+  title: 'Bildungsmesse – Jährliche Messe für Schüler-Experimente & Projekte | Lernzirkel Ludwigshafen e.V.',
+  description: 'Die Bildungsmesse des Lernzirkel Ludwigshafen e.V. findet einmal im Jahr statt: Schülerteams präsentieren eigene Experimente an Messeständen und forschen gemeinsam mit anschließender Prämierung.',
+};
+
+export default async function BildungsmessePage() {
+  const page = await prisma.page.findUnique({
+    where: { slug: 'projekte/wettbewerbe/bildungsmesse' },
+    include: {
+      parent: true,
+      sections: {
+        orderBy: { order: 'asc' }
+      }
+    }
+  });
+
+  if (page && page.isPublished && page.sections.length > 0) {
+    const breadcrumbs: BreadcrumbItem[] = [];
+    let currentParent = page.parent;
+    while (currentParent) {
+      breadcrumbs.unshift({
+        label: currentParent.title,
+        url: `/${currentParent.slug}`
+      });
+      if (currentParent.parentId) {
+        currentParent = await prisma.page.findUnique({
+          where: { id: currentParent.parentId }
+        });
+      } else {
+        break;
+      }
+    }
+    breadcrumbs.push({
+      label: page.title,
+      url: `/${page.slug}`,
+      isCurrent: true
+    });
+
+    return (
+      <article className="min-h-screen bg-slate-50/50">
+        <Breadcrumbs items={breadcrumbs} />
+        {page.sections.map((section: any) => (
+          <SectionRenderer key={section.id} section={section} />
+        ))}
+      </article>
+    );
+  }
+
+  return <StaticBildungsmesse />;
+}
+
+function StaticBildungsmesse() {
+  const breadcrumbs: BreadcrumbItem[] = [
+    { label: 'Startseite', url: '/' },
+    { label: 'Projekte', url: '/projekte' },
+    { label: 'Wettbewerbe', url: '/projekte/wettbewerbe' },
+    { label: 'Bildungsmesse', url: '/projekte/wettbewerbe/bildungsmesse', isCurrent: true },
+  ];
+
+  const pillars = [
+    {
+      title: 'Experimentieren & Forschen',
+      desc: 'Naturwissenschaftliche Phänomene und technische Zusammenhänge werden durch anschauliche Versuche begreifbar gemacht.',
+      icon: Beaker,
+      color: 'bg-amber-50 text-amber-800 border-amber-200/70',
+      iconBg: 'text-amber-700 bg-amber-100',
+    },
+    {
+      title: 'Teamarbeit in Kleingruppen',
+      desc: 'Schülerinnen und Schüler erarbeiten ihre Projekte gemeinsam in Teams, verteilen Aufgaben und stärken ihre Kooperationsfähigkeit.',
+      icon: Users,
+      color: 'bg-sky-50 text-sky-800 border-sky-200/70',
+      iconBg: 'text-sky-700 bg-sky-100',
+    },
+    {
+      title: 'Eigene Messestände',
+      desc: 'Jede Gruppe gestaltet einen eigenen Stand, präsentiert ihre Versuche live vor Publikum und beantwortet neugierige Fragen.',
+      icon: Presentation,
+      color: 'bg-emerald-50 text-emerald-800 border-emerald-200/70',
+      iconBg: 'text-emerald-700 bg-emerald-100',
+    },
+    {
+      title: 'Würdigung & Prämierung',
+      desc: 'Eine Jury bewertet alle Einreichungen. Zum Abschluss wird die Gruppe mit dem besten Projekt feierlich als Gewinner gekürt.',
+      icon: Trophy,
+      color: 'bg-rose-50 text-rose-800 border-rose-200/70',
+      iconBg: 'text-rose-700 bg-rose-100',
+    },
+  ];
+
+  const steps = [
+    {
+      step: '01',
+      title: 'Themenfindung & Projektentwicklung',
+      desc: 'Schüler:innen wählen ein spannendes Thema aus Naturwissenschaft, Technik oder Umwelt und planen in Kleingruppen ihren Versuchsaufbau.',
+    },
+    {
+      step: '02',
+      title: 'Vorbereitung & Versuchsaufbau',
+      desc: 'Mit Unterstützung von Lehrkräften und Betreuern werden Experimente getestet, Anschauungsmaterialien erstellt und Messestände vorbereitet.',
+    },
+    {
+      step: '03',
+      title: 'Der Messetag & Live-Vorführungen',
+      desc: 'Die Stände öffnen für Besucher:innen, Familien, Mitschüler:innen und Gäste. Die Gruppen führen ihre Experimente live vor.',
+    },
+    {
+      step: '04',
+      title: 'Jurybewertung & Feierliche Siegerehrung',
+      desc: 'Eine unabhängige Jury begutachtet jedes Projekt. Das überzeugendste Team gewinnt den Hauptpreis, und alle Teilnehmenden erhalten eine Urkunde.',
+    },
+  ];
+
+  const highlights = [
+    'Einmal im Jahr stattfindende Leistungsschau und Bildungsfest',
+    'Aktive Förderung der Freude am Lernen, Forschen und Experimentieren',
+    'Praktische Erfahrung im Präsentieren vor Publikum und Jury',
+    'Stärkung von Selbstvertrauen, Teamgeist und Sprachkompetenz',
+    'Feierliche Kür des besten Projekts mit Auszeichnungen und Urkunden',
+    '100 % kostenfreie Teilnahme für alle Schülerinnen und Schüler',
+  ];
+
+  const topicAreas = [
+    'Naturwissenschaften & Chemie',
+    'Physik & Mechanik',
+    'Biologie & Ökologie',
+    'Umweltschutz & Nachhaltigkeit',
+    'Technik, Elektronik & Robotik',
+    'Kreative Erfindungen im Alltag'
+  ];
+
+  return (
+    <div className="bg-slate-50/50 min-h-screen pb-16">
+      {/* Top Breadcrumb Bar */}
+      <div className="border-b border-gray-200 bg-white">
+        <div className="container mx-auto px-4 max-w-6xl py-3">
+          <Breadcrumbs items={breadcrumbs} />
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 max-w-6xl pt-6">
+        {/* Back Link */}
+        <Link 
+          href="/projekte" 
+          className="inline-flex items-center text-xs font-semibold text-slate-500 hover:text-sky-800 mb-6 transition-colors group"
+        >
+          <ArrowLeft className="w-4 h-4 mr-1.5 transition-transform group-hover:-translate-x-0.5" />
+          <span>Zurück zur Projektübersicht</span>
+        </Link>
+
+        {/* 2-Column Grid: Main Content + Sidebar */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Main Article (Left 8 cols) */}
+          <main className="lg:col-span-8 bg-white rounded-3xl p-6 sm:p-10 md:p-14 shadow-sm border border-gray-200 space-y-8">
+            
+            {/* Header Badge & Meta */}
+            <div>
+              <div className="flex flex-wrap items-center gap-2 mb-4">
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-amber-100 text-amber-950 font-bold rounded-full text-xs uppercase tracking-wider">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-700" />
+                  <span>Bildungsmesse & Wettbewerb</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-sky-100 text-sky-950 font-semibold rounded-full text-xs">
+                  <Calendar className="w-3.5 h-3.5 text-sky-700" />
+                  <span>1x jährlich</span>
+                </span>
+                <span className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-100 text-emerald-800 font-semibold rounded-full text-xs">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
+                  <span>Kostenlos</span>
+                </span>
+              </div>
+
+              <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                Bildungsmesse
+              </h1>
+              <p className="text-sm sm:text-base text-gray-600 mt-2">
+                Begeisterung für Lernen, Forschen und Experimentieren – Schülerteams präsentieren eigene Entdeckungen an interaktiven Messeständen.
+              </p>
+            </div>
+
+            {/* Featured Hero Image */}
+            <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 shadow-sm bg-slate-100">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img 
+                src="https://lernzirkel-online.de/wp-content/uploads/2016/08/Download-2-1.jpg"
+                alt="Bildungsmesse des Lernzirkel Ludwigshafen e.V."
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* Article Text Content */}
+            <div className="space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
+              
+              {/* Lead Motto Block */}
+              <div className="p-6 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 text-slate-800 shadow-2xs space-y-2">
+                <p className="text-base sm:text-lg font-medium leading-relaxed">
+                  Unsere <strong>Bildungsmesse</strong> findet <strong>einmal im Jahr</strong> statt. Ziel dieser Veranstaltung ist es, die <strong>Motivation am Lernen und Experimentieren</strong> nachhaltig zu fördern.
+                </p>
+                <p className="text-sm text-slate-600">
+                  Schüler und Schülerinnen bereiten in kleinen Gruppen Experimente und Projekte vor, die sie dann auf der Bildungsmesse an eigenen Ständen präsentieren.
+                </p>
+              </div>
+
+              {/* Konzept & Ziel */}
+              <div className="space-y-3">
+                <h2 className="text-xl font-bold text-gray-900">
+                  Lernen durch Erleben und Ausprobieren
+                </h2>
+                <p>
+                  Auf der Bildungsmesse stehen die Kinder und Jugendlichen im Mittelpunkt: Sie werden selbst zu Forscherinnen und Forschern. Statt reiner Theorie lernen sie wissenschaftliche Zusammenhänge durch eigene Versuche kennen und erfahren, wie spannend und alltagsnah Bildung sein kann.
+                </p>
+                <p>
+                  Dafür werden einzelne Messestände aufgebaut, die von den Besucherinnen und Besuchern bestaunt und interaktiv erkundet werden können. Mitschüler:innen, Eltern, Lehrkräfte und Interessierte aus der Stadtgesellschaft sind herzlich eingeladen, mitzumachen und sich inspirieren zu lassen.
+                </p>
+              </div>
+
+              {/* 4 Pillars Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {pillars.map((p, idx) => {
+                  const Icon = p.icon;
+                  return (
+                    <div 
+                      key={idx}
+                      className={`p-5 rounded-2xl border ${p.color} flex flex-col justify-between transition-transform hover:-translate-y-0.5 duration-200`}
+                    >
+                      <div className="flex items-center gap-3 mb-2.5">
+                        <div className={`p-2.5 rounded-xl ${p.iconBg} shadow-2xs`}>
+                          <Icon className="w-5 h-5" />
+                        </div>
+                        <h3 className="font-bold text-base text-gray-900">{p.title}</h3>
+                      </div>
+                      <p className="text-xs text-gray-600 leading-relaxed">
+                        {p.desc}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Ablauf der Bildungsmesse */}
+              <div className="space-y-4 pt-2">
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900">
+                    Der Ablauf: Vom Einfall zur Auszeichnung
+                  </h3>
+                  <p className="text-sm text-gray-600 mt-1">
+                    So entsteht ein erfolgreicher Beitrag für die Bildungsmesse:
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  {steps.map((s, idx) => (
+                    <div key={idx} className="p-4 rounded-xl bg-white border border-gray-200 flex items-start gap-3.5 shadow-2xs">
+                      <span className="text-lg font-extrabold text-amber-600 font-mono shrink-0">
+                        {s.step}
+                      </span>
+                      <div>
+                        <h4 className="font-bold text-xs text-gray-900">{s.title}</h4>
+                        <p className="text-[11px] text-gray-500 mt-0.5 leading-relaxed">{s.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Prämierung Highlight Card */}
+              <div className="p-6 rounded-2xl bg-amber-900 text-white space-y-3 shadow-md">
+                <div className="flex items-center gap-2">
+                  <Trophy className="w-5 h-5 text-amber-400" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-amber-300">
+                    Höhepunkt der Bildungsmesse
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-white">
+                  Feierliche Prämierung des Siegerprojekts
+                </h3>
+                <p className="text-sm sm:text-base leading-relaxed text-amber-100">
+                  Zum krönenden Abschluss der Messe wird <strong>die Gruppe mit dem besten Projekt zum Gewinner gekürt</strong>. Neben dem begehrten Siegerpreis erhalten alle beteiligten Kinder und Jugendlichen Anerkennung und Urkunden für ihren engagierten Einsatz.
+                </p>
+              </div>
+
+              {/* Themenfelder & Fachbereiche */}
+              <div className="bg-slate-50 rounded-2xl p-6 sm:p-8 border border-slate-200/80 space-y-4">
+                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                  <Lightbulb className="w-5 h-5 text-amber-600" />
+                  <span>Vielfältige Themenwelten auf der Messe</span>
+                </h3>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  Die Experimente und Projekte umfassen ein breites Spektrum an alltagsnahen und naturwissenschaftlichen Fachgebieten:
+                </p>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {topicAreas.map((topic, idx) => (
+                    <span 
+                      key={idx}
+                      className="px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-xs font-medium text-slate-700 shadow-2xs"
+                    >
+                      {topic}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Highlights Checkmarks */}
+              <div className="space-y-3 pt-2">
+                <h3 className="text-lg font-bold text-gray-900">
+                  Die Bildungsmesse auf einen Blick
+                </h3>
+                <div className="space-y-2.5">
+                  {highlights.map((h, idx) => (
+                    <div key={idx} className="flex items-start gap-3 text-sm text-gray-700">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
+                      <span>{h}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          </main>
+
+          {/* Sidebar (Right 4 cols) */}
+          <aside className="lg:col-span-4 space-y-6">
+            
+            {/* Quick Facts Card */}
+            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700">Eckdaten</span>
+              <h3 className="text-base font-bold text-gray-900">Messe-Steckbrief</h3>
+
+              <div className="space-y-3 pt-2 text-xs text-gray-600">
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
+                  <Users className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <div>
+                    <h5 className="font-bold text-gray-900">Zielgruppe</h5>
+                    <p className="text-gray-500">Schülerinnen & Schüler in Kleingruppen</p>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
+                  <Calendar className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
+                  <div>
+                    <h5 className="font-bold text-gray-900">Turnus</h5>
+                    <p className="text-gray-500">Einmal im Jahr (Jährlich)</p>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
+                  <Presentation className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <div>
+                    <h5 className="font-bold text-gray-900">Format</h5>
+                    <p className="text-gray-500">Messestände, Experimente, Präsentation & Jury</p>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
+                  <Trophy className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                  <div>
+                    <h5 className="font-bold text-gray-900">Auszeichnung</h5>
+                    <p className="text-gray-500">Kür des besten Projekts zum Gewinner</p>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
+                  <ShieldCheck className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
+                  <div>
+                    <h5 className="font-bold text-gray-900">Teilnahme</h5>
+                    <p className="text-gray-500">100 % kostenlos für alle Teilnehmenden</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Contact Card */}
+            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-5">
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700">Mitmachen & Besuchen</span>
+                <h3 className="text-base font-bold text-gray-900">Fragen zur Bildungsmesse?</h3>
+                <p className="text-xs text-gray-500 mt-1">
+                  Möchten Sie mit einer Schülergruppe teilnehmen oder als Besucher dabei sein? Unser Team berät Sie gerne.
+                </p>
+              </div>
+
+              <div className="space-y-3 text-xs text-gray-600 pt-2 border-t border-gray-100">
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-semibold text-gray-900 block">Kontaktstelle:</span>
+                    <span>Lernzirkel Ludwigshafen e.V.<br />Ludwigsplatz 9a, 67059 Ludwigshafen</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <Phone className="w-4 h-4 text-amber-700 shrink-0" />
+                  <div>
+                    <span className="font-semibold text-gray-900 block">Telefon:</span>
+                    <a href="tel:062130737271" className="text-amber-700 hover:underline">0621 30737271</a>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <Mail className="w-4 h-4 text-amber-700 shrink-0" />
+                  <div>
+                    <span className="font-semibold text-gray-900 block">E-Mail:</span>
+                    <EmailObfuscator 
+                      user="info" 
+                      domain="lernzirkel-online.de" 
+                      showIcon={false}
+                      className="text-amber-700 hover:underline font-semibold"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Link
+                  href="/kontakt"
+                  className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-xs font-semibold text-white shadow-sm transition"
+                >
+                  <span>Kontakt aufnehmen / Anfragen</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Other Projects Quick Nav */}
+            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">Weitere Projekte & Wettbewerbe</h4>
+              <nav className="space-y-1 text-xs font-medium">
+                <Link 
+                  href="/projekte/wettbewerbe/wir-sind-vielfalt" 
+                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-amber-900 transition"
+                >
+                  <span>Wir Sind Vielfalt</span>
+                  <ArrowRight className="w-4 h-4 text-slate-300" />
+                </Link>
+                <Link 
+                  href="/projekte/future-connect" 
+                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-amber-900 transition"
+                >
+                  <span>Future Connect</span>
+                  <ArrowRight className="w-4 h-4 text-slate-300" />
+                </Link>
+                <Link 
+                  href="/projekte/menschen-staerken" 
+                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-amber-900 transition"
+                >
+                  <span>Menschen stärken Menschen</span>
+                  <ArrowRight className="w-4 h-4 text-slate-300" />
+                </Link>
+                <Link 
+                  href="/projekte/konfliktmanagement" 
+                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-amber-900 transition"
+                >
+                  <span>Stark im Umgang mit Konflikten</span>
+                  <ArrowRight className="w-4 h-4 text-slate-300" />
+                </Link>
+                <Link 
+                  href="/projekte/sprach-cafe" 
+                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-amber-900 transition"
+                >
+                  <span>Sprach-Café</span>
+                  <ArrowRight className="w-4 h-4 text-slate-300" />
+                </Link>
+                <Link 
+                  href="/projekte/dsee" 
+                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-amber-900 transition"
+                >
+                  <span>DSEE Ehrenamt stärken</span>
+                  <ArrowRight className="w-4 h-4 text-slate-300" />
+                </Link>
+              </nav>
+            </div>
+
+          </aside>
+
+        </div>
+      </div>
+    </div>
+  );
+}

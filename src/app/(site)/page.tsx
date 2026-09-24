@@ -243,7 +243,7 @@ function StaticHome() {
                 <p className="text-gray-500 text-sm">Generationen vernetzen für morgen.</p>
               </div>
             </Link>
-            <Link href="/menschen-staerken" className="flatsome-card p-6 flex items-start group border border-gray-100 hover:border-secondary transition-colors">
+            <Link href="/projekte/menschen-staerken" className="flatsome-card p-6 flex items-start group border border-gray-100 hover:border-secondary transition-colors">
               <div className="w-12 h-12 rounded-lg bg-blue-50 text-primary flex items-center justify-center shrink-0 mr-4 group-hover:bg-primary group-hover:text-white transition-colors">
                 <Users2 className="w-6 h-6" />
               </div>
@@ -252,7 +252,7 @@ function StaticHome() {
                 <p className="text-gray-500 text-sm">Patenschaftsprogramm für Geflüchtete.</p>
               </div>
             </Link>
-            <Link href="/sprach-cafe" className="flatsome-card p-6 flex items-start group border border-gray-100 hover:border-secondary transition-colors">
+            <Link href="/projekte/sprach-cafe" className="flatsome-card p-6 flex items-start group border border-gray-100 hover:border-secondary transition-colors">
               <div className="w-12 h-12 rounded-lg bg-blue-50 text-primary flex items-center justify-center shrink-0 mr-4 group-hover:bg-primary group-hover:text-white transition-colors">
                 <MessageCircle className="w-6 h-6" />
               </div>
@@ -261,7 +261,7 @@ function StaticHome() {
                 <p className="text-gray-500 text-sm">Gemeinsam sprechen und lernen in lockerer Atmosphäre.</p>
               </div>
             </Link>
-            <Link href="/konfliktmanagement" className="flatsome-card p-6 flex items-start group border border-gray-100 hover:border-secondary transition-colors">
+            <Link href="/projekte/konfliktmanagement" className="flatsome-card p-6 flex items-start group border border-gray-100 hover:border-secondary transition-colors">
               <div className="w-12 h-12 rounded-lg bg-blue-50 text-primary flex items-center justify-center shrink-0 mr-4 group-hover:bg-primary group-hover:text-white transition-colors">
                 <Shield className="w-6 h-6" />
               </div>
@@ -270,7 +270,7 @@ function StaticHome() {
                 <p className="text-gray-500 text-sm">Kompetenzen für Engagierte in Krisenzeiten.</p>
               </div>
             </Link>
-            <Link href="/wir-sind-vielfalt" className="flatsome-card p-6 flex items-start group border border-gray-100 hover:border-secondary transition-colors">
+            <Link href="/projekte/wettbewerbe/wir-sind-vielfalt" className="flatsome-card p-6 flex items-start group border border-gray-100 hover:border-secondary transition-colors">
               <div className="w-12 h-12 rounded-lg bg-blue-50 text-primary flex items-center justify-center shrink-0 mr-4 group-hover:bg-primary group-hover:text-white transition-colors">
                 <Lightbulb className="w-6 h-6" />
               </div>

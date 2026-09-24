@@ -1,14 +1,14 @@
 import prisma from '@/lib/prisma';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 import Link from 'next/link';
-import { ArrowRight, HeartHandshake, Coffee, Shield, Globe, Lightbulb, Users2 } from 'lucide-react';
+import { ArrowRight, HeartHandshake, Coffee, Shield, Globe, Lightbulb, Users2, Sparkles, Trophy } from 'lucide-react';
 
 const projects = [
   {
     id: 'future-connect',
     title: 'Future Connect',
     desc: 'Generationen vernetzen für morgen. Digitale Kompetenzen für Jugendliche stärken – Medienkompetenz, Bewerbungstraining 2.0 und Berufsorientierung.',
-    link: '/future-connect',
+    link: '/projekte/future-connect',
     icon: <Globe className="w-12 h-12 text-blue-500" />,
     color: 'bg-blue-50'
   },
@@ -16,7 +16,7 @@ const projects = [
     id: 'menschen-staerken',
     title: 'Menschen stärken Menschen',
     desc: 'Ein bundesweites Patenschaftsprojekt zur Förderung des gesellschaftlichen Zusammenhalts und zur Unterstützung benachteiligter Personen.',
-    link: '/menschen-staerken',
+    link: '/projekte/menschen-staerken',
     icon: <HeartHandshake className="w-12 h-12 text-green-500" />,
     color: 'bg-green-50'
   },
@@ -24,7 +24,7 @@ const projects = [
     id: 'sprachcafe',
     title: 'Sprach Café',
     desc: 'Ein offener und ungezwungener Raum zum Deutsch sprechen, Leute kennenlernen und für den interkulturellen Austausch bei Kaffee und Tee.',
-    link: '/sprach-cafe',
+    link: '/projekte/sprach-cafe',
     icon: <Coffee className="w-12 h-12 text-yellow-600" />,
     color: 'bg-yellow-50'
   },
@@ -32,17 +32,33 @@ const projects = [
     id: 'konfliktmanagement',
     title: 'Stark im Umgang mit Konflikten',
     desc: 'Kompetenzen für Engagierte – Workshops und Trainings zum Umgang mit Konflikten und Krisen in Ehrenamt und Alltag.',
-    link: '/konfliktmanagement',
+    link: '/projekte/konfliktmanagement',
     icon: <Shield className="w-12 h-12 text-purple-500" />,
     color: 'bg-purple-50'
   },
   {
+    id: 'wettbewerbe',
+    title: 'Wettbewerbe & Schülerinitiativen',
+    desc: 'Talente wecken, Forschergeist fördern und den Zusammenhalt stärken: Unsere beiden Wettbewerbe „Wir sind Vielfalt“ und die „Bildungsmesse“ im Überblick.',
+    link: '/projekte/wettbewerbe',
+    icon: <Trophy className="w-12 h-12 text-rose-600" />,
+    color: 'bg-rose-50'
+  },
+  {
     id: 'wir-sind-vielfalt',
     title: 'Wir Sind Vielfalt',
-    desc: 'Wettbewerbe und gesellschaftliches Engagement für ein vielfältiges Miteinander. Aktionen, Veranstaltungen und Bildungsmesse in Ludwigshafen.',
-    link: '/wir-sind-vielfalt',
+    desc: 'Wettbewerbe und gesellschaftliches Engagement für ein vielfältiges Miteinander. Aktionen, Schülerwettbewerbe und Preise in Ludwigshafen.',
+    link: '/projekte/wettbewerbe/wir-sind-vielfalt',
     icon: <Lightbulb className="w-12 h-12 text-orange-500" />,
     color: 'bg-orange-50'
+  },
+  {
+    id: 'bildungsmesse',
+    title: 'Bildungsmesse',
+    desc: 'Lernen, Forschen & Experimentieren: Schülerteams präsentieren spannende Versuche an eigenen Messeständen mit anschließender Prämierung.',
+    link: '/projekte/wettbewerbe/bildungsmesse',
+    icon: <Sparkles className="w-12 h-12 text-amber-500" />,
+    color: 'bg-amber-50'
   },
   {
     id: 'jugendbetreuung',

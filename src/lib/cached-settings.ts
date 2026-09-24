@@ -2,7 +2,7 @@ import { unstable_cache } from 'next/cache';
 import prisma from '@/lib/prisma';
 import { defaultHeaderConfig, defaultFooterConfig, HeaderConfig, FooterConfig } from '@/lib/site-defaults';
 
-export const getCachedSiteSettings = unstable_cache(
+const getCachedSiteSettingsInternal = unstable_cache(
   async () => {
     try {
       const settings = await prisma.siteSettings.findUnique({
@@ -20,6 +20,20 @@ export const getCachedSiteSettings = unstable_cache(
     tags: ['site-settings'],
   }
 );
+
+export const getCachedSiteSettings = async () => {
+  if (process.env.NODE_ENV === 'development') {
+    try {
+      return await prisma.siteSettings.findUnique({
+        where: { id: 'global' },
+      });
+    } catch (err) {
+      console.error('Failed to load siteSettings in dev:', err);
+      return null;
+    }
+  }
+  return getCachedSiteSettingsInternal();
+};
 
 export const getCachedAnnouncements = unstable_cache(
   async () => {
