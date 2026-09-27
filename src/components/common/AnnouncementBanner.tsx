@@ -49,7 +49,7 @@ export default function AnnouncementBanner({
 
   // Component mount olduğunda localStorage'dan kapatılan duyuruları al
   useEffect(() => {
-    const stored = localStorage.getItem("dismissed_announcements");
+    const stored = localStorage.getItem("dismissed_announcements_v2");
     if (stored) {
       try {
         setDismissedIds(JSON.parse(stored));
@@ -80,6 +80,8 @@ export default function AnnouncementBanner({
       }
       return false;
     });
+    
+    console.log("Active announcements:", filtered, "All:", announcements);
 
     setActiveAnnouncements(filtered);
   }, [pathname, announcements, dismissedIds, mounted]);
@@ -87,7 +89,7 @@ export default function AnnouncementBanner({
   const handleDismiss = (id: string) => {
     const newDismissed = [...dismissedIds, id];
     setDismissedIds(newDismissed);
-    localStorage.setItem("dismissed_announcements", JSON.stringify(newDismissed));
+    localStorage.setItem("dismissed_announcements_v2", JSON.stringify(newDismissed));
   };
 
   // --- KATEGORİLENDİRME (Çoklu Duyuru Yönetimi İçin) ---
@@ -97,7 +99,24 @@ export default function AnnouncementBanner({
   const toasts = activeAnnouncements.filter(a => a.type === "toast");
   const popups = activeAnnouncements.filter(a => a.type === "popup");
 
+  const [visiblePopupId, setVisiblePopupId] = useState<string | null>(null);
+
   useEffect(() => {
+    // Popup Gecikme Mantığı
+    let popupTimer: NodeJS.Timeout;
+    if (popups.length > 0) {
+      const currentPopup = popups[0];
+      if (visiblePopupId !== currentPopup.id) {
+        // duration = 3 veya 5 saniye olarak ayarlanmıştı
+        const delayMs = (currentPopup.duration || 3) * 1000;
+        popupTimer = setTimeout(() => {
+          setVisiblePopupId(currentPopup.id);
+        }, delayMs);
+      }
+    } else {
+      setVisiblePopupId(null);
+    }
+
     // Timer for banners
     let bannerTimer: NodeJS.Timeout;
     if (banners.length > 1) {
@@ -129,11 +148,12 @@ export default function AnnouncementBanner({
     }
 
     return () => {
+      clearTimeout(popupTimer);
       clearTimeout(bannerTimer);
       clearTimeout(stickyTopTimer);
       clearTimeout(stickyBottomTimer);
     };
-  }, [banners, stickyTop, stickyBottom, activeIndices]);
+  }, [banners, stickyTop, stickyBottom, popups, activeIndices, visiblePopupId]);
 
   // Hydration hatasını önlemek için mount olana kadar render etmiyoruz
   if (!mounted || activeAnnouncements.length === 0) return null;
@@ -237,7 +257,7 @@ export default function AnnouncementBanner({
 
       {/* 2. Sticky Top (Rotasyon - Yukarıda tek gösterilir) */}
       {currentStickyTop && (
-        <div className="fixed top-0 left-0 right-0 z-50 flex flex-col shadow-md">
+        <div className="relative w-full z-[60] flex flex-col shadow-md">
           <div 
             key={currentStickyTop.id + activeIndices.stickyTop}
             style={{
@@ -338,6 +358,8 @@ export default function AnnouncementBanner({
       {/* 5. Popups (Kuyruk sistemi - Aynı anda sadece 1 adet gösterilir) */}
       {popups.length > 0 && (() => {
         const ann = popups[0]; // Kuyruktaki ilk popup'ı al
+        if (visiblePopupId !== ann.id) return null; // Timer dolmadıysa gösterme
+
         return (
           <div key={ann.id} className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 group">
             <div className="absolute inset-0 bg-black/60 animate-in fade-in duration-300" onClick={() => ann.isCloseable && handleDismiss(ann.id)} />
@@ -378,15 +400,6 @@ export default function AnnouncementBanner({
                   <div className="pt-2">
                     {renderLink(ann)}
                   </div>
-                )}
-                
-                {ann.isCloseable && (
-                  <button 
-                    onClick={() => handleDismiss(ann.id)}
-                    className="mt-6 px-6 py-2 bg-black/10 hover:bg-black/20 font-medium rounded-md transition-colors relative z-20"
-                  >
-                    Anladım, Kapat
-                  </button>
                 )}
               </div>
             </div>

@@ -65,6 +65,15 @@ export async function PUT(
       return NextResponse.json({ error: "Bir sayfa kendisinin üst sayfası olamaz." }, { status: 400 });
     }
     
+    // Check if the slug is already taken by another page
+    if (slug !== undefined) {
+      const cleanSlug = slug.replace(/^\/+/, "").trim();
+      const existing = await prisma.page.findUnique({ where: { slug: cleanSlug } });
+      if (existing && existing.id !== id) {
+        return NextResponse.json({ error: `Bu URL adresi (${cleanSlug}) zaten başka bir sayfada kullanılıyor. Lütfen farklı bir adres girin.` }, { status: 400 });
+      }
+    }
+    
     await prisma.$transaction(async (tx) => {
       // update page metadata if provided
       const updateData: any = {};
@@ -81,6 +90,8 @@ export async function PUT(
           data: updateData
         });
       }
+
+
 
       // delete existing sections
       await tx.section.deleteMany({
@@ -112,7 +123,6 @@ export async function PUT(
       }
     });
 
-    // Automatically sync hierarchy in case slug changed to something like "parent/child"
     const { syncPageHierarchy } = await import("@/actions/admin");
     await syncPageHierarchy();
 

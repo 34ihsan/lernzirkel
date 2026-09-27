@@ -87,7 +87,7 @@ export default function FloatingAIAssistant() {
   };
 
   return (
-    <div className="fixed bottom-20 right-4 lg:bottom-6 lg:right-6 z-40 font-sans">
+    <div className="fixed bottom-20 right-[5.5rem] lg:bottom-8 lg:right-[6.5rem] z-40 font-sans">
       {/* Floating Launcher Button */}
       {!isOpen && (
         <button
@@ -111,7 +111,7 @@ export default function FloatingAIAssistant() {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="w-[92vw] sm:w-96 max-h-[580px] h-[80vh] sm:h-[520px] bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-6 duration-200">
+        <div className="absolute bottom-16 -right-[4.5rem] sm:-right-4 w-[92vw] sm:w-96 max-h-[580px] h-[80vh] sm:h-[520px] bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-6 duration-200">
           {/* Top Bar */}
           <div className="bg-gradient-to-r from-sky-950 via-sky-900 to-indigo-950 p-4 text-white flex items-center justify-between shadow">
             <div className="flex items-center gap-3">

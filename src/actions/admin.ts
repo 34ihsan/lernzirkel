@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { revalidatePath, updateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import fs from "fs";
 import path from "path";
@@ -29,7 +29,7 @@ export async function updateSiteSettings(formData: FormData) {
     },
   });
 
-  updateTag("site-settings");
+  revalidateTag("site-settings");
   revalidatePath("/", "layout");
 }
 
@@ -65,7 +65,7 @@ export async function updateDesignSettings(payload: {
     },
   });
 
-  updateTag("site-settings");
+  revalidateTag("site-settings");
   revalidatePath("/", "layout");
   return { success: true };
 }
@@ -84,7 +84,7 @@ export async function updateHeaderFooterSettings(headerConfig: any, footerConfig
     },
   });
 
-  updateTag("site-settings");
+  revalidateTag("site-settings");
   revalidatePath("/", "layout");
 }
 
@@ -135,6 +135,8 @@ export async function saveModelRecord(modelName: string, id: string | null, data
   }
   redirect(`/admin/content/${modelName}`);
 }
+
+
 
 // ─── Announcement Actions ────────────────────────────────────────────────────
 
@@ -221,7 +223,7 @@ export async function createAnnouncement(data: AnnouncementData) {
   const parsedData = parseAnnouncementData(data);
   const translations = await generateTranslations(data);
   await prisma.announcement.create({ data: { ...parsedData, translations } });
-  updateTag("site-announcements");
+  revalidateTag("site-announcements");
   revalidatePath("/admin/announcements");
   revalidatePath("/", "layout");
 }
@@ -233,14 +235,14 @@ export async function updateAnnouncement(id: string, data: AnnouncementData) {
     where: { id },
     data: { ...parsedData, translations },
   });
-  updateTag("site-announcements");
+  revalidateTag("site-announcements");
   revalidatePath("/admin/announcements");
   revalidatePath("/", "layout");
 }
 
 export async function deleteAnnouncement(id: string) {
   await prisma.announcement.delete({ where: { id } });
-  updateTag("site-announcements");
+  revalidateTag("site-announcements");
   revalidatePath("/admin/announcements");
   revalidatePath("/", "layout");
 }
@@ -290,7 +292,7 @@ export async function syncPhysicalPages() {
         data: {
           slug,
           title: title,
-          description: "Otomatik eklenen sayfa",
+          description: `${title} - Lernzirkel Ludwigshafen e.V. Eğitim, danışmanlık ve entegrasyon projelerimizle yanınızdayız. Detaylı bilgi için sayfamızı inceleyin.`,
           isPublished: true,
         }
       });
@@ -544,6 +546,7 @@ export async function reorderPage(pageId: string, direction: 'up' | 'down') {
     })
   ]);
 
+  revalidateTag("site-pages");
   revalidatePath('/admin/pages');
   revalidatePath('/', 'layout');
   return { success: true };
@@ -582,6 +585,7 @@ export async function updatePageHierarchy(pageId: string, parentId: string | nul
     data: dataToUpdate
   });
 
+  revalidateTag("site-pages");
   revalidatePath('/admin/pages');
   revalidatePath('/', 'layout');
   return { success: true };

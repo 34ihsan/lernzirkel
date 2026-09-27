@@ -34,11 +34,16 @@ export default async function NewPage({
     
     const title = formData.get("title") as string;
     const rawSlug = formData.get("slug") as string;
-    const description = formData.get("description") as string;
+    let description = formData.get("description") as string;
     const parentId = (formData.get("parentId") as string) || null;
     const order = parseInt(formData.get("order") as string) || 0;
     
     if (!title || !rawSlug) return;
+
+    // Otomatik SEO oluşturma (Eğer boş bırakıldıysa)
+    if (!description || description.trim() === "") {
+      description = `${title} - Lernzirkel Ludwigshafen e.V. Eğitim, danışmanlık ve entegrasyon projelerimizle yanınızdayız. Detaylı bilgi için sayfamızı inceleyin.`;
+    }
     
     // Clean raw slug
     const cleanRawSlug = rawSlug.replace(/^\/+|\/+$/g, '').trim();

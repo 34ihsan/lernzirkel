@@ -20,7 +20,7 @@ export default function FloatingContact() {
   };
 
   return (
-    <div className="fixed bottom-20 right-4 z-40 flex flex-col items-end gap-3 lg:bottom-10 lg:right-10">
+    <div className="fixed bottom-20 right-4 z-40 flex flex-col items-end gap-3 lg:bottom-8 lg:right-8">
       {/* Expandable Menu */}
       {isOpen && (
         <div className="flex flex-col gap-3 mb-2 animate-in fade-in slide-in-from-bottom-4">

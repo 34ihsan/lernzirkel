@@ -21,8 +21,8 @@ export default function AdminLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="de">
-      <body className={`${inter.variable} antialiased bg-gray-50 text-gray-900`}>
+    <html lang="de" suppressHydrationWarning>
+      <body suppressHydrationWarning className={`${inter.variable} antialiased bg-gray-50 text-gray-900`}>
         <div className="flex h-screen overflow-hidden">
           {/* Sidebar */}
           <aside className="w-64 bg-gray-900 text-white flex flex-col">
@@ -54,7 +54,13 @@ export default function AdminLayout({
                 <li>
                   <Link href="/admin/content/News" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
                     <Newspaper size={18} />
-                    <span>Haberler (News)</span>
+                    <span>Duyurular (News)</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/admin/articles" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
+                    <FileText size={18} />
+                    <span>Blog & Makale</span>
                   </Link>
                 </li>
                 <li>
@@ -79,6 +85,12 @@ export default function AdminLayout({
                   <Link href="/admin/content/GalleryImage" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
                     <ImageIcon size={18} />
                     <span>Galeri (Gallery)</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/admin/jobs" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
+                    <FileText size={18} />
+                    <span>Karriere (Jobs)</span>
                   </Link>
                 </li>
 

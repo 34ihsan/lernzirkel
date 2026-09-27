@@ -5,7 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import AnnouncementBanner from "@/components/common/AnnouncementBanner";
 import { LanguageProvider } from "@/context/LanguageContext";
-import { getCachedSiteSettings, getCachedAnnouncements } from "@/lib/cached-settings";
+import { getCachedSiteSettings, getCachedAnnouncements, getCachedUnpublishedPageSlugs } from "@/lib/cached-settings";
 
 import { constructMetadata, generateOrganizationSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -34,10 +34,41 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [settings, serializedAnnouncements] = await Promise.all([
+  const [settings, serializedAnnouncements, unpublishedSlugs] = await Promise.all([
     getCachedSiteSettings(),
     getCachedAnnouncements(),
+    getCachedUnpublishedPageSlugs(),
   ]);
+
+  const headerConfig = JSON.parse(JSON.stringify((settings?.headerConfig as any) || { navLinks: [] }));
+  const footerConfig = JSON.parse(JSON.stringify((settings?.footerConfig as any) || { sections: [] }));
+
+  // Helper to check if a URL points to an unpublished page
+  const isUnpublished = (url: string) => {
+    if (!url || !url.startsWith('/')) return false;
+    const slug = url.substring(1).split('#')[0].split('?')[0];
+    return unpublishedSlugs.includes(slug);
+  };
+
+  // Filter out unpublished pages from header config
+  if (headerConfig.navLinks) {
+    headerConfig.navLinks = headerConfig.navLinks.filter((link: any) => !isUnpublished(link.url));
+    headerConfig.navLinks.forEach((link: any) => {
+      if (link.children) {
+        link.children = link.children.filter((child: any) => !isUnpublished(child.url));
+      }
+    });
+  }
+
+  // Filter out unpublished pages from footer config
+  if (footerConfig.quickLinks?.links) {
+    footerConfig.quickLinks.links = footerConfig.quickLinks.links.filter((link: any) => !isUnpublished(link.url));
+  }
+  if (footerConfig.legalLinks) {
+    footerConfig.legalLinks = footerConfig.legalLinks.filter((link: any) => !isUnpublished(link.url));
+  }
+
+
 
   const design = (settings?.designConfig as any) || {};
   const colors = design.colors || {};
@@ -95,7 +126,7 @@ export default async function RootLayout({
   const btnTransform = buttons.transform === 'uppercase' ? 'uppercase' : 'none';
 
   return (
-    <html lang="de">
+    <html lang="de" suppressHydrationWarning>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <style>{`
@@ -129,10 +160,10 @@ export default async function RootLayout({
         )}
         <JsonLd data={generateOrganizationSchema()} />
       </head>
-      <body className={`${fontInter.variable} ${fontOutfit.variable} antialiased flex flex-col min-h-screen bg-background`}>
+      <body className={`${fontInter.variable} ${fontOutfit.variable} antialiased flex flex-col min-h-screen bg-background`} suppressHydrationWarning>
         <LanguageProvider>
           <AnnouncementBanner announcements={serializedAnnouncements as any} />
-          <Header config={settings?.headerConfig as any} designConfig={design} />
+          <Header config={headerConfig} designConfig={design} />
           <main className="flex-grow pb-14 lg:pb-0">
             {children}
           </main>
@@ -140,7 +171,7 @@ export default async function RootLayout({
           <MobileActionBar />
           <FloatingAIAssistant />
           <A11yPanel />
-          <Footer config={settings?.footerConfig as any} designConfig={design} />
+          <Footer config={footerConfig} designConfig={design} />
         </LanguageProvider>
       </body>
     </html>

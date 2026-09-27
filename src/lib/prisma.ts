@@ -10,7 +10,7 @@ const prismaClientSingleton = () => {
   return new PrismaClient({ adapter })
 }
 
-const SCHEMA_VERSION = 3 // bumped for page hierarchy fields (parentId, order, parent, children)
+const SCHEMA_VERSION = 6 // bumped for Article
 
 declare const globalThis: {
   prismaGlobal: ReturnType<typeof prismaClientSingleton>;
@@ -22,7 +22,9 @@ const existingClient = globalThis.prismaGlobal
 const isStale = !existingClient || 
   globalThis.prismaSchemaVersion !== SCHEMA_VERSION ||
   !('page' in existingClient) || 
-  !('announcement' in existingClient)
+  !('announcement' in existingClient) ||
+  !('jobPosition' in existingClient) ||
+  !('article' in existingClient)
 
 const prisma = (!isStale && existingClient) ? existingClient : prismaClientSingleton()
 

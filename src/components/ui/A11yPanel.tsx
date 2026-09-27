@@ -52,7 +52,7 @@ export default function A11yPanel() {
   }, [easyLanguage]);
 
   return (
-    <div className="fixed bottom-6 left-6 z-50">
+    <div className="fixed bottom-20 left-4 lg:bottom-8 lg:left-8 z-50">
       {/* Trigger Button */}
       <Button
         variant="default"

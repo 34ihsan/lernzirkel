@@ -331,6 +331,10 @@ export const defaultHeaderConfig: HeaderConfig = {
         }
       ]
     },
+    {
+      label: "Blog & Wissen",
+      url: "/blog"
+    },
     { 
       label: "Über uns", 
       url: "/ueber-uns",
@@ -377,6 +381,12 @@ export const defaultHeaderConfig: HeaderConfig = {
           description: "Helfen Sie mit, Bildungschancen für alle zu sichern",
           badge: "Spenden",
           icon: "HeartHandshake"
+        },
+        {
+          label: "Karriere",
+          url: "/karriere",
+          description: "Stellenangebote für Lehrkräfte und Praktikanten",
+          icon: "Briefcase"
         }
       ]
     },
@@ -449,7 +459,9 @@ export const defaultFooterConfig: FooterConfig = {
       { label: "Migrationsfachdienst", url: "/beratung" },
       { label: "Projekte & Engagement", url: "/projekte" },
       { label: "ESF+ Alpha", url: "/esfplusalpha" },
-      { label: "Bildergalerie", url: "/ueber-uns/galerie" }
+      { label: "Bildergalerie", url: "/ueber-uns/galerie" },
+      { label: "Blog & Wissen", url: "/blog" },
+      { label: "Karriere", url: "/karriere" }
     ]
   },
   badges: {

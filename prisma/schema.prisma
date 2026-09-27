@@ -249,3 +249,44 @@ model AuditLog {
   createdAt DateTime @default(now())
 }
 
+
+model ContactMessage {
+  id        String   @id @default(uuid())
+  topic     String
+  firstName String
+  lastName  String
+  email     String
+  phone     String?
+  details   Json?
+  message   String
+  status    String   @default("UNREAD")
+  createdAt DateTime @default(now())
+}
+
+model JobPosition {
+  id          String   @id @default(uuid())
+  title       String   // e.g. "Lehrkraft für Deutsch", "Praktikant im Bereich Marketing"
+  type        String   // "LEHRER" | "PRAKTIKANT" | "OTHER"
+  description String   // Details about the position
+  requirements String? // requirements or qualifications
+  location    String?  // e.g. "Ludwigshafen"
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Article {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  excerpt     String?
+  content     String
+  coverImage  String?
+  category    String   @default("ALLGEMEIN") // MFD, INTEGRATION, NACHHILFE, ALLGEMEIN
+  tags        String?
+  author      String?
+  isPublished Boolean  @default(true)
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
