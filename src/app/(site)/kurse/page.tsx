@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { getCachedCourses } from '@/lib/cached-content';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 import AdvancedCourseExplorer from '@/components/courses/AdvancedCourseExplorer';
 import Link from 'next/link';
@@ -19,10 +20,7 @@ export default async function KursePage() {
         }
       }
     }).catch(() => null),
-    prisma.course.findMany({
-      where: { isActive: true },
-      orderBy: { createdAt: 'desc' }
-    }).catch(() => [])
+    getCachedCourses().catch(() => [])
   ]);
 
   if (cmsPage && cmsPage.isPublished && cmsPage.sections.length > 0) {
@@ -32,7 +30,7 @@ export default async function KursePage() {
           <SectionRenderer key={section.id} section={section} />
         ))}
         {/* Enhanced course explorer below CMS sections */}
-        <section className="py-16 bg-gray-50/60 border-t border-gray-100">
+        <section className="py-16 bg-gray-50 dark:bg-gray-800/60 border-t border-gray-100 dark:border-gray-800">
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="text-center mb-10 max-w-3xl mx-auto">
               <span className="text-accent font-bold uppercase tracking-wider text-xs md:text-sm mb-2 block">
@@ -41,7 +39,7 @@ export default async function KursePage() {
               <h2 className="text-3xl md:text-4xl font-extrabold text-primary mb-4">
                 Finden Sie das passende Programm
               </h2>
-              <p className="text-gray-600 text-sm md:text-base">
+              <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base">
                 Nutzen Sie die Volltextsuche und die Filter nach Sprachniveau, Förderung und Zeitformat.
               </p>
             </div>
@@ -53,7 +51,7 @@ export default async function KursePage() {
   }
 
   return (
-    <div className="py-12 md:py-16 bg-gray-50/40 min-h-screen">
+    <div className="py-12 md:py-16 bg-gray-50 dark:bg-gray-800/40 min-h-screen">
       <div className="container mx-auto px-4 max-w-7xl space-y-12">
 
         {/* Page Header */}
@@ -64,7 +62,7 @@ export default async function KursePage() {
           <h1 className="text-3xl md:text-5xl font-extrabold text-primary mb-5 leading-tight tracking-tight">
             Alle Kurse & Bildungsangebote
           </h1>
-          <p className="text-base md:text-lg text-gray-600 leading-relaxed">
+          <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
             Als vom BAMF anerkannter Träger und offizielles telc Prüfungszentrum bieten wir ein vielfältiges Spektrum an Deutschkursen, kostenloser Schülerförderung (BuT) und Grundbildung in Ludwigshafen.
           </p>
         </div>
@@ -98,13 +96,13 @@ export default async function KursePage() {
               </ul>
               <Link 
                 href="/kontakt" 
-                className="flatsome-button bg-accent hover:bg-red-700 text-white font-bold px-6 py-3 rounded-xl shadow-sm inline-flex items-center gap-2"
+                className="flatsome-button bg-accent hover:bg-red-700 text-white font-bold px-6 py-3 rounded-xl shadow-sm dark:shadow-none inline-flex items-center gap-2"
               >
                 <span>Persönliches Beratungsgespräch vereinbaren</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
-            <div className="bg-white/10 rounded-2xl p-8 text-center border border-white/15">
+            <div className="bg-white dark:bg-gray-900/10 rounded-2xl p-8 text-center border border-white/15">
               <GraduationCap className="w-20 h-20 mx-auto mb-4 text-white opacity-90" />
               <h3 className="text-2xl font-bold mb-2">BAMF anerkannt & telc Zentrum</h3>
               <p className="text-blue-100 text-sm md:text-base leading-relaxed">

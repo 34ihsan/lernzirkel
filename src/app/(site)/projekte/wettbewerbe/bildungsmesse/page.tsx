@@ -146,7 +146,7 @@ function StaticBildungsmesse() {
   return (
     <div className="bg-slate-50/50 min-h-screen pb-16">
       {/* Top Breadcrumb Bar */}
-      <div className="border-b border-gray-200 bg-white">
+      <div className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 max-w-6xl py-3">
           <Breadcrumbs items={breadcrumbs} />
         </div>
@@ -166,7 +166,7 @@ function StaticBildungsmesse() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Main Article (Left 8 cols) */}
-          <main className="lg:col-span-8 bg-white rounded-3xl p-6 sm:p-10 md:p-14 shadow-sm border border-gray-200 space-y-8">
+          <main className="lg:col-span-8 bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-10 md:p-14 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-8">
             
             {/* Header Badge & Meta */}
             <div>
@@ -185,16 +185,16 @@ function StaticBildungsmesse() {
                 </span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+              <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight leading-tight">
                 Bildungsmesse
               </h1>
-              <p className="text-sm sm:text-base text-gray-600 mt-2">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-2">
                 Begeisterung für Lernen, Forschen und Experimentieren – Schülerteams präsentieren eigene Entdeckungen an interaktiven Messeständen.
               </p>
             </div>
 
             {/* Featured Hero Image */}
-            <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 shadow-sm bg-slate-100">
+            <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm dark:shadow-none bg-slate-100">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
                 src="https://lernzirkel-online.de/wp-content/uploads/2016/08/Download-2-1.jpg"
@@ -204,7 +204,7 @@ function StaticBildungsmesse() {
             </div>
 
             {/* Article Text Content */}
-            <div className="space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
+            <div className="space-y-6 text-gray-700 dark:text-gray-300 text-sm sm:text-base leading-relaxed">
               
               {/* Lead Motto Block */}
               <div className="p-6 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 text-slate-800 shadow-2xs space-y-2">
@@ -218,7 +218,7 @@ function StaticBildungsmesse() {
 
               {/* Konzept & Ziel */}
               <div className="space-y-3">
-                <h2 className="text-xl font-bold text-gray-900">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                   Lernen durch Erleben und Ausprobieren
                 </h2>
                 <p>
@@ -242,9 +242,9 @@ function StaticBildungsmesse() {
                         <div className={`p-2.5 rounded-xl ${p.iconBg} shadow-2xs`}>
                           <Icon className="w-5 h-5" />
                         </div>
-                        <h3 className="font-bold text-base text-gray-900">{p.title}</h3>
+                        <h3 className="font-bold text-base text-gray-900 dark:text-gray-100">{p.title}</h3>
                       </div>
-                      <p className="text-xs text-gray-600 leading-relaxed">
+                      <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                         {p.desc}
                       </p>
                     </div>
@@ -255,23 +255,23 @@ function StaticBildungsmesse() {
               {/* Ablauf der Bildungsmesse */}
               <div className="space-y-4 pt-2">
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
                     Der Ablauf: Vom Einfall zur Auszeichnung
                   </h3>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                     So entsteht ein erfolgreicher Beitrag für die Bildungsmesse:
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   {steps.map((s, idx) => (
-                    <div key={idx} className="p-4 rounded-xl bg-white border border-gray-200 flex items-start gap-3.5 shadow-2xs">
+                    <div key={idx} className="p-4 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 flex items-start gap-3.5 shadow-2xs">
                       <span className="text-lg font-extrabold text-amber-600 font-mono shrink-0">
                         {s.step}
                       </span>
                       <div>
-                        <h4 className="font-bold text-xs text-gray-900">{s.title}</h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5 leading-relaxed">{s.desc}</p>
+                        <h4 className="font-bold text-xs text-gray-900 dark:text-gray-100">{s.title}</h4>
+                        <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5 leading-relaxed">{s.desc}</p>
                       </div>
                     </div>
                   ))}
@@ -279,7 +279,7 @@ function StaticBildungsmesse() {
               </div>
 
               {/* Prämierung Highlight Card */}
-              <div className="p-6 rounded-2xl bg-amber-900 text-white space-y-3 shadow-md">
+              <div className="p-6 rounded-2xl bg-amber-900 text-white space-y-3 shadow-md dark:shadow-none">
                 <div className="flex items-center gap-2">
                   <Trophy className="w-5 h-5 text-amber-400" />
                   <span className="text-xs font-bold uppercase tracking-wider text-amber-300">
@@ -296,18 +296,18 @@ function StaticBildungsmesse() {
 
               {/* Themenfelder & Fachbereiche */}
               <div className="bg-slate-50 rounded-2xl p-6 sm:p-8 border border-slate-200/80 space-y-4">
-                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <Lightbulb className="w-5 h-5 text-amber-600" />
                   <span>Vielfältige Themenwelten auf der Messe</span>
                 </h3>
-                <p className="text-sm text-gray-700 leading-relaxed">
+                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                   Die Experimente und Projekte umfassen ein breites Spektrum an alltagsnahen und naturwissenschaftlichen Fachgebieten:
                 </p>
                 <div className="flex flex-wrap gap-2 pt-1">
                   {topicAreas.map((topic, idx) => (
                     <span 
                       key={idx}
-                      className="px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-xs font-medium text-slate-700 shadow-2xs"
+                      className="px-3 py-1.5 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-xs font-medium text-slate-700 shadow-2xs"
                     >
                       {topic}
                     </span>
@@ -317,12 +317,12 @@ function StaticBildungsmesse() {
 
               {/* Highlights Checkmarks */}
               <div className="space-y-3 pt-2">
-                <h3 className="text-lg font-bold text-gray-900">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
                   Die Bildungsmesse auf einen Blick
                 </h3>
                 <div className="space-y-2.5">
                   {highlights.map((h, idx) => (
-                    <div key={idx} className="flex items-start gap-3 text-sm text-gray-700">
+                    <div key={idx} className="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
                       <span>{h}</span>
                     </div>
@@ -337,68 +337,68 @@ function StaticBildungsmesse() {
           <aside className="lg:col-span-4 space-y-6">
             
             {/* Quick Facts Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-4">
               <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700">Eckdaten</span>
-              <h3 className="text-base font-bold text-gray-900">Messe-Steckbrief</h3>
+              <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Messe-Steckbrief</h3>
 
-              <div className="space-y-3 pt-2 text-xs text-gray-600">
+              <div className="space-y-3 pt-2 text-xs text-gray-600 dark:text-gray-400">
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <Users className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Zielgruppe</h5>
-                    <p className="text-gray-500">Schülerinnen & Schüler in Kleingruppen</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Zielgruppe</h5>
+                    <p className="text-gray-500 dark:text-gray-400">Schülerinnen & Schüler in Kleingruppen</p>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <Calendar className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Turnus</h5>
-                    <p className="text-gray-500">Einmal im Jahr (Jährlich)</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Turnus</h5>
+                    <p className="text-gray-500 dark:text-gray-400">Einmal im Jahr (Jährlich)</p>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <Presentation className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Format</h5>
-                    <p className="text-gray-500">Messestände, Experimente, Präsentation & Jury</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Format</h5>
+                    <p className="text-gray-500 dark:text-gray-400">Messestände, Experimente, Präsentation & Jury</p>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <Trophy className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Auszeichnung</h5>
-                    <p className="text-gray-500">Kür des besten Projekts zum Gewinner</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Auszeichnung</h5>
+                    <p className="text-gray-500 dark:text-gray-400">Kür des besten Projekts zum Gewinner</p>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <ShieldCheck className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Teilnahme</h5>
-                    <p className="text-gray-500">100 % kostenlos für alle Teilnehmenden</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Teilnahme</h5>
+                    <p className="text-gray-500 dark:text-gray-400">100 % kostenlos für alle Teilnehmenden</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Contact Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-5">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-5">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700">Mitmachen & Besuchen</span>
-                <h3 className="text-base font-bold text-gray-900">Fragen zur Bildungsmesse?</h3>
-                <p className="text-xs text-gray-500 mt-1">
+                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Fragen zur Bildungsmesse?</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   Möchten Sie mit einer Schülergruppe teilnehmen oder als Besucher dabei sein? Unser Team berät Sie gerne.
                 </p>
               </div>
 
-              <div className="space-y-3 text-xs text-gray-600 pt-2 border-t border-gray-100">
+              <div className="space-y-3 text-xs text-gray-600 dark:text-gray-400 pt-2 border-t border-gray-100 dark:border-gray-800">
                 <div className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">Kontaktstelle:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">Kontaktstelle:</span>
                     <span>Lernzirkel Ludwigshafen e.V.<br />Ludwigsplatz 9a, 67059 Ludwigshafen</span>
                   </div>
                 </div>
@@ -406,7 +406,7 @@ function StaticBildungsmesse() {
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-amber-700 shrink-0" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">Telefon:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">Telefon:</span>
                     <a href="tel:062130737271" className="text-amber-700 hover:underline">0621 30737271</a>
                   </div>
                 </div>
@@ -414,7 +414,7 @@ function StaticBildungsmesse() {
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-amber-700 shrink-0" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">E-Mail:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">E-Mail:</span>
                     <EmailObfuscator 
                       user="info" 
                       domain="lernzirkel-online.de" 
@@ -428,7 +428,7 @@ function StaticBildungsmesse() {
               <div className="pt-2">
                 <Link
                   href="/kontakt"
-                  className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-xs font-semibold text-white shadow-sm transition"
+                  className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-xs font-semibold text-white shadow-sm dark:shadow-none transition"
                 >
                   <span>Kontakt aufnehmen / Anfragen</span>
                 </Link>
@@ -436,8 +436,8 @@ function StaticBildungsmesse() {
             </div>
 
             {/* Other Projects Quick Nav */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">Weitere Projekte & Wettbewerbe</h4>
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Weitere Projekte & Wettbewerbe</h4>
               <nav className="space-y-1 text-xs font-medium">
                 <Link 
                   href="/projekte/wettbewerbe/wir-sind-vielfalt" 

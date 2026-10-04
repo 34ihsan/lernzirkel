@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import AnnouncementBanner from "@/components/common/AnnouncementBanner";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { getCachedSiteSettings, getCachedAnnouncements, getCachedUnpublishedPageSlugs } from "@/lib/cached-settings";
 
 import { constructMetadata, generateOrganizationSchema } from "@/lib/seo";
@@ -12,6 +13,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import FloatingContact from "@/components/common/FloatingContact";
 import MobileActionBar from "@/components/common/MobileActionBar";
 import FloatingAIAssistant from "@/components/common/FloatingAIAssistant";
+import SmoothScrollProvider from "@/components/common/SmoothScrollProvider";
 
 import A11yPanel from "@/components/ui/A11yPanel";
 
@@ -148,6 +150,14 @@ export default async function RootLayout({
             --font-body: var(--font-sans), system-ui, -apple-system, sans-serif;
             --font-heading: var(--font-heading), var(--font-sans), sans-serif;
           }
+          .dark {
+            --background: #121212;
+            --foreground: #f1f5f9;
+            --surface: #1e1e1e;
+            --border: #333333;
+            --muted: #2d2d2d;
+            /* Keep brand colors (primary, accent) from CMS intact */
+          }
           body {
             font-family: var(--font-body);
           }
@@ -160,19 +170,23 @@ export default async function RootLayout({
         )}
         <JsonLd data={generateOrganizationSchema()} />
       </head>
-      <body className={`${fontInter.variable} ${fontOutfit.variable} antialiased flex flex-col min-h-screen bg-background`} suppressHydrationWarning>
-        <LanguageProvider>
-          <AnnouncementBanner announcements={serializedAnnouncements as any} />
-          <Header config={headerConfig} designConfig={design} />
-          <main className="flex-grow pb-14 lg:pb-0">
-            {children}
-          </main>
-          <FloatingContact />
-          <MobileActionBar />
-          <FloatingAIAssistant />
-          <A11yPanel />
-          <Footer config={footerConfig} designConfig={design} />
-        </LanguageProvider>
+      <body className={`${fontInter.variable} ${fontOutfit.variable} antialiased flex flex-col min-h-screen bg-background text-foreground transition-colors duration-300`} suppressHydrationWarning>
+        <SmoothScrollProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <LanguageProvider>
+              <AnnouncementBanner announcements={serializedAnnouncements as any} />
+            <Header config={headerConfig} designConfig={design} />
+            <main className="flex-grow pb-14 lg:pb-0">
+              {children}
+            </main>
+            <FloatingContact />
+            <MobileActionBar />
+            <FloatingAIAssistant />
+              <A11yPanel />
+              <Footer config={footerConfig} designConfig={design} />
+            </LanguageProvider>
+          </ThemeProvider>
+        </SmoothScrollProvider>
       </body>
     </html>
   );

@@ -38,7 +38,7 @@ export default async function PhilosophiePage() {
     });
 
     return (
-      <article className="min-h-screen bg-gray-50">
+      <article className="min-h-screen bg-gray-50 dark:bg-gray-800">
         <Breadcrumbs items={breadcrumbs} />
         {page.sections.map((section: any) => (
           <SectionRenderer key={section.id} section={section} />
@@ -52,16 +52,16 @@ export default async function PhilosophiePage() {
 
 function StaticPhilosophie() {
   return (
-    <div className="py-12 bg-gray-50/50 min-h-screen">
+    <div className="py-12 bg-gray-50 dark:bg-gray-800/50 min-h-screen">
       <div className="container mx-auto px-4 max-w-4xl">
         
         {/* Back Link */}
-        <Link href="/ueber-uns" className="inline-flex items-center text-sm text-gray-500 hover:text-primary mb-8 font-medium transition-colors">
+        <Link href="/ueber-uns" className="inline-flex items-center text-sm text-gray-500 dark:text-gray-400 hover:text-primary mb-8 font-medium transition-colors">
           <ArrowLeft className="w-4 h-4 mr-2" /> Zurück zu Über Uns
         </Link>
         
         {/* Main Content Card */}
-        <div className="bg-white rounded-xl shadow-sm p-8 md:p-14 border border-gray-100 flatsome-card">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none p-8 md:p-14 border border-gray-100 dark:border-gray-800 flatsome-card">
           
           <span className="inline-block px-4 py-1 bg-blue-100 text-blue-700 font-bold rounded-full text-sm mb-6 uppercase tracking-wider">
             Unsere Geschichte
@@ -71,7 +71,7 @@ function StaticPhilosophie() {
             Entstehung und Intension des Lernzirkel Ludwigshafen e.V.
           </h1>
           
-          <div className="prose max-w-none text-gray-700">
+          <div className="prose max-w-none text-gray-700 dark:text-gray-300">
             <h3 className="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
               <Lightbulb className="w-6 h-6 mr-3 text-accent" />
               Der gemeinnützige Verein

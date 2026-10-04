@@ -99,7 +99,7 @@ export default function SmartContactForm() {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-royal p-6 md:p-8 border border-slate-100">
+    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-royal p-6 md:p-8 border border-slate-100">
       <h3 className="text-2xl font-bold text-primary mb-6">Schreiben Sie uns</h3>
       
       {errorMsg && (
@@ -184,11 +184,11 @@ export default function SmartContactForm() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 bg-blue-50 p-4 rounded-lg border border-blue-100">
             <div>
               <label className="block text-sm font-semibold text-blue-900 mb-2">Klasse (Schüler)</label>
-              <input name="klasse" type="text" className="w-full bg-white border border-blue-200 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-400" placeholder="z.B. 8. Klasse" />
+              <input name="klasse" type="text" className="w-full bg-white dark:bg-gray-900 border border-blue-200 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-400" placeholder="z.B. 8. Klasse" />
             </div>
             <div>
               <label className="block text-sm font-semibold text-blue-900 mb-2">Fach/Fächer</label>
-              <input name="faecher" type="text" className="w-full bg-white border border-blue-200 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-400" placeholder="z.B. Mathe, Englisch" />
+              <input name="faecher" type="text" className="w-full bg-white dark:bg-gray-900 border border-blue-200 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-400" placeholder="z.B. Mathe, Englisch" />
             </div>
           </div>
         )}
@@ -196,7 +196,7 @@ export default function SmartContactForm() {
         {topic === 'deutschkurs' && (
           <div className="bg-amber-50 p-4 rounded-lg border border-amber-100">
             <label className="block text-sm font-semibold text-amber-900 mb-2">Haben Sie einen Berechtigungsschein vom BAMF oder Jobcenter?</label>
-            <select name="bamfStatus" className="w-full bg-white border border-amber-200 rounded-lg px-4 py-2 focus:outline-none focus:border-amber-400">
+            <select name="bamfStatus" className="w-full bg-white dark:bg-gray-900 border border-amber-200 rounded-lg px-4 py-2 focus:outline-none focus:border-amber-400">
               <option value="unbekannt">Ich weiß es nicht / Bitte um Beratung</option>
               <option value="ja_bamf">Ja, vom BAMF</option>
               <option value="ja_jobcenter">Ja, vom Jobcenter / Agentur für Arbeit</option>
@@ -214,7 +214,7 @@ export default function SmartContactForm() {
               name="attachment" 
               type="file" 
               accept=".pdf,.doc,.docx,.jpg,.png"
-              className="w-full bg-white border border-emerald-200 rounded-lg px-4 py-2 focus:outline-none focus:border-emerald-400 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100" 
+              className="w-full bg-white dark:bg-gray-900 border border-emerald-200 rounded-lg px-4 py-2 focus:outline-none focus:border-emerald-400 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100" 
             />
             <p className="text-xs text-emerald-700 mt-2">Erlaubte Formate: PDF, DOCX, JPG, PNG. (Max. 5 MB)</p>
           </div>

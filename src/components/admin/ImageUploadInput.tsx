@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { UploadCloud } from 'lucide-react';
+import { Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
+import MediaLibraryModal from './MediaLibraryModal';
 
 interface ImageUploadInputProps {
   value?: string;
@@ -12,8 +13,8 @@ interface ImageUploadInputProps {
   defaultValue?: string;
 }
 
-export default function ImageUploadInput({ value: propValue, onChange, placeholder = "Görsel URL'si (http://...) veya bilgisayardan seç", className = "", name, defaultValue }: ImageUploadInputProps & { defaultValue?: string }) {
-  const [isUploading, setIsUploading] = useState(false);
+export default function ImageUploadInput({ value: propValue, onChange, placeholder = "Görsel seçin veya URL yapıştırın", className = "", name, defaultValue }: ImageUploadInputProps & { defaultValue?: string }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [internalValue, setInternalValue] = useState(defaultValue || "");
 
   const isControlled = propValue !== undefined;
@@ -24,61 +25,46 @@ export default function ImageUploadInput({ value: propValue, onChange, placehold
     if (onChange) onChange(val);
   };
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setIsUploading(true);
-    try {
-      const fd = new FormData();
-      fd.append('file', file);
-      
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: fd
-      });
-      
-      if (res.ok) {
-        const data = await res.json();
-        if (data.url) {
-          handleChange(data.url);
-        }
-      } else {
-        alert('Dosya yüklenirken bir hata oluştu.');
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Hata oluştu.');
-    } finally {
-      setIsUploading(false);
-      // Reset input so the same file can be selected again if needed
-      e.target.value = '';
-    }
-  };
-
   return (
     <div className={`flex flex-col space-y-2 ${className}`}>
       <div className="flex items-center space-x-2">
-        <input
-          type="text"
-          name={name}
-          value={value || ''}
-          onChange={(e) => handleChange(e.target.value)}
-          placeholder={placeholder}
-          className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border text-sm"
-        />
-        <label className={`cursor-pointer flex items-center space-x-2 border border-gray-300 rounded-md px-3 py-2 text-sm font-medium transition-colors whitespace-nowrap ${isUploading ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-white hover:bg-gray-50 text-gray-700'}`}>
-          <UploadCloud size={16} />
-          <span>{isUploading ? 'Yükleniyor...' : 'Seç'}</span>
-          <input 
-            type="file" 
-            accept="image/*" 
-            className="hidden" 
-            disabled={isUploading}
-            onChange={handleUpload}
+        <div className="relative flex-1">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+            <LinkIcon size={16} />
+          </div>
+          <input
+            type="text"
+            name={name}
+            value={value || ''}
+            onChange={(e) => handleChange(e.target.value)}
+            placeholder={placeholder}
+            className="w-full pl-9 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border text-sm"
           />
-        </label>
+        </div>
+        <button 
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+          className="flex items-center space-x-2 border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-md px-4 py-2 text-sm font-medium transition-colors whitespace-nowrap"
+        >
+          <ImageIcon size={16} />
+          <span>Kütüphaneden Seç</span>
+        </button>
       </div>
+      
+      {/* Media Preview (if value exists) */}
+      {value && (
+        <div className="mt-2 w-32 h-20 rounded-md border border-gray-200 bg-gray-50 overflow-hidden relative">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={value} alt="Preview" className="w-full h-full object-cover" />
+        </div>
+      )}
+
+      {/* Media Library Modal */}
+      <MediaLibraryModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        onSelect={handleChange} 
+      />
     </div>
   );
 }

@@ -66,7 +66,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
 
     const dynamicProjects = projects.map((project) => ({
-      url: `${baseUrl}/projekte/${project.id}`, // Assuming this route exists or will exist
+      url: `${baseUrl}/projekte/${project.id}`,
       lastModified: project.updatedAt,
       changeFrequency: 'monthly' as const,
       priority: 0.6,

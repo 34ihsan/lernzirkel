@@ -27,12 +27,12 @@ export default async function KontaktPage() {
   const mapsUrl = contact?.mapsUrl || `https://maps.google.com/?q=${encodeURIComponent(address)}`;
 
   return (
-    <div className="py-16 bg-gray-50 min-h-screen">
+    <div className="py-16 bg-gray-50 dark:bg-gray-800 min-h-screen">
       <div className="container mx-auto px-4 max-w-6xl">
         
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">Kontakt & Anmeldung</h1>
-          <p className="text-lg text-gray-600">Wir sind für Sie da. Schreiben Sie uns eine Nachricht oder rufen Sie uns an.</p>
+          <p className="text-lg text-gray-600 dark:text-gray-400">Wir sind für Sie da. Schreiben Sie uns eine Nachricht oder rufen Sie uns an.</p>
         </div>
 
         <div className="grid lg:grid-cols-5 gap-12">
@@ -45,7 +45,7 @@ export default async function KontaktPage() {
           {/* Contact Info (Right) */}
           <div className="lg:col-span-2 space-y-8">
             <div className="bg-primary text-white p-8 rounded-xl shadow-lg relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-5 rounded-full -mr-10 -mt-10"></div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white dark:bg-gray-900 opacity-5 rounded-full -mr-10 -mt-10"></div>
               <h3 className="text-xl font-bold mb-6 relative z-10">Kontaktdaten</h3>
               
               <div className="space-y-6 relative z-10">
@@ -106,30 +106,30 @@ export default async function KontaktPage() {
               )}
             </div>
 
-            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 flatsome-card">
+            <div className="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-800 flatsome-card">
               <h3 className="text-lg font-bold text-foreground mb-4 flex items-center">
                 <Clock className="w-5 h-5 text-primary mr-2" /> {openingHours?.title || "Öffnungszeiten & Erreichbarkeit"}
               </h3>
               {workingHours && (
-                <div className="mb-4 pb-3 border-b border-gray-100">
+                <div className="mb-4 pb-3 border-b border-gray-100 dark:border-gray-800">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 block mb-0.5">
                     Zentrale Erreichbarkeit
                   </span>
-                  <p className="text-sm text-gray-800 font-medium">{workingHours}</p>
+                  <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">{workingHours}</p>
                 </div>
               )}
-              <ul className="space-y-4 text-sm text-gray-600">
+              <ul className="space-y-4 text-sm text-gray-600 dark:text-gray-400">
                 {departments.map((dept, idx) => (
                   <li key={dept.id || idx} className="border-b border-gray-50 pb-3 last:border-b-0 last:pb-0">
                     <div className="flex justify-between items-start gap-4">
-                      <span className="font-semibold text-gray-800">{dept.name}</span>
+                      <span className="font-semibold text-gray-800 dark:text-gray-200">{dept.name}</span>
                       <div className="text-right text-xs sm:text-sm space-y-0.5">
                         {dept.hours?.map((h, hIdx) => {
                           if (h.isClosed || (!h.openTime && !h.closeTime)) return null;
                           return (
-                            <div key={hIdx} className="text-gray-600">
-                              <span className="font-medium text-gray-500 mr-1.5">{h.day}:</span>
-                              <span className="font-semibold text-gray-800">{h.openTime} - {h.closeTime} Uhr</span>
+                            <div key={hIdx} className="text-gray-600 dark:text-gray-400">
+                              <span className="font-medium text-gray-500 dark:text-gray-400 mr-1.5">{h.day}:</span>
+                              <span className="font-semibold text-gray-800 dark:text-gray-200">{h.openTime} - {h.closeTime} Uhr</span>
                             </div>
                           );
                         })}

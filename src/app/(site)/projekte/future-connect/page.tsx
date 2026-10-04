@@ -112,7 +112,7 @@ function StaticFutureConnect() {
   return (
     <div className="bg-slate-50/50 min-h-screen pb-16">
       {/* Top Breadcrumb Bar */}
-      <div className="border-b border-gray-200 bg-white">
+      <div className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 max-w-6xl py-3">
           <Breadcrumbs items={breadcrumbs} />
         </div>
@@ -132,7 +132,7 @@ function StaticFutureConnect() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Main Article (Left 8 cols) */}
-          <main className="lg:col-span-8 bg-white rounded-3xl p-6 sm:p-10 md:p-14 shadow-sm border border-gray-200 space-y-8">
+          <main className="lg:col-span-8 bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-10 md:p-14 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-8">
             
             {/* Header Badge & Meta */}
             <div>
@@ -147,13 +147,13 @@ function StaticFutureConnect() {
                 </span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+              <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight leading-tight">
                 Future Connect – Generationen vernetzen für morgen
               </h1>
             </div>
 
             {/* Featured Image */}
-            <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 shadow-sm bg-slate-100">
+            <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm dark:shadow-none bg-slate-100">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
                 src="https://lernzirkel-online.de/wp-content/uploads/2026/05/KI-generiert-750x458.jpg"
@@ -163,9 +163,9 @@ function StaticFutureConnect() {
             </div>
 
             {/* Article Text Content */}
-            <div className="space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
+            <div className="space-y-6 text-gray-700 dark:text-gray-300 text-sm sm:text-base leading-relaxed">
               
-              <p className="text-base sm:text-lg text-gray-800 font-medium leading-relaxed">
+              <p className="text-base sm:text-lg text-gray-800 dark:text-gray-200 font-medium leading-relaxed">
                 Mit <strong>„Future Connect – Generationen vernetzen für morgen“</strong> schaffen der Lernzirkel Ludwigshafen e.V., 
                 Ela Frauennetzwerk e.V., Fontäne Kulturzentrum e.V. sowie der Seniorenrat Ludwigshafen einen 
                 generationenübergreifenden Lern- und Begegnungsraum in Ludwigshafen.
@@ -204,12 +204,12 @@ function StaticFutureConnect() {
 
               {/* Maßnahmen Box */}
               <div className="bg-slate-50 rounded-2xl p-6 sm:p-8 border border-slate-200/80 space-y-4">
-                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5 text-emerald-600" />
                   <span>Unsere Maßnahmen</span>
                 </h3>
                 
-                <ul className="space-y-2.5 text-sm text-gray-700">
+                <ul className="space-y-2.5 text-sm text-gray-700 dark:text-gray-300">
                   <li className="flex items-start gap-2.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-sky-600 mt-2 shrink-0"></span>
                     <span>Vorbereitung und Qualifizierung junger Lernbegleiter:innen</span>
@@ -241,28 +241,28 @@ function StaticFutureConnect() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                 <div className="p-5 rounded-2xl bg-amber-50/60 border border-amber-200/80 space-y-1.5">
                   <span className="text-xs font-bold uppercase tracking-wider text-amber-800">Projektdauer</span>
-                  <p className="text-sm font-semibold text-gray-900">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                     Das Projekt findet im Laufe des Jahres 2026 statt.
                   </p>
                 </div>
 
                 <div className="p-5 rounded-2xl bg-emerald-50/60 border border-emerald-200/80 space-y-1.5">
                   <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">Ziel</span>
-                  <p className="text-sm font-semibold text-gray-900">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                     Digitale Teilhabe stärken, gesellschaftlichen Zusammenhalt fördern und nachhaltige Begegnungsräume schaffen.
                   </p>
                 </div>
               </div>
 
               {/* Förderer BASF */}
-              <div className="pt-6 border-t border-gray-100 space-y-4">
-                <span className="text-xs font-bold uppercase tracking-wider text-gray-500 block">
+              <div className="pt-6 border-t border-gray-100 dark:border-gray-800 space-y-4">
+                <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 block">
                   Förderung & Unterstützung
                 </span>
-                <div className="p-6 rounded-2xl bg-white border border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xs">
+                <div className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xs">
                   <div>
-                    <h4 className="font-bold text-gray-900 text-sm">Gefördert mit freundlicher Unterstützung durch die BASF</h4>
-                    <p className="text-xs text-gray-500 mt-0.5">
+                    <h4 className="font-bold text-gray-900 dark:text-gray-100 text-sm">Gefördert mit freundlicher Unterstützung durch die BASF</h4>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                       Gemeinsam für digitale Bildung, interkulturellen Dialog und gesellschaftliche Teilhabe in Ludwigshafen.
                     </p>
                   </div>
@@ -276,19 +276,19 @@ function StaticFutureConnect() {
               </div>
 
               {/* Photo Gallery Grid */}
-              <div className="pt-6 border-t border-gray-100 space-y-4">
+              <div className="pt-6 border-t border-gray-100 dark:border-gray-800 space-y-4">
                 <div>
                   <span className="text-xs font-bold uppercase tracking-wider text-sky-700 block mb-1">
                     Bilder & Eindrücke
                   </span>
-                  <h3 className="text-lg font-bold text-gray-900">Impressionen aus den Future Connect Workshops</h3>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">Impressionen aus den Future Connect Workshops</h3>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                   {galleryImages.map((img, idx) => (
                     <div 
                       key={idx} 
-                      className="group relative rounded-2xl overflow-hidden border border-gray-200 shadow-2xs hover:shadow-md transition duration-200 bg-slate-100"
+                      className="group relative rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-2xs hover:shadow-md dark:shadow-none transition duration-200 bg-slate-100"
                     >
                       <div className="aspect-square relative w-full overflow-hidden">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -301,8 +301,8 @@ function StaticFutureConnect() {
                           <p className="text-white text-[11px] font-medium leading-tight">{img.caption}</p>
                         </div>
                       </div>
-                      <div className="p-2.5 bg-white text-center">
-                        <p className="text-xs font-semibold text-gray-800 truncate">{img.title}</p>
+                      <div className="p-2.5 bg-white dark:bg-gray-900 text-center">
+                        <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate">{img.title}</p>
                       </div>
                     </div>
                   ))}
@@ -316,17 +316,17 @@ function StaticFutureConnect() {
           <aside className="lg:col-span-4 space-y-6">
             
             {/* Project Partners Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-4">
               <span className="text-[11px] font-bold uppercase tracking-wider text-sky-700">Kooperationspartner</span>
-              <h3 className="text-base font-bold text-gray-900">Gemeinsam für Ludwigshafen</h3>
+              <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Gemeinsam für Ludwigshafen</h3>
 
               <div className="space-y-3 pt-2">
                 {partners.map((partner, idx) => (
                   <div key={idx} className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-sky-700 shrink-0 mt-0.5" />
                     <div>
-                      <h5 className="font-bold text-xs text-gray-900">{partner.name}</h5>
-                      <p className="text-[11px] text-gray-500">{partner.role}</p>
+                      <h5 className="font-bold text-xs text-gray-900 dark:text-gray-100">{partner.name}</h5>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400">{partner.role}</p>
                     </div>
                   </div>
                 ))}
@@ -334,20 +334,20 @@ function StaticFutureConnect() {
             </div>
 
             {/* Contact & Ansprechpartner */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-5">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-5">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-sky-700">Mitmachen & Fragen</span>
-                <h3 className="text-base font-bold text-gray-900">Interesse an Future Connect?</h3>
-                <p className="text-xs text-gray-500 mt-1">
+                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Interesse an Future Connect?</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   Ob als junger Lernbegleiter oder als teilnehmender Senior – wir freuen uns über Ihre Kontaktaufnahme!
                 </p>
               </div>
 
-              <div className="space-y-3 text-xs text-gray-600 pt-2 border-t border-gray-100">
+              <div className="space-y-3 text-xs text-gray-600 dark:text-gray-400 pt-2 border-t border-gray-100 dark:border-gray-800">
                 <div className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 text-sky-700 shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">Ort der Workshops:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">Ort der Workshops:</span>
                     <span>Lernzirkel Ludwigshafen e.V.<br />Ludwigsplatz 9a, 67059 Ludwigshafen</span>
                   </div>
                 </div>
@@ -355,7 +355,7 @@ function StaticFutureConnect() {
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-sky-700 shrink-0" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">Telefon:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">Telefon:</span>
                     <a href="tel:062130737271" className="text-sky-700 hover:underline">0621 30737271</a>
                   </div>
                 </div>
@@ -363,7 +363,7 @@ function StaticFutureConnect() {
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-sky-700 shrink-0" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">E-Mail:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">E-Mail:</span>
                     <EmailObfuscator 
                       user="info" 
                       domain="lernzirkel-online.de" 
@@ -377,7 +377,7 @@ function StaticFutureConnect() {
               <div className="pt-2">
                 <Link
                   href="/kontakt"
-                  className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-sky-800 hover:bg-sky-900 text-xs font-semibold text-white shadow-sm transition"
+                  className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-sky-800 hover:bg-sky-900 text-xs font-semibold text-white shadow-sm dark:shadow-none transition"
                 >
                   <span>Jetzt anmelden / Kontakt aufnehmen</span>
                 </Link>
@@ -385,8 +385,8 @@ function StaticFutureConnect() {
             </div>
 
             {/* Other Projects Quick Nav */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">Weitere Projekte</h4>
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Weitere Projekte</h4>
               <nav className="space-y-1 text-xs font-medium">
                 <Link 
                   href="/projekte/menschen-staerken" 

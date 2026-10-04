@@ -143,7 +143,7 @@ function StaticKonfliktmanagement() {
   return (
     <div className="bg-slate-50/50 min-h-screen pb-16">
       {/* Top Breadcrumb Bar */}
-      <div className="border-b border-gray-200 bg-white">
+      <div className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 max-w-6xl py-3">
           <Breadcrumbs items={breadcrumbs} />
         </div>
@@ -163,7 +163,7 @@ function StaticKonfliktmanagement() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Main Article (Left 8 cols) */}
-          <main className="lg:col-span-8 bg-white rounded-3xl p-6 sm:p-10 md:p-14 shadow-sm border border-gray-200 space-y-8">
+          <main className="lg:col-span-8 bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-10 md:p-14 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-8">
             
             {/* Header Badge & Meta */}
             <div>
@@ -182,16 +182,16 @@ function StaticKonfliktmanagement() {
                 </span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+              <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight leading-tight">
                 Projekt: „Stark im Umgang mit Konflikten und Krisen – Kompetenzen für Engagierte“
               </h1>
-              <p className="text-sm sm:text-base text-gray-600 mt-2">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-2">
                 Psychosoziale Kompetenzen, Deeskalation und Resilienz für ehrenamtlich Engagierte in Ludwigshafen.
               </p>
             </div>
 
             {/* Featured Hero Image */}
-            <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 shadow-sm bg-slate-100">
+            <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm dark:shadow-none bg-slate-100">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
                 src="https://lernzirkel-online.de/wp-content/uploads/2026/05/KI-generiertes-Symbolbild-750x458.jpg"
@@ -201,7 +201,7 @@ function StaticKonfliktmanagement() {
             </div>
 
             {/* Article Text Content */}
-            <div className="space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
+            <div className="space-y-6 text-gray-700 dark:text-gray-300 text-sm sm:text-base leading-relaxed">
               
               {/* Lead Motto Block */}
               <div className="p-6 rounded-2xl bg-gradient-to-r from-purple-50 to-sky-50 border border-purple-100 text-slate-800 shadow-2xs">
@@ -218,7 +218,7 @@ function StaticKonfliktmanagement() {
 
               {/* Problemstellung & Hintergrund */}
               <div className="space-y-3.5">
-                <h2 className="text-xl font-bold text-gray-900">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                   Herausforderungen im ehrenamtlichen Alltag begegnen
                 </h2>
                 <p>
@@ -242,10 +242,10 @@ function StaticKonfliktmanagement() {
                   <span className="text-xs font-bold uppercase tracking-wider text-purple-700 block mb-1">
                     Qualifizierungsprogramm
                   </span>
-                  <h3 className="text-xl font-bold text-gray-900">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                     6 interaktive Module unter fachkundiger Leitung
                   </h3>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                     In 6 praxisnahen Workshops lernen Sie, Konflikte frühzeitig zu erkennen, Gelassenheit in Krisen zu bewahren und Ihre persönliche Resilienz zu stärken:
                   </p>
                 </div>
@@ -260,10 +260,10 @@ function StaticKonfliktmanagement() {
                       >
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-2">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-white shadow-2xs">
+                            <span className="text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-white dark:bg-gray-900 shadow-2xs">
                               {m.nr}
                             </span>
-                            <h4 className="font-bold text-base text-gray-900">{m.title}</h4>
+                            <h4 className="font-bold text-base text-gray-900 dark:text-gray-100">{m.title}</h4>
                           </div>
                           <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
                             <Calendar className="w-3.5 h-3.5 text-purple-600 shrink-0" />
@@ -273,7 +273,7 @@ function StaticKonfliktmanagement() {
                             <span>{m.time}</span>
                           </div>
                         </div>
-                        <p className="text-xs sm:text-sm text-gray-600 leading-relaxed mt-1">
+                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed mt-1">
                           {m.desc}
                         </p>
                       </div>
@@ -284,16 +284,16 @@ function StaticKonfliktmanagement() {
 
               {/* Didaktik & Praxisnähe */}
               <div className="bg-slate-50 rounded-2xl p-6 sm:p-8 border border-slate-200/80 space-y-4">
-                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5 text-emerald-600" />
                   <span>Praxisorientiertes Lernen statt trockener Theorie</span>
                 </h3>
-                <p className="text-sm text-gray-700 leading-relaxed">
+                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                   Die Workshops orientieren sich stark an den Erfahrungen und Herausforderungen der Teilnehmenden. Statt rein theoretischer 
                   Wissensvermittlung setzt das Projekt bewusst auf interaktive Methoden: Durch Rollenspiele, Gruppenarbeiten, 
                   reale Fallbeispiele und gemeinsame Reflexionsphasen werden alltägliche Situationen bearbeitet und konkrete Handlungsoptionen entwickelt.
                 </p>
-                <p className="text-sm text-gray-700 leading-relaxed">
+                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                   Ein besonderer Schwerpunkt liegt auf der Förderung einer <strong>wertschätzenden Kommunikationskultur</strong> und der Stärkung 
                   sozialer Handlungssicherheit. Die Teilnehmenden lernen, Konflikte frühzeitig zu erkennen, Eskalationen vorzubeugen und schwierige 
                   Gespräche respektvoll und lösungsorientiert zu führen.
@@ -301,7 +301,7 @@ function StaticKonfliktmanagement() {
               </div>
 
               {/* Nachhaltigkeit & Peer-Coaching */}
-              <div className="p-6 rounded-2xl bg-sky-900 text-white space-y-3 shadow-md">
+              <div className="p-6 rounded-2xl bg-sky-900 text-white space-y-3 shadow-md dark:shadow-none">
                 <span className="text-xs font-bold uppercase tracking-wider text-sky-300 block">
                   Nachhaltiger Ansatz & Multiplikation
                 </span>
@@ -314,12 +314,12 @@ function StaticKonfliktmanagement() {
 
               {/* Highlights Checkliste */}
               <div className="space-y-3 pt-2">
-                <h3 className="text-lg font-bold text-gray-900">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
                   Ziele und Nutzen für Teilnehmende
                 </h3>
                 <div className="space-y-2.5">
                   {highlights.map((h, idx) => (
-                    <div key={idx} className="flex items-start gap-3 text-sm text-gray-700">
+                    <div key={idx} className="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-1 shrink-0" />
                       <span>{h}</span>
                     </div>
@@ -328,20 +328,20 @@ function StaticKonfliktmanagement() {
               </div>
 
               {/* Förderer Deutsche Postcode Lotterie */}
-              <div className="pt-8 border-t border-gray-100 space-y-4">
+              <div className="pt-8 border-t border-gray-100 dark:border-gray-800 space-y-4">
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-gray-500 block mb-1">
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 block mb-1">
                     Förderung & Unterstützung
                   </span>
-                  <h3 className="text-base font-bold text-gray-900">
+                  <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">
                     Diese Maßnahme wird mit Unterstützung der Deutschen Postcode Lotterie durchgeführt
                   </h3>
                 </div>
 
-                <div className="p-6 sm:p-8 rounded-2xl bg-white border border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xs hover:shadow-sm transition">
+                <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xs hover:shadow-sm dark:shadow-none transition">
                   <div className="space-y-1 text-center sm:text-left">
-                    <h4 className="font-bold text-sm text-gray-900">Deutsche Postcode Lotterie</h4>
-                    <p className="text-xs text-gray-500 max-w-md">
+                    <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100">Deutsche Postcode Lotterie</h4>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 max-w-md">
                       Förderung von sozialem Zusammenhalt, Chancengleichheit, Demokratieförderung und interkulturellem Dialog.
                     </p>
                   </div>
@@ -361,57 +361,57 @@ function StaticKonfliktmanagement() {
           <aside className="lg:col-span-4 space-y-6">
             
             {/* Quick Facts Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-4">
               <span className="text-[11px] font-bold uppercase tracking-wider text-purple-700">Eckdaten</span>
-              <h3 className="text-base font-bold text-gray-900">Workshop-Details</h3>
+              <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Workshop-Details</h3>
 
-              <div className="space-y-3 pt-2 text-xs text-gray-600">
+              <div className="space-y-3 pt-2 text-xs text-gray-600 dark:text-gray-400">
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Kosten</h5>
-                    <p className="text-gray-500">100 % kostenlos (vollständig gefördert)</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Kosten</h5>
+                    <p className="text-gray-500 dark:text-gray-400">100 % kostenlos (vollständig gefördert)</p>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <Calendar className="w-4 h-4 text-sky-700 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Umfang & Zeitraum</h5>
-                    <p className="text-gray-500">6 Module von September bis Oktober 2026</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Umfang & Zeitraum</h5>
+                    <p className="text-gray-500 dark:text-gray-400">6 Module von September bis Oktober 2026</p>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <MapPin className="w-4 h-4 text-purple-700 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Veranstaltungsort</h5>
-                    <p className="text-gray-500">Bad-Aussee-Straße 51, 67069 Oppau / Ludwigshafen</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Veranstaltungsort</h5>
+                    <p className="text-gray-500 dark:text-gray-400">Bad-Aussee-Straße 51, 67069 Oppau / Ludwigshafen</p>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <Users className="w-4 h-4 text-sky-700 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Zielgruppe</h5>
-                    <p className="text-gray-500">Ehrenamtlich Engagierte, Multiplikatoren & Aktive</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Zielgruppe</h5>
+                    <p className="text-gray-500 dark:text-gray-400">Ehrenamtlich Engagierte, Multiplikatoren & Aktive</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Kooperationspartner Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-4">
               <span className="text-[11px] font-bold uppercase tracking-wider text-purple-700">Kooperationspartner</span>
-              <h3 className="text-base font-bold text-gray-900">Projektträger & Partner</h3>
+              <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Projektträger & Partner</h3>
 
               <div className="space-y-3 pt-2">
                 {partners.map((partner, idx) => (
                   <div key={idx} className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-purple-700 shrink-0 mt-0.5" />
                     <div>
-                      <h5 className="font-bold text-xs text-gray-900">{partner.name}</h5>
-                      <p className="text-[11px] text-gray-500">{partner.role}</p>
+                      <h5 className="font-bold text-xs text-gray-900 dark:text-gray-100">{partner.name}</h5>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400">{partner.role}</p>
                     </div>
                   </div>
                 ))}
@@ -419,20 +419,20 @@ function StaticKonfliktmanagement() {
             </div>
 
             {/* Registration & Contact Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-5">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-5">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-purple-700">Anmeldung & Kontakt</span>
-                <h3 className="text-base font-bold text-gray-900">Jetzt Platz sichern</h3>
-                <p className="text-xs text-gray-500 mt-1">
+                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Jetzt Platz sichern</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   Da die Teilnehmerzahl in den interaktiven Modulen begrenzt ist, bitten wir um vorherige Anmeldung per E-Mail oder Kontaktformular.
                 </p>
               </div>
 
-              <div className="space-y-3 text-xs text-gray-600 pt-2 border-t border-gray-100">
+              <div className="space-y-3 text-xs text-gray-600 dark:text-gray-400 pt-2 border-t border-gray-100 dark:border-gray-800">
                 <div className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 text-purple-700 shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">Workshop-Ort:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">Workshop-Ort:</span>
                     <span>Bad-Aussee-Straße 51<br />67069 Oppau / Ludwigshafen</span>
                   </div>
                 </div>
@@ -440,7 +440,7 @@ function StaticKonfliktmanagement() {
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-purple-700 shrink-0" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">Projekt-E-Mail:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">Projekt-E-Mail:</span>
                     <EmailObfuscator 
                       user="projekt" 
                       domain="lernzirkel-online.de" 
@@ -453,7 +453,7 @@ function StaticKonfliktmanagement() {
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-purple-700 shrink-0" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">Zentrale:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">Zentrale:</span>
                     <a href="tel:062130737271" className="text-purple-700 hover:underline">0621 30737271</a>
                   </div>
                 </div>
@@ -462,7 +462,7 @@ function StaticKonfliktmanagement() {
               <div className="pt-2">
                 <Link
                   href="/kontakt"
-                  className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-xs font-semibold text-white shadow-sm transition"
+                  className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-xs font-semibold text-white shadow-sm dark:shadow-none transition"
                 >
                   <span>Zur Anmeldung / Kontakt</span>
                 </Link>
@@ -470,8 +470,8 @@ function StaticKonfliktmanagement() {
             </div>
 
             {/* Other Projects Quick Nav */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">Weitere Projekte</h4>
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Weitere Projekte</h4>
               <nav className="space-y-1 text-xs font-medium">
                 <Link 
                   href="/projekte/future-connect" 

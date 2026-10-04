@@ -29,9 +29,9 @@ export default async function BeratungPage() {
 
 function StaticBeratung() {
   return (
-    <div className="py-16 bg-gray-50/50 min-h-screen">
+    <div className="py-16 bg-gray-50 dark:bg-gray-800/50 min-h-screen">
       <div className="container mx-auto px-4 max-w-5xl">
-        <div className="bg-white rounded-xl shadow-sm p-8 md:p-14 border border-gray-100 flatsome-card">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none p-8 md:p-14 border border-gray-100 dark:border-gray-800 flatsome-card">
           
           <div className="flex items-center space-x-4 mb-6">
             <LifeBuoy className="w-10 h-10 text-accent" />
@@ -42,7 +42,7 @@ function StaticBeratung() {
             Migrationsfachdienst (MFD)
           </h1>
           
-          <p className="text-xl text-gray-600 mb-10 leading-relaxed font-light">
+          <p className="text-xl text-gray-600 dark:text-gray-400 mb-10 leading-relaxed font-light">
             Unser Migrationsfachdienst bietet individuelle, vertrauliche und <strong>kostenfreie</strong> Beratung für Menschen mit Migrationshintergrund. Wir unterstützen Sie bei der Integration und Bewältigung des Alltags in Deutschland.
           </p>
 
@@ -59,7 +59,7 @@ function StaticBeratung() {
                 ].map((item, i) => (
                   <li key={i} className="flex items-start">
                     <CheckCircle2 className="w-6 h-6 text-primary-light mr-3 shrink-0" />
-                    <span className="text-gray-700 leading-relaxed">{item}</span>
+                    <span className="text-gray-700 dark:text-gray-300 leading-relaxed">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -73,7 +73,7 @@ function StaticBeratung() {
                   <div className="flex items-center text-foreground font-bold mb-2">
                     <Clock className="w-5 h-5 mr-2 text-primary" /> Öffnungszeiten MFD
                   </div>
-                  <p className="text-gray-600 pl-7 text-sm">Dienstag & Donnerstag: 10:00 - 15:00 Uhr<br/>
+                  <p className="text-gray-600 dark:text-gray-400 pl-7 text-sm">Dienstag & Donnerstag: 10:00 - 15:00 Uhr<br/>
                   <span className="text-accent font-bold mt-1 inline-block bg-accent/10 px-2 py-1 rounded">Nur nach Terminvereinbarung</span></p>
                 </div>
 
@@ -81,11 +81,11 @@ function StaticBeratung() {
                   <div className="flex items-center text-foreground font-bold mb-2">
                     <MapPin className="w-5 h-5 mr-2 text-primary" /> Ort
                   </div>
-                  <p className="text-gray-600 pl-7 text-sm">Musterstraße 123, 67061 Ludwigshafen</p>
+                  <p className="text-gray-600 dark:text-gray-400 pl-7 text-sm">Musterstraße 123, 67061 Ludwigshafen</p>
                 </div>
 
-                <div className="pt-4 border-t border-gray-200">
-                  <p className="text-sm text-gray-600 mb-3">Termin anfragen via E-Mail:</p>
+                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Termin anfragen via E-Mail:</p>
                   <EmailObfuscator user="beratung" domain="lernzirkel-online.de" className="text-primary font-bold text-lg" />
                 </div>
               </div>

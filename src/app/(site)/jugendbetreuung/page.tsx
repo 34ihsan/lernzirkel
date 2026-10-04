@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function JugendbetreuungPage() {
   return (
-    <div className="bg-white">
+    <div className="bg-white dark:bg-gray-900">
       {/* Hero Section */}
       <section className="bg-primary text-white py-16 md:py-24">
         <div className="container mx-auto px-4 text-center">
@@ -22,7 +22,7 @@ export default function JugendbetreuungPage() {
       {/* Content Section */}
       <section className="py-16">
         <div className="container mx-auto px-4 max-w-4xl">
-          <div className="prose prose-lg max-w-none text-gray-700">
+          <div className="prose prose-lg max-w-none text-gray-700 dark:text-gray-300">
             <p>
               Jugendbetreuung bedeutet für uns mehr als nur eine Aufsicht nach der Schule. Es geht um die Schaffung eines sicheren Raums, in dem sich Jugendliche entfalten, soziale Kompetenzen stärken und ihre Freizeit sinnvoll verbringen können.
             </p>
@@ -42,7 +42,7 @@ export default function JugendbetreuungPage() {
               </div>
             </div>
 
-            <div className="bg-gray-50 border-l-4 border-accent p-6 my-8">
+            <div className="bg-gray-50 dark:bg-gray-800 border-l-4 border-accent p-6 my-8">
               <h3 className="text-xl font-bold mb-2">Unsere Ziele</h3>
               <ul className="list-disc pl-6 space-y-2 mb-0">
                 <li>Stärkung des Selbstbewusstseins</li>

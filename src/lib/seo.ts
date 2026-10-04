@@ -117,3 +117,27 @@ export function generateBreadcrumbSchema(items: { name: string; url: string }[])
     })),
   };
 }
+
+/**
+ * Generate Course JSON-LD Schema
+ */
+export function generateCourseSchema(course: {
+  id: string;
+  title: string;
+  description: string;
+  providerName?: string;
+  url: string;
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    name: course.title,
+    description: course.description,
+    url: `${siteConfig.url}${course.url}`,
+    provider: {
+      '@type': 'Organization',
+      name: course.providerName || siteConfig.name,
+      sameAs: siteConfig.url,
+    },
+  };
+}

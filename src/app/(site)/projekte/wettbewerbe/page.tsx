@@ -172,7 +172,7 @@ function StaticWettbewerbeHub() {
   return (
     <div className="bg-slate-50/50 min-h-screen pb-16">
       {/* Top Breadcrumb Bar */}
-      <div className="border-b border-gray-200 bg-white">
+      <div className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 max-w-6xl py-3">
           <Breadcrumbs items={breadcrumbs} />
         </div>
@@ -195,7 +195,7 @@ function StaticWettbewerbeHub() {
           <main className="lg:col-span-8 space-y-8">
             
             {/* Header Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-200 space-y-4">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-10 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-4">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-amber-100 text-amber-950 font-bold rounded-full text-xs uppercase tracking-wider">
                   <Trophy className="w-3.5 h-3.5 text-amber-700" />
@@ -211,11 +211,11 @@ function StaticWettbewerbeHub() {
                 </span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+              <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight leading-tight">
                 Wettbewerbe beim Lernzirkel
               </h1>
               
-              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed">
                 Der Lernzirkel Ludwigshafen e.V. initiiert und begleitet jedes Jahr zwei herausragende Wettbewerbsformate für junge Menschen: den gesellschaftlichen Kreativwettbewerb <strong>„Wir sind Vielfalt“</strong> und die naturwissenschaftliche <strong>„Bildungsmesse“</strong>.
               </p>
 
@@ -230,7 +230,7 @@ function StaticWettbewerbeHub() {
 
             {/* The 2 Sub-Pages Summary Cards */}
             <div className="space-y-6">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2.5">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2.5">
                 <Layers className="w-6 h-6 text-sky-700" />
                 <span>Unsere beiden Wettbewerbsformate im Überblick</span>
               </h2>
@@ -241,7 +241,7 @@ function StaticWettbewerbeHub() {
                   return (
                     <article 
                       key={item.id}
-                      className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 space-y-6"
+                      className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 hover:shadow-md dark:shadow-none transition-shadow duration-200 space-y-6"
                     >
                       {/* Top Bar with Icon & Badge */}
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -253,7 +253,7 @@ function StaticWettbewerbeHub() {
                             <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${item.badgeColor} mb-1`}>
                               {item.badge}
                             </span>
-                            <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
+                            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
                               {item.title}
                             </h3>
                           </div>
@@ -270,7 +270,7 @@ function StaticWettbewerbeHub() {
 
                       {/* Image & Description Grid */}
                       <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
-                        <div className="md:col-span-5 h-48 sm:h-52 rounded-2xl overflow-hidden bg-slate-100 border border-gray-100 shrink-0">
+                        <div className="md:col-span-5 h-48 sm:h-52 rounded-2xl overflow-hidden bg-slate-100 border border-gray-100 dark:border-gray-800 shrink-0">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img 
                             src={item.image} 
@@ -280,17 +280,17 @@ function StaticWettbewerbeHub() {
                         </div>
 
                         <div className="md:col-span-7 space-y-3">
-                          <p className="text-xs sm:text-sm font-semibold text-gray-900 leading-snug">
+                          <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-gray-100 leading-snug">
                             {item.tagline}
                           </p>
-                          <p className="text-xs text-gray-600 leading-relaxed">
+                          <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                             {item.description}
                           </p>
 
                           {/* Highlights */}
                           <div className="space-y-1.5 pt-1">
                             {item.highlights.map((h, hIdx) => (
-                              <div key={hIdx} className="flex items-start gap-2 text-xs text-gray-700">
+                              <div key={hIdx} className="flex items-start gap-2 text-xs text-gray-700 dark:text-gray-300">
                                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
                                 <span>{h}</span>
                               </div>
@@ -300,13 +300,13 @@ function StaticWettbewerbeHub() {
                       </div>
 
                       {/* Action Button */}
-                      <div className="pt-2 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
-                        <span className="text-[11px] text-gray-500">
+                      <div className="pt-2 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <span className="text-[11px] text-gray-500 dark:text-gray-400">
                           Offizielle Unterseite mit allen Teilnahmebedingungen & Eckdaten
                         </span>
                         <Link
                           href={item.url}
-                          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-sky-900 text-white text-xs font-semibold shadow-sm transition"
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-sky-900 text-white text-xs font-semibold shadow-sm dark:shadow-none transition"
                         >
                           <span>{item.ctaText}</span>
                           <ArrowRight className="w-4 h-4" />
@@ -319,12 +319,12 @@ function StaticWettbewerbeHub() {
             </div>
 
             {/* Gemeinsame Werte / Pädagogischer Leitgedanke */}
-            <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-200 space-y-6">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-10 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-6">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                   Warum Wettbewerbe beim Lernzirkel?
                 </h2>
-                <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">
                   Wettbewerbe sind bei uns keine Ausgrenzung, sondern eine Plattform für gemeinsame Spitzenleistungen und gelebte Wertschätzung.
                 </p>
               </div>
@@ -338,12 +338,12 @@ function StaticWettbewerbeHub() {
                       className={`p-5 rounded-2xl border ${val.color} space-y-2`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <div className="p-2 rounded-xl bg-white shadow-2xs">
+                        <div className="p-2 rounded-xl bg-white dark:bg-gray-900 shadow-2xs">
                           <Icon className="w-4 h-4" />
                         </div>
-                        <h4 className="font-bold text-sm text-gray-900">{val.title}</h4>
+                        <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100">{val.title}</h4>
                       </div>
-                      <p className="text-xs text-gray-600 leading-relaxed">
+                      <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                         {val.desc}
                       </p>
                     </div>
@@ -353,29 +353,29 @@ function StaticWettbewerbeHub() {
             </div>
 
             {/* Direkter Vergleich / Steckbrief */}
-            <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-200 space-y-5">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-10 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-5">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                   Die Formate im direkten Vergleich
                 </h2>
-                <p className="text-xs text-gray-600 mt-1">
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                   Auf einen Blick: Welches Format passt zu Ihrer Klasse oder Jugendgruppe?
                 </p>
               </div>
 
-              <div className="overflow-x-auto rounded-2xl border border-gray-200">
+              <div className="overflow-x-auto rounded-2xl border border-gray-200 dark:border-gray-700">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-100/80 text-gray-900 font-bold border-b border-gray-200">
+                  <thead className="bg-slate-100/80 text-gray-900 dark:text-gray-100 font-bold border-b border-gray-200 dark:border-gray-700">
                     <tr>
                       <th className="p-3.5">Kriterium</th>
                       <th className="p-3.5 text-rose-950 bg-rose-50/60">Wir sind Vielfalt</th>
                       <th className="p-3.5 text-amber-950 bg-amber-50/60">Bildungsmesse</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100 text-gray-700">
+                  <tbody className="divide-y divide-gray-100 text-gray-700 dark:text-gray-300">
                     {comparisonRows.map((row, idx) => (
                       <tr key={idx} className="hover:bg-slate-50/70 transition-colors">
-                        <td className="p-3.5 font-bold text-gray-900">{row.feature}</td>
+                        <td className="p-3.5 font-bold text-gray-900 dark:text-gray-100">{row.feature}</td>
                         <td className="p-3.5 bg-rose-50/20">{row.vielfalt}</td>
                         <td className="p-3.5 bg-amber-50/20">{row.messe}</td>
                       </tr>
@@ -391,10 +391,10 @@ function StaticWettbewerbeHub() {
           <aside className="lg:col-span-4 space-y-6">
             
             {/* Quick Navigation Card to Subpages */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-4">
               <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700">Übersicht</span>
-              <h3 className="text-base font-bold text-gray-900">Wettbewerbe Unterseiten</h3>
-              <p className="text-xs text-gray-500">
+              <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Wettbewerbe Unterseiten</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 Wählen Sie einen Wettbewerb für detaillierte Informationen:
               </p>
 
@@ -406,8 +406,8 @@ function StaticWettbewerbeHub() {
                   <div className="flex items-center gap-2.5">
                     <Heart className="w-4 h-4 text-rose-600" />
                     <div>
-                      <div className="font-bold text-xs text-gray-900">Wir sind Vielfalt</div>
-                      <div className="text-[11px] text-gray-500">Toleranz & Miteinander</div>
+                      <div className="font-bold text-xs text-gray-900 dark:text-gray-100">Wir sind Vielfalt</div>
+                      <div className="text-[11px] text-gray-500 dark:text-gray-400">Toleranz & Miteinander</div>
                     </div>
                   </div>
                   <ArrowRight className="w-4 h-4 text-rose-400 group-hover:translate-x-0.5 transition-transform" />
@@ -420,8 +420,8 @@ function StaticWettbewerbeHub() {
                   <div className="flex items-center gap-2.5">
                     <Beaker className="w-4 h-4 text-amber-600" />
                     <div>
-                      <div className="font-bold text-xs text-gray-900">Bildungsmesse</div>
-                      <div className="text-[11px] text-gray-500">Experimente & Forschung</div>
+                      <div className="font-bold text-xs text-gray-900 dark:text-gray-100">Bildungsmesse</div>
+                      <div className="text-[11px] text-gray-500 dark:text-gray-400">Experimente & Forschung</div>
                     </div>
                   </div>
                   <ArrowRight className="w-4 h-4 text-amber-400 group-hover:translate-x-0.5 transition-transform" />
@@ -430,20 +430,20 @@ function StaticWettbewerbeHub() {
             </div>
 
             {/* Contact Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-5">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-5">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-sky-700">Mitmachen & Teilnehmen</span>
-                <h3 className="text-base font-bold text-gray-900">Fragen zu den Wettbewerben?</h3>
-                <p className="text-xs text-gray-500 mt-1">
+                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Fragen zu den Wettbewerben?</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   Ob Schule, Jugendtreff oder Schülerteam – unser Koordinationsteam beantwortet gerne Ihre Fragen.
                 </p>
               </div>
 
-              <div className="space-y-3 text-xs text-gray-600 pt-2 border-t border-gray-100">
+              <div className="space-y-3 text-xs text-gray-600 dark:text-gray-400 pt-2 border-t border-gray-100 dark:border-gray-800">
                 <div className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 text-sky-700 shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">Kontaktstelle:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">Kontaktstelle:</span>
                     <span>Lernzirkel Ludwigshafen e.V.<br />Ludwigsplatz 9a, 67059 Ludwigshafen</span>
                   </div>
                 </div>
@@ -451,7 +451,7 @@ function StaticWettbewerbeHub() {
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-sky-700 shrink-0" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">Telefon:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">Telefon:</span>
                     <a href="tel:062130737271" className="text-sky-700 hover:underline">0621 30737271</a>
                   </div>
                 </div>
@@ -459,7 +459,7 @@ function StaticWettbewerbeHub() {
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-sky-700 shrink-0" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">E-Mail:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">E-Mail:</span>
                     <EmailObfuscator 
                       user="info" 
                       domain="lernzirkel-online.de" 
@@ -473,7 +473,7 @@ function StaticWettbewerbeHub() {
               <div className="pt-2">
                 <Link
                   href="/kontakt"
-                  className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-sky-800 hover:bg-sky-900 text-xs font-semibold text-white shadow-sm transition"
+                  className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-sky-800 hover:bg-sky-900 text-xs font-semibold text-white shadow-sm dark:shadow-none transition"
                 >
                   <span>Kontakt aufnehmen / Anfragen</span>
                 </Link>
@@ -481,8 +481,8 @@ function StaticWettbewerbeHub() {
             </div>
 
             {/* Other Projects Quick Nav */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">Weitere Projekte</h4>
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Weitere Projekte</h4>
               <nav className="space-y-1 text-xs font-medium">
                 <Link 
                   href="/projekte/future-connect" 

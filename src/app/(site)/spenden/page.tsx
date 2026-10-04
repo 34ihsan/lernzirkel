@@ -4,7 +4,7 @@ import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 export default function SpendenPage() {
   return (
-    <div className="py-12 bg-gray-50/50 min-h-screen">
+    <div className="py-12 bg-gray-50 dark:bg-gray-800/50 min-h-screen">
       <div className="container mx-auto px-4 max-w-5xl">
         
         {/* Main Header Area */}
@@ -15,7 +15,7 @@ export default function SpendenPage() {
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6 leading-tight">
             Werden Sie Teil unserer Mission
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
             Wir, die Mitglieder des Lernzirkel Ludwigshafen e.V., fördern die Integration und Bildung.
           </p>
         </div>
@@ -24,13 +24,13 @@ export default function SpendenPage() {
           
           {/* Main Content (Left) */}
           <div className="lg:col-span-2 space-y-8">
-            <div className="bg-white rounded-xl shadow-sm p-8 md:p-12 border border-gray-100 flatsome-card">
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none p-8 md:p-12 border border-gray-100 dark:border-gray-800 flatsome-card">
               <h2 className="text-3xl font-bold text-primary mb-6 flex items-center">
                 <Users className="w-8 h-8 mr-3 text-secondary" />
                 Mitgliedschaft im Lernzirkel
               </h2>
               
-              <div className="prose max-w-none text-gray-700 space-y-6 text-lg leading-relaxed">
+              <div className="prose max-w-none text-gray-700 dark:text-gray-300 space-y-6 text-lg leading-relaxed">
                 <p>
                   Unser Verein hat im Moment in der Region Rheinland-Pfalz viele Mitglieder und Fördermitglieder, die sich alle ehrenamtlich und unbezahlt für dieses Ziel einsetzen.
                 </p>
@@ -60,7 +60,7 @@ export default function SpendenPage() {
                   </ul>
                 </div>
 
-                <p className="font-medium bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <p className="font-medium bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
                   Das geht ganz einfach und kostet Sie nur <strong className="text-accent text-xl">60 Euro jährlich</strong>, die Sie von Ihrer Steuer absetzen können.
                 </p>
               </div>
@@ -79,7 +79,7 @@ export default function SpendenPage() {
               </p>
               
               <div className="space-y-6">
-                <div className="flex items-center space-x-4 bg-white/10 p-4 rounded-lg">
+                <div className="flex items-center space-x-4 bg-white dark:bg-gray-900/10 p-4 rounded-lg">
                   <div className="bg-accent p-2 rounded-full">
                     <Phone className="w-5 h-5 text-white" />
                   </div>
@@ -91,7 +91,7 @@ export default function SpendenPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-4 bg-white/10 p-4 rounded-lg">
+                <div className="flex items-center space-x-4 bg-white dark:bg-gray-900/10 p-4 rounded-lg">
                   <div className="bg-accent p-2 rounded-full">
                     <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -108,7 +108,7 @@ export default function SpendenPage() {
             </div>
 
             {/* Bank Account Card */}
-            <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100 flatsome-card relative overflow-hidden">
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none p-8 border border-gray-100 dark:border-gray-800 flatsome-card relative overflow-hidden">
               <div className="absolute top-0 right-0 p-4 opacity-5">
                 <Euro className="w-24 h-24" />
               </div>
@@ -119,46 +119,46 @@ export default function SpendenPage() {
                 Spendenkonto
               </h3>
               
-              <div className="space-y-4 text-gray-700 relative z-10">
+              <div className="space-y-4 text-gray-700 dark:text-gray-300 relative z-10">
                 <div>
-                  <p className="text-sm text-gray-500 mb-1">Kontoinhaber</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Kontoinhaber</p>
                   <p className="font-bold text-lg">Lernzirkel Ludwigshafen e.V.</p>
                 </div>
                 
                 <div>
-                  <p className="text-sm text-gray-500 mb-1">Bankinstitut</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Bankinstitut</p>
                   <p className="font-semibold text-gray-400 italic">[Name der Bank]</p>
                 </div>
                 
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 font-mono relative group cursor-all-scroll">
-                  <p className="text-sm text-gray-500 mb-1 font-sans">IBAN</p>
+                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 font-mono relative group cursor-all-scroll">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1 font-sans">IBAN</p>
                   <p className="font-bold text-lg tracking-widest text-primary break-all">
                     DEXX XXXX XXXX XXXX XXXX XX
                   </p>
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs bg-white border border-gray-200 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity text-gray-400">IBAN hier eintragen</span>
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity text-gray-400">IBAN hier eintragen</span>
                 </div>
                 
                 <div>
-                  <p className="text-sm text-gray-500 mb-1">BIC</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">BIC</p>
                   <p className="font-semibold tracking-wider text-gray-400 italic">[BIC / SWIFT]</p>
                 </div>
                 
                 <div className="pt-2">
-                  <p className="text-sm text-gray-500 mb-1">Verwendungszweck</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Verwendungszweck</p>
                   <p className="font-semibold bg-blue-50/50 inline-block px-3 py-1 rounded text-primary">Spende + [Ihr Name]</p>
                 </div>
               </div>
             </div>
 
             {/* Tax Info Card */}
-            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flatsome-card">
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none p-6 border border-gray-100 dark:border-gray-800 flatsome-card">
               <div className="flex items-center mb-4">
                 <div className="bg-green-100 p-3 rounded-full mr-4">
                   <Euro className="w-6 h-6 text-green-600" />
                 </div>
-                <h4 className="font-bold text-gray-800">Spendenquittung</h4>
+                <h4 className="font-bold text-gray-800 dark:text-gray-200">Spendenquittung</h4>
               </div>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 Als gemeinnütziger Verein sind wir berechtigt, Spendenbescheinigungen auszustellen. Ihre Mitgliedsbeiträge und Spenden sind steuerlich absetzbar.
               </p>
             </div>

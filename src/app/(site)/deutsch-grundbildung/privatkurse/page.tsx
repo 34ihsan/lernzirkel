@@ -3,11 +3,11 @@ import { ArrowRight, CheckCircle2, UserPlus, Users } from 'lucide-react';
 
 export default function PrivatkursePage() {
   return (
-    <div className="py-12 bg-gray-50/50 min-h-screen">
+    <div className="py-12 bg-gray-50 dark:bg-gray-800/50 min-h-screen">
       <div className="container mx-auto px-4 max-w-4xl">
         
         {/* Main Content Card */}
-        <div className="bg-white rounded-xl shadow-sm p-8 md:p-14 border border-gray-100 flatsome-card relative overflow-hidden">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none p-8 md:p-14 border border-gray-100 dark:border-gray-800 flatsome-card relative overflow-hidden">
           
           <span className="inline-block px-4 py-1 bg-accent/10 text-accent font-bold rounded-full text-sm mb-6 uppercase tracking-wider">
             Privat & Firmen
@@ -17,7 +17,7 @@ export default function PrivatkursePage() {
             Sprachtraining Deutsch für den Beruf
           </h1>
 
-          <div className="prose max-w-none text-gray-700">
+          <div className="prose max-w-none text-gray-700 dark:text-gray-300">
             <h3 className="text-2xl font-bold text-foreground mt-8 mb-4">Sprachcoaching</h3>
             <p className="leading-relaxed mb-6">
               Im Sprachcoaching liegt der Schwerpunkt auf der Kommunikation und der praktischen Anwendung der deutschen Sprache. Sie werden dabei nicht nur sprachlich, sondern auch inhaltlich und persönlich fit gemacht. 
@@ -27,8 +27,8 @@ export default function PrivatkursePage() {
             </p>
             
             <div className="grid md:grid-cols-2 gap-6 mb-12">
-              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
-                <div className="bg-white w-12 h-12 rounded-full flex items-center justify-center shadow-sm mb-4">
+              <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="bg-white dark:bg-gray-900 w-12 h-12 rounded-full flex items-center justify-center shadow-sm dark:shadow-none mb-4">
                   <UserPlus className="w-6 h-6 text-accent" />
                 </div>
                 <h4 className="font-bold text-primary mb-3">Einzeltraining</h4>
@@ -40,8 +40,8 @@ export default function PrivatkursePage() {
                 </ul>
               </div>
               
-              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
-                <div className="bg-white w-12 h-12 rounded-full flex items-center justify-center shadow-sm mb-4">
+              <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="bg-white dark:bg-gray-900 w-12 h-12 rounded-full flex items-center justify-center shadow-sm dark:shadow-none mb-4">
                   <Users className="w-6 h-6 text-accent" />
                 </div>
                 <h4 className="font-bold text-primary mb-3">Gruppentraining</h4>
@@ -54,7 +54,7 @@ export default function PrivatkursePage() {
               </div>
             </div>
 
-            <hr className="my-10 border-gray-200" />
+            <hr className="my-10 border-gray-200 dark:border-gray-700" />
 
             <h3 className="text-2xl font-bold text-foreground mb-4">Inhalte des Coachings</h3>
             <p className="leading-relaxed mb-6">Wir bereiten Sie gezielt auf Ihren Berufsalltag vor. Mögliche Themengebiete sind:</p>

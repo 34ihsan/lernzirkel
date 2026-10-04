@@ -1,50 +1,70 @@
-/**
- * In-Memory Sliding Window Rate Limiter for API Protection
- */
-interface RateLimitRecord {
-  count: number;
-  resetTime: number;
+export interface RateLimiterInfo {
+  limit: number;
+  remaining: number;
+  success: boolean;
 }
 
-const rateLimitStore = new Map<string, RateLimitRecord>();
+export class RateLimiter {
+  private tokenCache = new Map<string, number[]>();
+  private interval: number;
+  private limit: number;
 
-export function checkRateLimit(
-  identifier: string,
-  limit: number = 60,
-  windowMs: number = 60 * 1000
-): { allowed: boolean; remaining: number; resetInMs: number } {
-  const now = Date.now();
-  const record = rateLimitStore.get(identifier);
+  constructor(options: { interval: number; limit: number }) {
+    this.interval = options.interval;
+    this.limit = options.limit;
 
-  // Clean up periodically if store gets large
-  if (rateLimitStore.size > 10000) {
-    for (const [key, val] of rateLimitStore.entries()) {
-      if (val.resetTime < now) {
-        rateLimitStore.delete(key);
-      }
+    // Clean up old entries every minute to prevent memory leaks
+    if (typeof setInterval !== "undefined") {
+      setInterval(() => {
+        const now = Date.now();
+        for (const [ip, timestamps] of this.tokenCache.entries()) {
+          const validTimestamps = timestamps.filter(
+            (t) => now - t < this.interval
+          );
+          if (validTimestamps.length === 0) {
+            this.tokenCache.delete(ip);
+          } else {
+            this.tokenCache.set(ip, validTimestamps);
+          }
+        }
+      }, 60000).unref?.();
     }
   }
 
-  if (!record || record.resetTime < now) {
-    rateLimitStore.set(identifier, {
-      count: 1,
-      resetTime: now + windowMs,
-    });
-    return { allowed: true, remaining: limit - 1, resetInMs: windowMs };
-  }
-
-  if (record.count >= limit) {
+  check(limit: number, token: string): RateLimiterInfo {
+    const now = Date.now();
+    const timestamps = this.tokenCache.get(token) || [];
+    
+    // Filter timestamps within the interval window
+    const validTimestamps = timestamps.filter((t) => now - t < this.interval);
+    
+    const isRateLimited = validTimestamps.length >= limit;
+    
+    if (!isRateLimited) {
+      validTimestamps.push(now);
+      this.tokenCache.set(token, validTimestamps);
+    }
+    
     return {
-      allowed: false,
-      remaining: 0,
-      resetInMs: Math.max(0, record.resetTime - now),
+      limit,
+      remaining: isRateLimited ? 0 : limit - validTimestamps.length,
+      success: !isRateLimited,
     };
   }
+}
 
-  record.count += 1;
-  return {
-    allowed: true,
-    remaining: limit - record.count,
-    resetInMs: Math.max(0, record.resetTime - now),
-  };
+const limiters = new Map<number, RateLimiter>();
+
+/** Convenience helper: `limit` requests per `windowSeconds` per key (in-memory). */
+export async function rateLimit(
+  key: string,
+  limit: number,
+  windowSeconds: number
+): Promise<RateLimiterInfo> {
+  let limiter = limiters.get(windowSeconds);
+  if (!limiter) {
+    limiter = new RateLimiter({ interval: windowSeconds * 1000, limit });
+    limiters.set(windowSeconds, limiter);
+  }
+  return limiter.check(limit, key);
 }

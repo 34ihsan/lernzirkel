@@ -38,7 +38,7 @@ export default async function GaleriePage() {
     });
 
     return (
-      <article className="min-h-screen bg-gray-50">
+      <article className="min-h-screen bg-gray-50 dark:bg-gray-800">
         <Breadcrumbs items={breadcrumbs} />
         {page.sections.map((section: any) => (
           <SectionRenderer key={section.id} section={section} />
@@ -63,14 +63,14 @@ function StaticGalerie() {
   ];
 
   return (
-    <div className="py-16 bg-gray-50 min-h-screen">
+    <div className="py-16 bg-gray-50 dark:bg-gray-800 min-h-screen">
       <div className="container mx-auto px-4">
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="text-accent font-bold uppercase tracking-wider text-sm mb-2 block">Einblicke</span>
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">Bildergalerie</h1>
-          <p className="text-lg text-gray-600 leading-relaxed mb-4">
+          <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
             Machen Sie sich ein Bild von unserer täglichen Arbeit, unseren Räumlichkeiten und unseren gemeinsamen Projekten.
           </p>
         </div>
@@ -78,7 +78,7 @@ function StaticGalerie() {
         {/* Gallery Grid (Flatsome Style) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
           {images.map((img, idx) => (
-            <div key={idx} className="group relative overflow-hidden rounded-xl shadow-sm cursor-pointer bg-white aspect-[4/3] flatsome-card">
+            <div key={idx} className="group relative overflow-hidden rounded-xl shadow-sm dark:shadow-none cursor-pointer bg-white dark:bg-gray-900 aspect-[4/3] flatsome-card">
               
               {/* Image with zoom effect */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -91,7 +91,7 @@ function StaticGalerie() {
               {/* Hover Overlay */}
               <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-colors duration-300 flex flex-col items-center justify-center p-4">
                 <div className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex flex-col items-center text-center">
-                  <span className="text-white font-bold text-lg mb-2 drop-shadow-md">
+                  <span className="text-white font-bold text-lg mb-2 drop-shadow-md dark:shadow-none">
                     {img.alt}
                   </span>
                   <span className="text-white/80 text-sm font-medium uppercase tracking-widest bg-black/30 px-3 py-1 rounded-full">
@@ -106,7 +106,7 @@ function StaticGalerie() {
 
         {/* CTA */}
         <div className="mt-20 text-center">
-          <p className="text-gray-600 mb-6">Möchten Sie unsere Räumlichkeiten persönlich kennenlernen?</p>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">Möchten Sie unsere Räumlichkeiten persönlich kennenlernen?</p>
           <Link href="/kontakt" className="flatsome-button">
             Besuchen Sie uns
           </Link>

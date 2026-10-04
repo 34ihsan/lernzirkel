@@ -225,7 +225,7 @@ function StaticSprachCafe() {
   return (
     <div className="bg-slate-50/50 min-h-screen pb-16">
       {/* Top Breadcrumb Bar */}
-      <div className="border-b border-gray-200 bg-white">
+      <div className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 max-w-6xl py-3">
           <Breadcrumbs items={breadcrumbs} />
         </div>
@@ -245,7 +245,7 @@ function StaticSprachCafe() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Main Article (Left 8 cols) */}
-          <main className="lg:col-span-8 bg-white rounded-3xl p-6 sm:p-10 md:p-14 shadow-sm border border-gray-200 space-y-8">
+          <main className="lg:col-span-8 bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-10 md:p-14 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-8">
             
             {/* Header Badge & Meta */}
             <div>
@@ -268,16 +268,16 @@ function StaticSprachCafe() {
                 </span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+              <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight leading-tight">
                 Sprach Café Ludwigshafen
               </h1>
-              <p className="text-sm sm:text-base text-gray-600 mt-2">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-2">
                 Deutschkenntnisse im Alltag vertiefen, neue Leute kennenlernen und Erfahrungen austauschen – bei Kaffee und Kuchen.
               </p>
             </div>
 
             {/* Featured Hero Image */}
-            <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 shadow-sm bg-slate-100">
+            <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm dark:shadow-none bg-slate-100">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
                 src="https://lernzirkel-online.de/wp-content/uploads/2021/11/Design-ohne-Titel-3.png"
@@ -287,7 +287,7 @@ function StaticSprachCafe() {
             </div>
 
             {/* Article Text Content */}
-            <div className="space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
+            <div className="space-y-6 text-gray-700 dark:text-gray-300 text-sm sm:text-base leading-relaxed">
               
               {/* Termin-Callout Box */}
               <div className="p-6 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 text-slate-800 shadow-2xs space-y-2">
@@ -304,32 +304,32 @@ function StaticSprachCafe() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 text-center space-y-1">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Teilnahme</span>
-                  <p className="text-sm font-bold text-gray-900">Vollständig kostenlos</p>
-                  <p className="text-[11px] text-gray-500">Ohne Kursgebühren</p>
+                  <p className="text-sm font-bold text-gray-900 dark:text-gray-100">Vollständig kostenlos</p>
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400">Ohne Kursgebühren</p>
                 </div>
 
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 text-center space-y-1">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-sky-700">Voraussetzung</span>
-                  <p className="text-sm font-bold text-gray-900">Mindestens Niveau A2</p>
-                  <p className="text-[11px] text-gray-500">Grundkenntnisse vorhanden</p>
+                  <p className="text-sm font-bold text-gray-900 dark:text-gray-100">Mindestens Niveau A2</p>
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400">Grundkenntnisse vorhanden</p>
                 </div>
 
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 text-center space-y-1">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700">Teilnahmeform</span>
-                  <p className="text-sm font-bold text-gray-900">Anmeldung erbeten</p>
-                  <p className="text-[11px] text-gray-500">Regelmäßigkeit erwünscht</p>
+                  <p className="text-sm font-bold text-gray-900 dark:text-gray-100">Anmeldung erbeten</p>
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400">Regelmäßigkeit erwünscht</p>
                 </div>
               </div>
 
               {/* Flyer Download Banner */}
-              <div className="p-5 rounded-2xl bg-white border border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
+              <div className="p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
                 <div className="flex items-center gap-3">
                   <div className="p-3 rounded-xl bg-amber-50 text-amber-700">
                     <Download className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-sm text-gray-900">Offizieller SprachCafé Flyer</h4>
-                    <p className="text-xs text-gray-500">Alle Informationen und Termine auf einen Blick</p>
+                    <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100">Offizieller SprachCafé Flyer</h4>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Alle Informationen und Termine auf einen Blick</p>
                   </div>
                 </div>
                 <a
@@ -348,10 +348,10 @@ function StaticSprachCafe() {
                 <span className="text-xs font-bold uppercase tracking-wider text-amber-800 block mb-1">
                   Inhalte & Gesprächsthemen
                 </span>
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
                   Vielfältige Themenschwerpunkte im Sprach Café
                 </h2>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                   In jeder Sitzung widmen wir uns alltagsnahen, spannenden Themen, die Sie unmittelbar in Ihrem Leben in Deutschland unterstützen:
                 </p>
               </div>
@@ -367,12 +367,12 @@ function StaticSprachCafe() {
                     >
                       <div>
                         <div className="flex items-center gap-2.5 mb-3">
-                          <div className="p-2 rounded-xl bg-white shadow-2xs">
+                          <div className="p-2 rounded-xl bg-white dark:bg-gray-900 shadow-2xs">
                             <Icon className="w-4 h-4" />
                           </div>
-                          <h3 className="font-bold text-sm text-gray-900">{t.category}</h3>
+                          <h3 className="font-bold text-sm text-gray-900 dark:text-gray-100">{t.category}</h3>
                         </div>
-                        <ul className="space-y-1.5 text-xs text-gray-700">
+                        <ul className="space-y-1.5 text-xs text-gray-700 dark:text-gray-300">
                           {t.items.map((item, iIdx) => (
                             <li key={iIdx} className="flex items-start gap-2">
                               <span className="w-1.5 h-1.5 rounded-full bg-amber-600 mt-1.5 shrink-0" />
@@ -388,17 +388,17 @@ function StaticSprachCafe() {
 
               {/* Didaktik & Vorteile */}
               <div className="bg-slate-50 rounded-2xl p-6 sm:p-8 border border-slate-200/80 space-y-4">
-                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5 text-emerald-600" />
                   <span>Warum sich der Besuch im Sprach Café lohnt</span>
                 </h3>
-                <p className="text-sm text-gray-700 leading-relaxed">
+                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                   Sprache lernt man am nachhaltigsten durch aktives Sprechen und Zuhören! Im Sprach Café bieten wir Ihnen einen geschützten Raum, in dem Sie frei sprechen können, ohne Angst vor grammatikalischen Fehlern haben zu müssen. Unsere ehrenamtlichen Moderator:innen unterstützen Sie einfühlsam und helfen bei Wortschatzfragen.
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
                   {benefits.map((b, idx) => (
-                    <div key={idx} className="flex items-start gap-2.5 text-xs text-gray-700">
+                    <div key={idx} className="flex items-start gap-2.5 text-xs text-gray-700 dark:text-gray-300">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
                       <span>{b}</span>
                     </div>
@@ -407,7 +407,7 @@ function StaticSprachCafe() {
               </div>
 
               {/* Callout: Wir freuen uns auf Sie */}
-              <div className="p-6 rounded-2xl bg-amber-900 text-white space-y-2 shadow-md">
+              <div className="p-6 rounded-2xl bg-amber-900 text-white space-y-2 shadow-md dark:shadow-none">
                 <h3 className="text-lg font-bold text-amber-100 flex items-center gap-2">
                   <Coffee className="w-5 h-5 text-amber-300" />
                   <span>Wir freuen uns auf Sie!</span>
@@ -424,60 +424,60 @@ function StaticSprachCafe() {
           <aside className="lg:col-span-4 space-y-6">
             
             {/* Quick Facts Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-4">
               <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800">Auf einen Blick</span>
-              <h3 className="text-base font-bold text-gray-900">Sprach Café Details</h3>
+              <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Sprach Café Details</h3>
 
-              <div className="space-y-3 pt-2 text-xs text-gray-600">
+              <div className="space-y-3 pt-2 text-xs text-gray-600 dark:text-gray-400">
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <Calendar className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Wann?</h5>
-                    <p className="text-gray-500">Jeden Montag, 15:00 – 16:30 Uhr</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Wann?</h5>
+                    <p className="text-gray-500 dark:text-gray-400">Jeden Montag, 15:00 – 16:30 Uhr</p>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Kosten</h5>
-                    <p className="text-gray-500">100 % kostenlos</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Kosten</h5>
+                    <p className="text-gray-500 dark:text-gray-400">100 % kostenlos</p>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <BookOpen className="w-4 h-4 text-sky-700 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Sprachniveau</h5>
-                    <p className="text-gray-500">Ab Niveau A2 empfohlen</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Sprachniveau</h5>
+                    <p className="text-gray-500 dark:text-gray-400">Ab Niveau A2 empfohlen</p>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <MapPin className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Ort</h5>
-                    <p className="text-gray-500">Ludwigsplatz 9a, 67059 Ludwigshafen</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Ort</h5>
+                    <p className="text-gray-500 dark:text-gray-400">Ludwigsplatz 9a, 67059 Ludwigshafen</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Contact & Registration Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-5">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-5">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800">Anmeldung & Fragen</span>
-                <h3 className="text-base font-bold text-gray-900">Machen Sie mit!</h3>
-                <p className="text-xs text-gray-500 mt-1">
+                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Machen Sie mit!</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   Wir bitten um kurze vorherige Anmeldung per E-Mail oder Telefon, damit wir Kaffee und Plätze vorbereiten können.
                 </p>
               </div>
 
-              <div className="space-y-3 text-xs text-gray-600 pt-2 border-t border-gray-100">
+              <div className="space-y-3 text-xs text-gray-600 dark:text-gray-400 pt-2 border-t border-gray-100 dark:border-gray-800">
                 <div className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">Treffpunkt:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">Treffpunkt:</span>
                     <span>Lernzirkel Ludwigshafen e.V.<br />Ludwigsplatz 9a, 67059 Ludwigshafen</span>
                   </div>
                 </div>
@@ -485,7 +485,7 @@ function StaticSprachCafe() {
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-amber-700 shrink-0" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">Telefon:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">Telefon:</span>
                     <a href="tel:062130737271" className="text-amber-800 hover:underline">0621 30737271</a>
                   </div>
                 </div>
@@ -493,7 +493,7 @@ function StaticSprachCafe() {
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-amber-700 shrink-0" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">E-Mail:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">E-Mail:</span>
                     <EmailObfuscator 
                       user="info" 
                       domain="lernzirkel-online.de" 
@@ -507,7 +507,7 @@ function StaticSprachCafe() {
               <div className="pt-2">
                 <Link
                   href="/kontakt"
-                  className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-amber-700 hover:bg-amber-800 text-xs font-semibold text-white shadow-sm transition"
+                  className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-amber-700 hover:bg-amber-800 text-xs font-semibold text-white shadow-sm dark:shadow-none transition"
                 >
                   <span>Jetzt anmelden / Kontakt aufnehmen</span>
                 </Link>
@@ -515,8 +515,8 @@ function StaticSprachCafe() {
             </div>
 
             {/* Other Projects Quick Nav */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">Weitere Projekte</h4>
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Weitere Projekte</h4>
               <nav className="space-y-1 text-xs font-medium">
                 <Link 
                   href="/projekte/future-connect" 

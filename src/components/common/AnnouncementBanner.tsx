@@ -177,7 +177,7 @@ export default function AnnouncementBanner({
         href={ann.linkUrl} 
         target="_blank" 
         rel="noopener noreferrer" 
-        className="shrink-0 px-4 py-1 ml-3 rounded-full font-medium text-sm transition-all hover:scale-105 z-20 relative shadow-sm inline-block" 
+        className="shrink-0 px-4 py-1 ml-3 rounded-full font-medium text-sm transition-all hover:scale-105 z-20 relative shadow-sm dark:shadow-none inline-block" 
         style={{ backgroundColor: ann.textColor, color: ann.backgroundColor }}
       >
         {getTranslatedText(ann, 'linkText') || 'Tıklayın'}
@@ -262,7 +262,7 @@ export default function AnnouncementBanner({
 
       {/* 2. Sticky Top (Rotasyon - Yukarıda tek gösterilir) */}
       {currentStickyTop && (
-        <div className="relative w-full z-[60] flex flex-col shadow-md">
+        <div className="relative w-full z-[60] flex flex-col shadow-md dark:shadow-none">
           <div 
             key={currentStickyTop.id + activeIndices.stickyTop}
             style={{

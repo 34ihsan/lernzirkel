@@ -163,13 +163,13 @@ export default function GrantEligibilityWizard({ isOpen = true, onClose, inline 
   );
 
   const content = (
-    <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden max-w-2xl w-full mx-auto text-slate-800">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-slate-200 overflow-hidden max-w-2xl w-full mx-auto text-slate-800">
       {/* Header */}
       <div className="bg-gradient-to-r from-sky-900 via-sky-800 to-indigo-900 text-white p-6 relative">
         {onClose && !inline && (
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-white/80 hover:text-white p-1 rounded-full hover:bg-white/10 transition"
+            className="absolute top-4 right-4 text-white/80 hover:text-white p-1 rounded-full hover:bg-white dark:bg-gray-900/10 transition"
           >
             <X size={20} />
           </button>
@@ -193,7 +193,7 @@ export default function GrantEligibilityWizard({ isOpen = true, onClose, inline 
             <div
               key={s}
               className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-                s <= step ? "bg-amber-400" : "bg-white/20"
+                s <= step ? "bg-amber-400" : "bg-white dark:bg-gray-900/20"
               }`}
             />
           ))}
@@ -216,8 +216,8 @@ export default function GrantEligibilityWizard({ isOpen = true, onClose, inline 
                   onClick={() => setSelectedService(s.id)}
                   className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
                     selectedService === s.id
-                      ? "border-sky-600 bg-sky-50/60 shadow-sm"
-                      : "border-slate-200 hover:border-slate-300 bg-white"
+                      ? "border-sky-600 bg-sky-50/60 shadow-sm dark:shadow-none"
+                      : "border-slate-200 hover:border-slate-300 bg-white dark:bg-gray-900"
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -261,8 +261,8 @@ export default function GrantEligibilityWizard({ isOpen = true, onClose, inline 
                   onClick={() => setSelectedBenefit(b.id)}
                   className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all flex items-center justify-between ${
                     selectedBenefit === b.id
-                      ? "border-sky-600 bg-sky-50/60 shadow-sm"
-                      : "border-slate-200 hover:border-slate-300 bg-white"
+                      ? "border-sky-600 bg-sky-50/60 shadow-sm dark:shadow-none"
+                      : "border-slate-200 hover:border-slate-300 bg-white dark:bg-gray-900"
                   }`}
                 >
                   <div className="font-medium text-slate-800 text-sm">{b.label}</div>
@@ -310,7 +310,7 @@ export default function GrantEligibilityWizard({ isOpen = true, onClose, inline 
                 <select
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl bg-white text-slate-800 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl bg-white dark:bg-gray-900 text-slate-800 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none"
                 >
                   <option value="Ludwigshafen">Ludwigshafen am Rhein</option>
                   <option value="Mannheim">Mannheim</option>
@@ -327,7 +327,7 @@ export default function GrantEligibilityWizard({ isOpen = true, onClose, inline 
                 <select
                   value={timePref}
                   onChange={(e) => setTimePref(e.target.value)}
-                  className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl bg-white text-slate-800 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl bg-white dark:bg-gray-900 text-slate-800 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none"
                 >
                   <option value="Vormittags (09:00 - 13:00)">Vormittags (09:00 - 13:00 Uhr)</option>
                   <option value="Nachmittags (14:00 - 17:30)">Nachmittags (14:00 - 17:30 Uhr)</option>

@@ -15,20 +15,20 @@ export default function UeberUnsSatzungPage() {
   ];
 
   return (
-    <div className="py-12 bg-gray-50/50 min-h-screen">
+    <div className="py-12 bg-gray-50 dark:bg-gray-800/50 min-h-screen">
       <div className="container mx-auto px-4 max-w-4xl">
         <Breadcrumbs items={breadcrumbs} />
 
         {/* Back Link */}
         <Link 
           href="/ueber-uns" 
-          className="inline-flex items-center text-sm text-gray-500 hover:text-primary mb-6 font-medium transition-colors"
+          className="inline-flex items-center text-sm text-gray-500 dark:text-gray-400 hover:text-primary mb-6 font-medium transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" /> Zurück zur Über uns Übersicht
         </Link>
         
         {/* Main Content Card */}
-        <div className="bg-white rounded-2xl shadow-sm p-8 md:p-14 border border-gray-100 flatsome-card">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm dark:shadow-none p-8 md:p-14 border border-gray-100 dark:border-gray-800 flatsome-card">
           
           <div className="flex items-center gap-2 mb-4">
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-sky-100 text-sky-800 font-bold rounded-full text-xs uppercase tracking-wider">
@@ -42,11 +42,11 @@ export default function UeberUnsSatzungPage() {
           <h1 className="text-3xl md:text-5xl font-bold text-primary mb-4 leading-tight">
             Satzung des Vereins Lernzirkel Ludwigshafen e.V.
           </h1>
-          <p className="text-gray-600 text-base mb-10 leading-relaxed">
+          <p className="text-gray-600 dark:text-gray-400 text-base mb-10 leading-relaxed">
             Eingetragen im Vereinsregister beim Amtsgericht Ludwigshafen am Rhein. Anerkannt gemeinnützig nach §§ 51 ff. AO.
           </p>
           
-          <div className="prose max-w-none text-gray-700 satzung-content">
+          <div className="prose max-w-none text-gray-700 dark:text-gray-300 satzung-content">
             
             <h3 className="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
               <FileText className="w-6 h-6 mr-3 text-accent" />
@@ -144,8 +144,8 @@ export default function UeberUnsSatzungPage() {
             </h3>
             <p>Bei Auflösung oder Aufhebung des Vereins oder bei Wegfall steuerbegünstigter Zwecke fällt das Vereinsvermögen an den Paritätischen Landesverband Rheinland-Pfalz/Saarland e.V., die es ausschließlich und unmittelbar für steuerbegünstigte Bildungszwecke zu verwenden hat.</p>
             
-            <div className="mt-12 bg-gray-50 border border-gray-200 p-6 rounded-xl text-xs text-gray-600">
-              <p className="font-bold text-gray-800 mb-1">Stand der Satzung:</p>
+            <div className="mt-12 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 rounded-xl text-xs text-gray-600 dark:text-gray-400">
+              <p className="font-bold text-gray-800 dark:text-gray-200 mb-1">Stand der Satzung:</p>
               <p>Ludwigshafen am Rhein, Fassung vom 01.01.2013 (zuletzt geändert am 18.10.2018).</p>
             </div>
 
@@ -156,13 +156,13 @@ export default function UeberUnsSatzungPage() {
               <img 
                 src="/uploads/organigramm.png" 
                 alt="Organigramm des Lernzirkel Ludwigshafen e.V." 
-                className="max-w-full h-auto rounded-xl border border-gray-200 shadow-md" 
+                className="max-w-full h-auto rounded-xl border border-gray-200 dark:border-gray-700 shadow-md dark:shadow-none" 
               />
             </div>
 
           </div>
 
-          <div className="mt-12 pt-8 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="mt-12 pt-8 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
             <Link 
               href="/ueber-uns" 
               className="inline-flex items-center text-sm font-semibold text-primary hover:text-accent transition-colors"
@@ -172,7 +172,7 @@ export default function UeberUnsSatzungPage() {
             
             <Link 
               href="/spenden" 
-              className="inline-flex items-center justify-center px-6 py-2.5 bg-primary text-white font-medium rounded-xl hover:bg-primary-light transition-colors text-sm shadow-sm"
+              className="inline-flex items-center justify-center px-6 py-2.5 bg-primary text-white font-medium rounded-xl hover:bg-primary-light transition-colors text-sm shadow-sm dark:shadow-none"
             >
               Verein unterstützen / Fördermitglied werden
             </Link>

@@ -16,7 +16,7 @@ export default function BlockunterrichtPage() {
   ];
 
   return (
-    <div className="py-12 bg-gray-50/50 min-h-screen">
+    <div className="py-12 bg-gray-50 dark:bg-gray-800/50 min-h-screen">
       <div className="container mx-auto px-4 max-w-6xl">
         
         {/* Header Section */}
@@ -27,7 +27,7 @@ export default function BlockunterrichtPage() {
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6 leading-tight">
             Erfolg durch Nachhilfe!
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
             Individuelle Betreuung und optimale Lernbedingungen für den schulischen Erfolg.
           </p>
         </div>
@@ -37,7 +37,7 @@ export default function BlockunterrichtPage() {
           {/* Main Content Area */}
           <div className="lg:col-span-2 space-y-8">
             {/* Image (Using the original image from the live site) */}
-            <div className="rounded-xl overflow-hidden shadow-sm relative h-[300px] md:h-[400px]">
+            <div className="rounded-xl overflow-hidden shadow-sm dark:shadow-none relative h-[300px] md:h-[400px]">
               <Image 
                 src="https://lernzirkel-online.de/wp-content/uploads/2016/09/Nachhilfe-Titelbild-e1724420846536-750x458.jpg" 
                 alt="Nachhilfe Titelbild"
@@ -47,10 +47,10 @@ export default function BlockunterrichtPage() {
               />
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm p-8 md:p-12 border border-gray-100 flatsome-card">
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none p-8 md:p-12 border border-gray-100 dark:border-gray-800 flatsome-card">
               <h2 className="text-2xl font-bold text-primary mb-6">Unser Unterrichtskonzept</h2>
               
-              <div className="prose max-w-none text-gray-700 space-y-6 text-lg leading-relaxed">
+              <div className="prose max-w-none text-gray-700 dark:text-gray-300 space-y-6 text-lg leading-relaxed">
                 <p>
                   Um einen hohen Lernerfolg zu erzielen, finden unsere Nachhilfekurse in <strong>kleinen Gruppen</strong> statt. Jeder Schüler genießt auf diese Weise eine intensive Betreuung durch unsere Lehrkräfte. Hat ein Schüler oder eine Schülerin Nachholbedarf in den Grundlagen eines Faches, so können wir zusätzlich einen individuellen Lehrplan erstellen.
                 </p>
@@ -63,19 +63,19 @@ export default function BlockunterrichtPage() {
                     <Users className="w-8 h-8 text-accent mr-4 flex-shrink-0 mt-1" />
                     <div>
                       <h3 className="font-bold text-primary text-xl mb-2">Einzelunterricht & Zusatztermine</h3>
-                      <p className="text-gray-600">
+                      <p className="text-gray-600 dark:text-gray-400">
                         Auch bieten wir <strong>Einzelunterricht</strong> an, um optimal auf die Bedürfnisse der Schüler und Schülerinnen eingehen zu können. Bei anstehenden Klassenarbeiten können zusätzliche Termine ausgemacht werden.
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
                   <h3 className="font-bold text-primary text-xl mb-3 flex items-center">
                     <GraduationCap className="w-6 h-6 mr-2 text-accent" />
                     Fächerangebot
                   </h3>
-                  <p className="text-gray-600">
+                  <p className="text-gray-600 dark:text-gray-400">
                     Der Schwerpunkt unseres Nachhilfe-Angebots liegt in den Hauptfächern <strong>Deutsch, Mathematik und Englisch</strong>. Nach Bedarf und Anfrage bieten wir außerdem Nachhilfekurse in weiteren Fächern an, wie beispielsweise in Französisch, Latein oder in naturwissenschaftlichen Fächern.
                   </p>
                 </div>
@@ -87,15 +87,15 @@ export default function BlockunterrichtPage() {
           <div className="space-y-8">
             
             {/* Benefits Card */}
-            <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100 flatsome-card">
-              <h3 className="text-xl font-bold text-primary mb-6 pb-4 border-b border-gray-100">
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none p-8 border border-gray-100 dark:border-gray-800 flatsome-card">
+              <h3 className="text-xl font-bold text-primary mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">
                 Ihre Vorteile
               </h3>
               <ul className="space-y-4">
                 {vorteile.map((vorteil, index) => (
                   <li key={index} className="flex items-start">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700 text-sm leading-snug">{vorteil}</span>
+                    <span className="text-gray-700 dark:text-gray-300 text-sm leading-snug">{vorteil}</span>
                   </li>
                 ))}
               </ul>

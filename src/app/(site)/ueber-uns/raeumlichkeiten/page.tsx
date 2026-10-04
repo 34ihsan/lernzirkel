@@ -66,16 +66,16 @@ const galleryImages = [
 
 export default function RaeumlichkeitenPage() {
   return (
-    <div className="py-12 bg-gray-50/50 min-h-screen">
+    <div className="py-12 bg-gray-50 dark:bg-gray-800/50 min-h-screen">
       <div className="container mx-auto px-4 max-w-6xl">
         
         {/* Back Link */}
-        <Link href="/ueber-uns" className="inline-flex items-center text-sm text-gray-500 hover:text-primary mb-8 font-medium transition-colors">
+        <Link href="/ueber-uns" className="inline-flex items-center text-sm text-gray-500 dark:text-gray-400 hover:text-primary mb-8 font-medium transition-colors">
           <ArrowLeft className="w-4 h-4 mr-2" /> Zurück zu Über Uns
         </Link>
         
         {/* Main Content Card */}
-        <div className="bg-white rounded-xl shadow-sm p-8 md:p-14 border border-gray-100 flatsome-card">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none p-8 md:p-14 border border-gray-100 dark:border-gray-800 flatsome-card">
           
           <div className="flex items-center space-x-3 mb-6">
             <span className="inline-block px-4 py-1 bg-primary/10 text-primary font-bold rounded-full text-sm uppercase tracking-wider">
@@ -88,13 +88,13 @@ export default function RaeumlichkeitenPage() {
             Räumlichkeiten
           </h1>
           
-          <p className="text-lg text-gray-700 mb-12 max-w-3xl">
+          <p className="text-lg text-gray-700 dark:text-gray-300 mb-12 max-w-3xl">
             Machen Sie sich ein Bild von unseren Räumlichkeiten. Hier lernen, arbeiten und begegnen sich Menschen jeden Alters in einer einladenden und motivierenden Atmosphäre.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {galleryImages.map((image, idx) => (
-              <div key={idx} className="group relative rounded-xl overflow-hidden bg-gray-100 shadow-sm border border-gray-200">
+              <div key={idx} className="group relative rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800/50 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src={image.src} 

@@ -131,7 +131,7 @@ function StaticWirSindVielfalt() {
   return (
     <div className="bg-slate-50/50 min-h-screen pb-16">
       {/* Top Breadcrumb Bar */}
-      <div className="border-b border-gray-200 bg-white">
+      <div className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 max-w-6xl py-3">
           <Breadcrumbs items={breadcrumbs} />
         </div>
@@ -151,7 +151,7 @@ function StaticWirSindVielfalt() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Main Article (Left 8 cols) */}
-          <main className="lg:col-span-8 bg-white rounded-3xl p-6 sm:p-10 md:p-14 shadow-sm border border-gray-200 space-y-8">
+          <main className="lg:col-span-8 bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-10 md:p-14 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-8">
             
             {/* Header Badge & Meta */}
             <div>
@@ -170,16 +170,16 @@ function StaticWirSindVielfalt() {
                 </span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+              <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight leading-tight">
                 Wir sind Vielfalt
               </h1>
-              <p className="text-sm sm:text-base text-gray-600 mt-2">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-2">
                 Der Wettbewerb für Schüler:innen und Jugendliche zur Förderung von Toleranz, sozialer Verantwortung und Zusammenleben in Vielfalt.
               </p>
             </div>
 
             {/* Featured Hero Image */}
-            <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 shadow-sm bg-slate-100">
+            <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm dark:shadow-none bg-slate-100">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
                 src="https://lernzirkel-online.de/wp-content/uploads/2016/08/Beitragsbild.jpg"
@@ -189,7 +189,7 @@ function StaticWirSindVielfalt() {
             </div>
 
             {/* Article Text Content */}
-            <div className="space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
+            <div className="space-y-6 text-gray-700 dark:text-gray-300 text-sm sm:text-base leading-relaxed">
               
               {/* Lead Motto Block */}
               <div className="p-6 rounded-2xl bg-gradient-to-r from-rose-50 to-amber-50 border border-rose-100 text-slate-800 shadow-2xs space-y-2">
@@ -203,7 +203,7 @@ function StaticWirSindVielfalt() {
 
               {/* Leitgedanke & Werte */}
               <div className="space-y-3">
-                <h2 className="text-xl font-bold text-gray-900">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                   Werte für ein gelebtes Miteinander
                 </h2>
                 <p>
@@ -221,12 +221,12 @@ function StaticWirSindVielfalt() {
                       className={`p-5 rounded-2xl border ${v.color} flex flex-col justify-between transition-transform hover:-translate-y-0.5 duration-200`}
                     >
                       <div className="flex items-center gap-3 mb-2.5">
-                        <div className="p-2 rounded-xl bg-white shadow-2xs">
+                        <div className="p-2 rounded-xl bg-white dark:bg-gray-900 shadow-2xs">
                           <Icon className="w-5 h-5" />
                         </div>
-                        <h3 className="font-bold text-base text-gray-900">{v.title}</h3>
+                        <h3 className="font-bold text-base text-gray-900 dark:text-gray-100">{v.title}</h3>
                       </div>
-                      <p className="text-xs text-gray-600 leading-relaxed">
+                      <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                         {v.desc}
                       </p>
                     </div>
@@ -236,20 +236,20 @@ function StaticWirSindVielfalt() {
 
               {/* Jährliches Motto & Partizipation */}
               <div className="bg-slate-50 rounded-2xl p-6 sm:p-8 border border-slate-200/80 space-y-3">
-                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <Lightbulb className="w-5 h-5 text-amber-600" />
                   <span>Partizipatives Konzept & Jährlich wechselndes Motto</span>
                 </h3>
-                <p className="text-sm text-gray-700 leading-relaxed">
+                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                   Der Name <strong>„Wir sind Vielfalt“</strong> stellt den verlässlichen Rahmen für ein sich jährlich änderndes Wettbewerbsthema bzw. Motto dar.
                 </p>
-                <p className="text-sm text-gray-700 leading-relaxed">
+                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                   Besonderer Wert wird auf Partizipation gelegt: <strong>Die Themen werden unter aktiver Beteiligung der Schüler und Jugendlichen festgelegt</strong>, sodass Fragen verhandelt werden, die junge Menschen in ihrem Alltag und Lebensumfeld wirklich bewegen.
                 </p>
               </div>
 
               {/* Regionale Verankerung & Öffentliche Ehrung */}
-              <div className="p-6 rounded-2xl bg-sky-900 text-white space-y-3 shadow-md">
+              <div className="p-6 rounded-2xl bg-sky-900 text-white space-y-3 shadow-md dark:shadow-none">
                 <span className="text-xs font-bold uppercase tracking-wider text-sky-300 block">
                   Anerkennung & Festliche Prämierung
                 </span>
@@ -261,10 +261,10 @@ function StaticWirSindVielfalt() {
               {/* Mögliche Beitragsformen */}
               <div className="space-y-4 pt-2">
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
                     Mögliche Beitragsformate
                   </h3>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                     Jugendliche können ihre Ideen in den unterschiedlichsten Formen einreichen:
                   </p>
                 </div>
@@ -273,13 +273,13 @@ function StaticWirSindVielfalt() {
                   {formats.map((f, idx) => {
                     const Icon = f.icon;
                     return (
-                      <div key={idx} className="p-4 rounded-xl bg-white border border-gray-200 flex items-start gap-3 shadow-2xs">
+                      <div key={idx} className="p-4 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 flex items-start gap-3 shadow-2xs">
                         <div className="p-2 rounded-lg bg-slate-50 text-sky-700 shrink-0">
                           <Icon className="w-4 h-4" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-xs text-gray-900">{f.title}</h4>
-                          <p className="text-[11px] text-gray-500 mt-0.5 leading-relaxed">{f.desc}</p>
+                          <h4 className="font-bold text-xs text-gray-900 dark:text-gray-100">{f.title}</h4>
+                          <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5 leading-relaxed">{f.desc}</p>
                         </div>
                       </div>
                     );
@@ -289,12 +289,12 @@ function StaticWirSindVielfalt() {
 
               {/* Highlights Checkmarks */}
               <div className="space-y-3 pt-2">
-                <h3 className="text-lg font-bold text-gray-900">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
                   Der Wettbewerb auf einen Blick
                 </h3>
                 <div className="space-y-2.5">
                   {highlights.map((h, idx) => (
-                    <div key={idx} className="flex items-start gap-3 text-sm text-gray-700">
+                    <div key={idx} className="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
                       <span>{h}</span>
                     </div>
@@ -309,60 +309,60 @@ function StaticWirSindVielfalt() {
           <aside className="lg:col-span-4 space-y-6">
             
             {/* Quick Facts Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-4">
               <span className="text-[11px] font-bold uppercase tracking-wider text-rose-700">Eckdaten</span>
-              <h3 className="text-base font-bold text-gray-900">Wettbewerbs-Steckbrief</h3>
+              <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Wettbewerbs-Steckbrief</h3>
 
-              <div className="space-y-3 pt-2 text-xs text-gray-600">
+              <div className="space-y-3 pt-2 text-xs text-gray-600 dark:text-gray-400">
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <Users className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Zielgruppe</h5>
-                    <p className="text-gray-500">Schüler:innen & Jugendliche aller Schulformen</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Zielgruppe</h5>
+                    <p className="text-gray-500 dark:text-gray-400">Schüler:innen & Jugendliche aller Schulformen</p>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <Calendar className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Turnus</h5>
-                    <p className="text-gray-500">Jährlich mit wechselnden Schwerpunktthemen</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Turnus</h5>
+                    <p className="text-gray-500 dark:text-gray-400">Jährlich mit wechselnden Schwerpunktthemen</p>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <Award className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Auszeichnung</h5>
-                    <p className="text-gray-500">Öffentliche Prämierungsveranstaltung & Urkunden</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Auszeichnung</h5>
+                    <p className="text-gray-500 dark:text-gray-400">Öffentliche Prämierungsveranstaltung & Urkunden</p>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <ShieldCheck className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Teilnahme</h5>
-                    <p className="text-gray-500">100 % kostenlos</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Teilnahme</h5>
+                    <p className="text-gray-500 dark:text-gray-400">100 % kostenlos</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Contact & Registration Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-5">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-5">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-rose-700">Mitmachen & Einreichen</span>
-                <h3 className="text-base font-bold text-gray-900">Fragen zum Wettbewerb?</h3>
-                <p className="text-xs text-gray-500 mt-1">
+                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Fragen zum Wettbewerb?</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   Ob als teilnehmende Gruppe, Lehrkraft oder Schule – wenden Sie sich gerne jederzeit an unser Organisationsteam.
                 </p>
               </div>
 
-              <div className="space-y-3 text-xs text-gray-600 pt-2 border-t border-gray-100">
+              <div className="space-y-3 text-xs text-gray-600 dark:text-gray-400 pt-2 border-t border-gray-100 dark:border-gray-800">
                 <div className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 text-rose-700 shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">Kontaktstelle:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">Kontaktstelle:</span>
                     <span>Lernzirkel Ludwigshafen e.V.<br />Ludwigsplatz 9a, 67059 Ludwigshafen</span>
                   </div>
                 </div>
@@ -370,7 +370,7 @@ function StaticWirSindVielfalt() {
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-rose-700 shrink-0" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">Telefon:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">Telefon:</span>
                     <a href="tel:062130737271" className="text-rose-700 hover:underline">0621 30737271</a>
                   </div>
                 </div>
@@ -378,7 +378,7 @@ function StaticWirSindVielfalt() {
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-rose-700 shrink-0" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">E-Mail:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">E-Mail:</span>
                     <EmailObfuscator 
                       user="info" 
                       domain="lernzirkel-online.de" 
@@ -392,7 +392,7 @@ function StaticWirSindVielfalt() {
               <div className="pt-2">
                 <Link
                   href="/kontakt"
-                  className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-rose-700 hover:bg-rose-800 text-xs font-semibold text-white shadow-sm transition"
+                  className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-rose-700 hover:bg-rose-800 text-xs font-semibold text-white shadow-sm dark:shadow-none transition"
                 >
                   <span>Kontakt aufnehmen / Anfragen</span>
                 </Link>
@@ -400,8 +400,8 @@ function StaticWirSindVielfalt() {
             </div>
 
             {/* Other Projects Quick Nav */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">Weitere Projekte</h4>
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Weitere Projekte</h4>
               <nav className="space-y-1 text-xs font-medium">
                 <Link 
                   href="/projekte/wettbewerbe/bildungsmesse" 

@@ -17,7 +17,7 @@ export default function JobCard({ job }: { job: any }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="group bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-primary/20 transition-all duration-300 relative overflow-hidden flex flex-col h-full">
+    <div className="group bg-white dark:bg-gray-900 p-6 md:p-8 rounded-2xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-800 hover:shadow-xl hover:border-primary/20 transition-all duration-300 relative overflow-hidden flex flex-col h-full">
       <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
         {job.type === 'LEHRER' ? <GraduationCap size={80} /> : <Briefcase size={80} />}
       </div>
@@ -27,30 +27,30 @@ export default function JobCard({ job }: { job: any }) {
           <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
             job.type === 'LEHRER' ? 'bg-blue-50 text-blue-700' :
             job.type === 'PRAKTIKANT' ? 'bg-emerald-50 text-emerald-700' :
-            'bg-gray-100 text-gray-700'
+            'bg-gray-100 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300'
           }`}>
             {job.type === 'LEHRER' ? 'Lehrkraft' : job.type === 'PRAKTIKANT' ? 'Praktikum' : 'Stellenangebot'}
           </span>
           {job.location && (
-            <span className="flex items-center text-gray-500 text-xs font-medium bg-gray-50 px-3 py-1 rounded-full border border-gray-100">
+            <span className="flex items-center text-gray-500 dark:text-gray-400 text-xs font-medium bg-gray-50 dark:bg-gray-800 px-3 py-1 rounded-full border border-gray-100 dark:border-gray-800">
               <MapPin className="w-3.5 h-3.5 mr-1 text-gray-400" /> {job.location}
             </span>
           )}
         </div>
-        <h3 className="text-2xl font-bold text-gray-900 group-hover:text-primary transition-colors pr-12">{job.title}</h3>
+        <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-primary transition-colors pr-12">{job.title}</h3>
       </div>
       
       <div className="flex-grow">
-        <div className={`prose prose-sm text-gray-600 mb-6 whitespace-pre-wrap ${!isExpanded ? 'line-clamp-4' : ''}`}>
+        <div className={`prose prose-sm text-gray-600 dark:text-gray-400 mb-6 whitespace-pre-wrap ${!isExpanded ? 'line-clamp-4' : ''}`}>
           {job.description}
         </div>
         
         {job.requirements && (
-          <div className="mb-6 bg-gray-50/50 p-4 rounded-xl border border-gray-100">
-            <h4 className="font-semibold text-gray-900 mb-2 flex items-center text-sm">
+          <div className="mb-6 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-100 dark:border-gray-800">
+            <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center text-sm">
               <Sparkles className="w-4 h-4 mr-2 text-amber-500" /> Profil & Anforderungen
             </h4>
-            <div className={`prose prose-sm text-gray-600 whitespace-pre-wrap ${!isExpanded ? 'line-clamp-3' : ''}`}>
+            <div className={`prose prose-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap ${!isExpanded ? 'line-clamp-3' : ''}`}>
               {job.requirements}
             </div>
           </div>
@@ -71,13 +71,13 @@ export default function JobCard({ job }: { job: any }) {
         </button>
       </div>
       
-      <div className="pt-4 border-t border-gray-100 mt-auto flex items-center justify-between">
+      <div className="pt-4 border-t border-gray-100 dark:border-gray-800 mt-auto flex items-center justify-between">
         <span className="text-xs text-gray-400 flex items-center font-medium">
           <Clock className="w-3.5 h-3.5 mr-1" /> Vollzeit / Teilzeit
         </span>
         <Link 
           href={`/kontakt?betreff=Bewerbung: ${encodeURIComponent(job.title)}`} 
-          className="inline-flex items-center justify-center bg-primary text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-primary-light transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 group/btn relative z-10"
+          className="inline-flex items-center justify-center bg-primary text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-primary-light transition-all shadow-sm dark:shadow-none hover:shadow-md dark:shadow-none hover:-translate-y-0.5 group/btn relative z-10"
         >
           <span>Jetzt bewerben</span>
           <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />

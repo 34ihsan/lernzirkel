@@ -1,11 +1,13 @@
 import React from 'react';
-import prisma from '@/lib/prisma';
+import { getCachedCourseById } from '@/lib/cached-content';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { 
   ArrowLeft, Calendar, Clock, MapPin, User, CheckCircle2, 
   GraduationCap, Euro, FileText, Sparkles, Phone, Mail
 } from 'lucide-react';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { generateCourseSchema } from '@/lib/seo';
 
 export const revalidate = 60;
 
@@ -13,18 +15,30 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const resolvedParams = await params;
   
   // Find course by slug or ID
-  const courses = await prisma.course.findMany();
-  const course = courses.find((c) => c.id === resolvedParams.slug);
+  const course = await getCachedCourseById(resolvedParams.slug);
 
   if (!course) {
     return { title: 'Kurs nicht gefunden | Lernzirkel Ludwigshafen' };
   }
 
+  // Get design config for possible fallback image
+  const design = course.design ? JSON.parse(JSON.stringify(course.design)) : {};
+  const ogImageUrl = design.imageUrl || `/api/og?title=${encodeURIComponent(course.title)}&description=${encodeURIComponent(course.description.substring(0, 100))}&badge=Kurs`;
+
   return {
     title: `${course.title} | Lernzirkel Ludwigshafen e.V.`,
     description: course.description.substring(0, 160),
     openGraph: {
-      images: [],
+      title: course.title,
+      description: course.description.substring(0, 160),
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: course.title,
+        }
+      ],
     },
   };
 }
@@ -32,8 +46,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function CourseDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
   
-  const courses = await prisma.course.findMany();
-  const course = courses.find((c) => c.id === resolvedParams.slug);
+  const course = await getCachedCourseById(resolvedParams.slug);
 
   if (!course) {
     notFound();
@@ -63,12 +76,31 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
     return new Date(date).toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' });
   };
 
+  // Generate JSON-LD Data for SEO
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": course.title,
+    "description": course.description,
+    "provider": {
+      "@type": "Organization",
+      "name": "Lernzirkel Ludwigshafen e.V.",
+      "url": "https://lernzirkel-online.de"
+    },
+    ...(design.imageUrl && { "image": design.imageUrl }),
+    ...(course.targetAudience && { 
+      "audience": { "@type": "Audience", "audienceType": course.targetAudience } 
+    }),
+    ...(course.requirements && { "coursePrerequisites": course.requirements })
+  };
+
   return (
-    <main className="min-h-screen bg-gray-50 pt-28 pb-24">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-800 pt-28 pb-24">
+      <JsonLd data={jsonLd} />
       {/* Hero Section */}
-      <div className="bg-white border-b border-gray-100 mb-12">
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 mb-12">
         <div className="container mx-auto px-4 max-w-5xl py-12">
-          <Link href="/kurse" className="inline-flex items-center text-gray-500 hover:text-primary font-medium mb-8 transition-colors">
+          <Link href="/kurse" className="inline-flex items-center text-gray-500 dark:text-gray-400 hover:text-primary font-medium mb-8 transition-colors">
             <ArrowLeft size={16} className="mr-2" /> Zurück zur Kursübersicht
           </Link>
           
@@ -76,30 +108,30 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
             <div className="flex-1">
               <div className="flex flex-wrap gap-2 mb-4">
                 <span 
-                  className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm"
+                  className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm dark:shadow-none"
                   style={{ backgroundColor: highlightColor }}
                 >
                   <GraduationCap size={14} className="mr-1.5" />
                   {categoryLabels[course.category] || course.category}
                 </span>
                 {design.level && (
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-gray-800 bg-gray-100 border border-gray-200 shadow-sm">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 shadow-sm dark:shadow-none">
                     {design.level}
                   </span>
                 )}
                 {!course.isActive && (
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-red-800 bg-red-100 shadow-sm">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-red-800 bg-red-100 shadow-sm dark:shadow-none">
                     Inaktiv (Archiviert)
                   </span>
                 )}
               </div>
 
-              <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+              <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-gray-100 mb-6 leading-tight">
                 {course.title}
               </h1>
 
               {/* Quick Info Bar */}
-              <div className="flex flex-wrap gap-4 text-sm font-medium text-gray-600 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+              <div className="flex flex-wrap gap-4 text-sm font-medium text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-800">
                 {(course.startDate || course.endDate) && (
                   <div className="flex items-center gap-2">
                     <Calendar size={16} className="text-primary" />
@@ -122,7 +154,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
             </div>
 
             {design.imageUrl && (
-              <div className="w-full md:w-1/3 aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shrink-0 border border-gray-100">
+              <div className="w-full md:w-1/3 aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shrink-0 border border-gray-100 dark:border-gray-800">
                 <img src={design.imageUrl} alt={course.title} className="w-full h-full object-cover" />
               </div>
             )}
@@ -136,25 +168,25 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
           {/* Main Content */}
           <div className="flex-1 space-y-12">
             
-            <section className="bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-gray-100">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+            <section className="bg-white dark:bg-gray-900 p-8 md:p-10 rounded-3xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-800">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-3">
                 <FileText className="text-primary" /> Kursbeschreibung
               </h2>
-              <div className="prose prose-lg max-w-none text-gray-700 whitespace-pre-wrap leading-relaxed">
+              <div className="prose prose-lg max-w-none text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
                 {course.description}
               </div>
             </section>
 
             {features.length > 0 && (
-              <section className="bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-gray-100">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+              <section className="bg-white dark:bg-gray-900 p-8 md:p-10 rounded-3xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-800">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-3">
                   <Sparkles className="text-primary" /> Kursinhalte & Highlights
                 </h2>
                 <div className="grid sm:grid-cols-2 gap-4">
                   {features.map((feat: string, i: number) => (
-                    <div key={i} className="flex items-start gap-3 p-4 bg-gray-50 rounded-2xl">
+                    <div key={i} className="flex items-start gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-2xl">
                       <CheckCircle2 className="w-6 h-6 text-green-500 shrink-0 mt-0.5" />
-                      <span className="font-medium text-gray-800">{feat}</span>
+                      <span className="font-medium text-gray-800 dark:text-gray-200">{feat}</span>
                     </div>
                   ))}
                 </div>
@@ -164,19 +196,19 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
             {/* Target Audience & Requirements */}
             <section className="grid md:grid-cols-2 gap-6">
               {course.targetAudience && (
-                <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-                  <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <div className="bg-white dark:bg-gray-900 p-8 rounded-3xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-800">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
                     <User className="text-primary" size={20} /> Zielgruppe
                   </h3>
-                  <p className="text-gray-700 leading-relaxed">{course.targetAudience}</p>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{course.targetAudience}</p>
                 </div>
               )}
               {course.requirements && (
-                <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-                  <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <div className="bg-white dark:bg-gray-900 p-8 rounded-3xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-800">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
                     <FileText className="text-primary" size={20} /> Voraussetzungen
                   </h3>
-                  <p className="text-gray-700 leading-relaxed">{course.requirements}</p>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{course.requirements}</p>
                 </div>
               )}
             </section>
@@ -184,8 +216,8 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
 
           {/* Sidebar */}
           <aside className="w-full lg:w-[340px] shrink-0 space-y-6">
-            <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 sticky top-28">
-              <h3 className="font-bold text-xl text-gray-900 mb-6">Teilnahme & Anmeldung</h3>
+            <div className="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-800 sticky top-28">
+              <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 mb-6">Teilnahme & Anmeldung</h3>
               
               <div className="space-y-4 mb-8">
                 {course.costsInfo && (
@@ -194,8 +226,8 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
                       <Euro className="text-blue-600" size={20} />
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-gray-500 uppercase">Kosten & Förderung</div>
-                      <div className="font-medium text-gray-900">{course.costsInfo}</div>
+                      <div className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">Kosten & Förderung</div>
+                      <div className="font-medium text-gray-900 dark:text-gray-100">{course.costsInfo}</div>
                     </div>
                   </div>
                 )}
@@ -205,8 +237,8 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
                       <User className="text-amber-600" size={20} />
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-gray-500 uppercase">Ansprechpartner</div>
-                      <div className="font-medium text-gray-900">{design.instructor}</div>
+                      <div className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">Ansprechpartner</div>
+                      <div className="font-medium text-gray-900 dark:text-gray-100">{design.instructor}</div>
                     </div>
                   </div>
                 )}
@@ -215,15 +247,15 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
               <div className="space-y-3">
                 <Link 
                   href={design.linkUrl || `/kontakt?kurs=${encodeURIComponent(course.title)}`}
-                  className="w-full flex items-center justify-center gap-2 py-4 px-6 text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                  className="w-full flex items-center justify-center gap-2 py-4 px-6 text-white font-bold rounded-xl transition-all shadow-md dark:shadow-none hover:shadow-lg hover:-translate-y-0.5"
                   style={{ backgroundColor: highlightColor }}
                 >
                   {design.linkText || 'Jetzt anmelden'}
                 </Link>
                 <div className="text-center">
-                  <span className="text-xs text-gray-500">oder kontaktieren Sie uns direkt:</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">oder kontaktieren Sie uns direkt:</span>
                 </div>
-                <a href="tel:062130737271" className="w-full flex items-center justify-center gap-2 py-3 px-6 bg-gray-50 hover:bg-gray-100 text-gray-800 font-bold rounded-xl transition-colors border border-gray-200">
+                <a href="tel:062130737271" className="w-full flex items-center justify-center gap-2 py-3 px-6 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:bg-gray-800/50 text-gray-800 dark:text-gray-200 font-bold rounded-xl transition-colors border border-gray-200 dark:border-gray-700">
                   <Phone size={16} /> 0621 307 372 71
                 </a>
               </div>

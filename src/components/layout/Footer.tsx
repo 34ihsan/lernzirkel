@@ -66,9 +66,9 @@ export default async function Footer({
         
         {/* Zertifikate & Partner Banner */}
         {footer.badges && ((footer.badges.partners && footer.badges.partners.length > 0) || (footer.badges.items && footer.badges.items.length > 0)) && (
-          <div className="bg-white rounded-xl p-6 mb-12 flex flex-col md:flex-row items-center justify-center md:space-x-12 space-y-6 md:space-y-0 shadow-sm border border-gray-100 text-gray-800">
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-6 mb-12 flex flex-col md:flex-row items-center justify-center md:space-x-12 space-y-6 md:space-y-0 shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-800 text-gray-800 dark:text-gray-200">
             {footer.badges.showTitle !== false && (
-              <p className="font-bold uppercase tracking-wider text-center md:text-left text-gray-700 text-xs sm:text-sm shrink-0">
+              <p className="font-bold uppercase tracking-wider text-center md:text-left text-gray-700 dark:text-gray-300 text-xs sm:text-sm shrink-0">
                 {footer.badges.title || "Zertifiziert & Gefördert durch:"}
               </p>
             )}
@@ -76,7 +76,7 @@ export default async function Footer({
               {footer.badges.partners && footer.badges.partners.length > 0 ? (
                 footer.badges.partners.map((partner, idx) => {
                   const content = partner.logoUrl ? (
-                    <div className="flex items-center justify-center p-2 rounded-lg bg-gray-50/90 hover:bg-gray-100 border border-gray-100 transition-all">
+                    <div className="flex items-center justify-center p-2 rounded-lg bg-gray-50 dark:bg-gray-800/90 hover:bg-gray-100 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 transition-all">
                       <Image
                         src={partner.logoUrl}
                         alt={partner.name || "Partner Logo"}
@@ -91,7 +91,7 @@ export default async function Footer({
                       />
                     </div>
                   ) : (
-                    <div className="h-10 px-4 bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-700 font-semibold text-xs rounded-md shadow-xs hover:bg-gray-200 transition-colors">
+                    <div className="h-10 px-4 bg-gray-100 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-300 font-semibold text-xs rounded-md shadow-xs hover:bg-gray-200 transition-colors">
                       {partner.name}
                     </div>
                   );
@@ -113,7 +113,7 @@ export default async function Footer({
                 })
               ) : (
                 footer.badges.items?.map((badge, idx) => (
-                  <div key={idx} className="h-10 px-4 bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-700 font-semibold text-xs rounded-md shadow-xs">
+                  <div key={idx} className="h-10 px-4 bg-gray-100 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-300 font-semibold text-xs rounded-md shadow-xs">
                     {badge}
                   </div>
                 ))
@@ -207,7 +207,7 @@ export default async function Footer({
                             href={mapsUrl} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 mt-1.5 text-xs text-primary-light hover:text-white hover:underline bg-white/5 hover:bg-white/10 px-2.5 py-1 rounded-md transition-all border border-white/10"
+                            className="inline-flex items-center gap-1.5 mt-1.5 text-xs text-primary-light hover:text-white hover:underline bg-white dark:bg-gray-900/5 hover:bg-white dark:bg-gray-900/10 px-2.5 py-1 rounded-md transition-all border border-white/10"
                             title="Auf Google Maps anzeigen"
                           >
                             <MapPin size={11} className="text-accent" />
@@ -219,7 +219,7 @@ export default async function Footer({
                     </div>
 
                     {showMapEmbed && (
-                      <div className="mt-2.5 rounded-xl overflow-hidden border border-white/10 shadow-sm bg-black/30">
+                      <div className="mt-2.5 rounded-xl overflow-hidden border border-white/10 shadow-sm dark:shadow-none bg-black/30">
                         <iframe
                           title="Google Maps"
                           src={`https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
@@ -285,12 +285,12 @@ export default async function Footer({
                   <li key={i}>
                     {isExt ? (
                       <a href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-white transition-colors group">
-                        <ChevronRight className="w-4 h-4 mr-1 text-gray-500 group-hover:text-primary-light transition-colors" />
+                        <ChevronRight className="w-4 h-4 mr-1 text-gray-500 dark:text-gray-400 group-hover:text-primary-light transition-colors" />
                         {link.label}
                       </a>
                     ) : (
                       <Link href={link.url} className="flex items-center hover:text-white transition-colors group">
-                        <ChevronRight className="w-4 h-4 mr-1 text-gray-500 group-hover:text-primary-light transition-colors" />
+                        <ChevronRight className="w-4 h-4 mr-1 text-gray-500 dark:text-gray-400 group-hover:text-primary-light transition-colors" />
                         {link.label}
                       </Link>
                     )}
@@ -378,7 +378,7 @@ export default async function Footer({
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-800 pt-6 mt-6 flex flex-col md:flex-row justify-between items-center text-gray-500">
+        <div className="border-t border-gray-800 pt-6 mt-6 flex flex-col md:flex-row justify-between items-center text-gray-500 dark:text-gray-400">
           <p>{copyrightText}</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
             {footer.legalLinks?.map((item, idx) => (

@@ -72,7 +72,7 @@ export default function A11yPanel() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="absolute bottom-16 left-0 mb-4 w-72 bg-white rounded-2xl shadow-floating border border-slate-100 overflow-hidden"
+            className="absolute bottom-16 left-0 mb-4 w-72 bg-white dark:bg-gray-900 rounded-2xl shadow-floating border border-slate-100 overflow-hidden"
           >
             <div className="bg-primary p-4 flex justify-between items-center text-white">
               <h3 className="font-semibold text-lg flex items-center gap-2">

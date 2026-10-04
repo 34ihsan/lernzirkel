@@ -59,6 +59,8 @@ model Course {
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
   registrations  Registration[]
+
+  @@index([isActive, category])
 }
 
 enum ProjectStatus {
@@ -88,6 +90,8 @@ model Project {
   imageUrl        String?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
+
+  @@index([status])
 }
 
 model TeamMember {
@@ -123,6 +127,9 @@ model News {
   design      Json?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  @@index([publishDate(sort: Desc)])
+  @@index([archiveDate])
 }
 
 model SiteSettings {
@@ -158,6 +165,9 @@ model Page {
   sections    Section[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  @@index([parentId, order])
+  @@index([isPublished])
 }
 
 model Section {
@@ -170,6 +180,8 @@ model Section {
   order     Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([pageId, order])
 }
 
 model Announcement {
@@ -248,6 +260,9 @@ model LeadApplication {
   adminNote      String?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+
+  @@index([status, serviceType])
+  @@index([createdAt(sort: Desc)])
 }
 
 model EventLog {

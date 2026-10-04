@@ -117,7 +117,7 @@ export default function SiteSearchModal({ isOpen, onClose }: Props) {
       case 'HandHeart': return <HandHeart className="w-4 h-4 text-red-500" />;
       case 'Phone': return <Phone className="w-4 h-4 text-green-600" />;
       case 'Clock': return <Clock className="w-4 h-4 text-purple-600" />;
-      default: return <FileText className="w-4 h-4 text-gray-500" />;
+      default: return <FileText className="w-4 h-4 text-gray-500 dark:text-gray-400" />;
     }
   };
 
@@ -132,10 +132,10 @@ export default function SiteSearchModal({ isOpen, onClose }: Props) {
       />
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-gray-200/80 overflow-hidden z-10 flex flex-col max-h-[82vh] animate-in zoom-in-95 duration-150">
+      <div className="relative w-full max-w-2xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700/80 overflow-hidden z-10 flex flex-col max-h-[82vh] animate-in zoom-in-95 duration-150">
         
         {/* Search Input Bar */}
-        <div className="relative flex items-center px-4 py-3.5 border-b border-gray-100 bg-gray-50/50">
+        <div className="relative flex items-center px-4 py-3.5 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
           <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-blue-50 text-blue-600 shrink-0 mr-3">
             {loading ? (
               <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
@@ -150,14 +150,14 @@ export default function SiteSearchModal({ isOpen, onClose }: Props) {
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Sitede arayın... (Örn: Kurs, Integrationskurs, telc, Nachhilfe, Adresse)"
-            className="flex-1 bg-transparent border-none outline-none text-base text-gray-900 placeholder:text-gray-400 font-medium"
+            className="flex-1 bg-transparent border-none outline-none text-base text-gray-900 dark:text-gray-100 placeholder:text-gray-400 font-medium"
           />
 
           {query && (
             <button
               type="button"
               onClick={() => setQuery('')}
-              className="p-1 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-200/60 transition-colors mr-1"
+              className="p-1 text-gray-400 hover:text-gray-600 dark:text-gray-400 rounded-md hover:bg-gray-200/60 transition-colors mr-1"
               title="Aramayı temizle"
             >
               <X size={16} />
@@ -167,7 +167,7 @@ export default function SiteSearchModal({ isOpen, onClose }: Props) {
           <button
             type="button"
             onClick={onClose}
-            className="px-2 py-1 text-xs font-semibold text-gray-500 hover:text-gray-800 bg-white border border-gray-200 rounded-lg shadow-xs hover:bg-gray-50 transition-colors"
+            className="px-2 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xs hover:bg-gray-50 dark:bg-gray-800 transition-colors"
           >
             ESC
           </button>
@@ -175,14 +175,14 @@ export default function SiteSearchModal({ isOpen, onClose }: Props) {
 
         {/* Quick Suggestion Pills */}
         {!query && suggestions.length > 0 && (
-          <div className="px-5 py-2.5 bg-slate-50/60 border-b border-gray-100 flex items-center gap-1.5 overflow-x-auto text-xs">
+          <div className="px-5 py-2.5 bg-slate-50/60 border-b border-gray-100 dark:border-gray-800 flex items-center gap-1.5 overflow-x-auto text-xs">
             <span className="text-gray-400 font-medium mr-1 shrink-0">Hızlı Arama:</span>
             {suggestions.map((sug, i) => (
               <button
                 key={i}
                 type="button"
                 onClick={() => setQuery(sug)}
-                className="px-2.5 py-1 rounded-full bg-white border border-gray-200 text-gray-700 hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50/40 transition-all shrink-0 font-medium"
+                className="px-2.5 py-1 rounded-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50/40 transition-all shrink-0 font-medium"
               >
                 {sug}
               </button>
@@ -203,16 +203,16 @@ export default function SiteSearchModal({ isOpen, onClose }: Props) {
                   className={`p-3 rounded-xl cursor-pointer flex items-start gap-3 transition-all duration-150 ${
                     isSelected 
                       ? 'bg-blue-50/80 border border-blue-200/80 shadow-xs' 
-                      : 'hover:bg-gray-50 border border-transparent'
+                      : 'hover:bg-gray-50 dark:bg-gray-800 border border-transparent'
                   }`}
                 >
-                  <div className={`p-2 rounded-lg shrink-0 mt-0.5 ${isSelected ? 'bg-white shadow-xs' : 'bg-gray-100/80'}`}>
+                  <div className={`p-2 rounded-lg shrink-0 mt-0.5 ${isSelected ? 'bg-white dark:bg-gray-900 shadow-xs' : 'bg-gray-100 dark:bg-gray-800/50/80'}`}>
                     {renderIcon(item.icon)}
                   </div>
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <h4 className={`text-sm font-bold truncate ${isSelected ? 'text-blue-900' : 'text-gray-900'}`}>
+                      <h4 className={`text-sm font-bold truncate ${isSelected ? 'text-blue-900' : 'text-gray-900 dark:text-gray-100'}`}>
                         {item.title}
                       </h4>
                       {item.badge && (
@@ -226,7 +226,7 @@ export default function SiteSearchModal({ isOpen, onClose }: Props) {
                     </div>
 
                     {item.description && (
-                      <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1 mt-0.5">
                         {item.description}
                       </p>
                     )}
@@ -243,28 +243,28 @@ export default function SiteSearchModal({ isOpen, onClose }: Props) {
               );
             })
           ) : query.trim().length >= 2 && !loading ? (
-            <div className="py-12 text-center text-gray-500 space-y-2">
+            <div className="py-12 text-center text-gray-500 dark:text-gray-400 space-y-2">
               <Search size={32} className="mx-auto text-gray-300 mb-2" />
-              <p className="font-semibold text-sm text-gray-700">"{query}" için sonuç bulunamadı</p>
+              <p className="font-semibold text-sm text-gray-700 dark:text-gray-300">"{query}" için sonuç bulunamadı</p>
               <p className="text-xs text-gray-400">Farklı bir kelime aramayı veya ana menüdeki kategorilere göz atmayı deneyebilirsiniz.</p>
             </div>
           ) : null}
         </div>
 
         {/* Footer info bar */}
-        <div className="px-4 py-2.5 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-400">
+        <div className="px-4 py-2.5 bg-gray-50 dark:bg-gray-800 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-[11px] text-gray-400">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-600 font-mono font-bold">↑↓</kbd> Gezin
+              <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 font-mono font-bold">↑↓</kbd> Gezin
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-600 font-mono font-bold">↵</kbd> Seç
+              <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 font-mono font-bold">↵</kbd> Seç
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-600 font-mono font-bold">ESC</kbd> Kapat
+              <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 font-mono font-bold">ESC</kbd> Kapat
             </span>
           </div>
-          <span className="font-medium text-gray-500">Lernzirkel Site Arama</span>
+          <span className="font-medium text-gray-500 dark:text-gray-400">Lernzirkel Site Arama</span>
         </div>
 
       </div>

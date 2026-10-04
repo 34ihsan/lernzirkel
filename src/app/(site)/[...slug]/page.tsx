@@ -77,7 +77,7 @@ export default async function DynamicCmsPage({ params }: { params: Promise<{ slu
   });
 
   return (
-    <article className="min-h-screen bg-gray-50">
+    <article className="min-h-screen bg-gray-50 dark:bg-gray-800">
       <JsonLd data={generateBreadcrumbSchema(breadcrumbs.map(b => ({ name: b.label, url: b.url })))} />
       {page.slug !== 'home' && (
         <Breadcrumbs items={breadcrumbs} />

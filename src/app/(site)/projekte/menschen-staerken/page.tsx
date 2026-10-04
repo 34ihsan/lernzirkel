@@ -113,7 +113,7 @@ function StaticMenschenStaerken() {
   return (
     <div className="bg-slate-50/50 min-h-screen pb-16">
       {/* Top Breadcrumb Bar */}
-      <div className="border-b border-gray-200 bg-white">
+      <div className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 max-w-6xl py-3">
           <Breadcrumbs items={breadcrumbs} />
         </div>
@@ -133,7 +133,7 @@ function StaticMenschenStaerken() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Main Article (Left 8 cols) */}
-          <main className="lg:col-span-8 bg-white rounded-3xl p-6 sm:p-10 md:p-14 shadow-sm border border-gray-200 space-y-8">
+          <main className="lg:col-span-8 bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-10 md:p-14 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-8">
             
             {/* Header Badge & Meta */}
             <div>
@@ -152,16 +152,16 @@ function StaticMenschenStaerken() {
                 </span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+              <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight leading-tight">
                 Patenschaft „MENSCHEN STÄRKEN MENSCHEN“
               </h1>
-              <p className="text-sm sm:text-base text-gray-600 mt-2">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-2">
                 Gemeinsam Perspektiven schaffen: Miteinander lernen, Kultur erleben und verlässliche Partnerschaften aufbauen.
               </p>
             </div>
 
             {/* Featured Hero Image */}
-            <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 shadow-sm bg-slate-100">
+            <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm dark:shadow-none bg-slate-100">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
                 src="https://lernzirkel-online.de/wp-content/uploads/2016/09/Slide_Integration.jpg"
@@ -171,7 +171,7 @@ function StaticMenschenStaerken() {
             </div>
 
             {/* Article Text Content */}
-            <div className="space-y-6 text-gray-700 text-sm sm:text-base leading-relaxed">
+            <div className="space-y-6 text-gray-700 dark:text-gray-300 text-sm sm:text-base leading-relaxed">
               
               {/* Lead Motto Block */}
               <div className="p-6 rounded-2xl bg-gradient-to-r from-sky-50 to-emerald-50 border border-sky-100 text-slate-800 shadow-2xs">
@@ -187,10 +187,10 @@ function StaticMenschenStaerken() {
 
               {/* Schwerpunkte Heading */}
               <div>
-                <h2 className="text-xl font-bold text-gray-900 mb-2">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                   Worin unterstützt das Programm?
                 </h2>
-                <p className="text-gray-600 text-sm">
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
                   Eine Patenschaft orientiert sich ganz flexibel an den konkreten Lebensbedürfnissen der Geflüchteten und Neuzugewanderten:
                 </p>
               </div>
@@ -205,12 +205,12 @@ function StaticMenschenStaerken() {
                       className={`p-5 rounded-2xl border ${item.color} flex flex-col justify-between transition-transform hover:-translate-y-0.5 duration-200`}
                     >
                       <div className="flex items-center gap-3 mb-2.5">
-                        <div className="p-2 rounded-xl bg-white shadow-2xs">
+                        <div className="p-2 rounded-xl bg-white dark:bg-gray-900 shadow-2xs">
                           <Icon className="w-5 h-5" />
                         </div>
-                        <h3 className="font-bold text-base text-gray-900">{item.title}</h3>
+                        <h3 className="font-bold text-base text-gray-900 dark:text-gray-100">{item.title}</h3>
                       </div>
-                      <p className="text-xs text-gray-600 leading-relaxed">
+                      <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                         {item.desc}
                       </p>
                     </div>
@@ -220,11 +220,11 @@ function StaticMenschenStaerken() {
 
               {/* Tandem-Modell Explanation */}
               <div className="bg-slate-50 rounded-2xl p-6 sm:p-8 border border-slate-200/80 space-y-4">
-                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <Users className="w-5 h-5 text-sky-700" />
                   <span>Wie funktioniert das Tandem-Modell?</span>
                 </h3>
-                <p className="text-sm text-gray-700 leading-relaxed">
+                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                   Hierbei bilden wir als <strong>Lernzirkel Ludwigshafen e.V.</strong> passgenaue Paten-Pärchen 
                   und führen Pat(inn)en und Menschen mit Flucht- und Migrationshintergrund zusammen. 
                   Gemeinsam bestimmen die Tandems, wie oft sie sich treffen und welche Ziele sie verfolgen möchten – 
@@ -247,7 +247,7 @@ function StaticMenschenStaerken() {
               </div>
 
               {/* Feedback Callout Quote */}
-              <div className="p-6 rounded-2xl bg-sky-900 text-white space-y-3 shadow-md">
+              <div className="p-6 rounded-2xl bg-sky-900 text-white space-y-3 shadow-md dark:shadow-none">
                 <span className="text-xs font-bold uppercase tracking-wider text-sky-300 block">
                   Erfahrungen & Wirkung
                 </span>
@@ -262,12 +262,12 @@ function StaticMenschenStaerken() {
 
               {/* Advantages / Checkmarks List */}
               <div className="space-y-3 pt-2">
-                <h3 className="text-lg font-bold text-gray-900">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
                   Ihre Vorteile auf einen Blick
                 </h3>
                 <div className="space-y-2.5">
                   {benefits.map((b, idx) => (
-                    <div key={idx} className="flex items-start gap-3 text-sm text-gray-700">
+                    <div key={idx} className="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-1 shrink-0" />
                       <span>{b}</span>
                     </div>
@@ -277,20 +277,20 @@ function StaticMenschenStaerken() {
 
               {/* Requirements & Costs */}
               <div className="p-5 rounded-2xl bg-slate-100/80 border border-slate-200 text-sm space-y-2">
-                <h4 className="font-bold text-gray-900">Kosten & Voraussetzungen</h4>
-                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                <h4 className="font-bold text-gray-900 dark:text-gray-100">Kosten & Voraussetzungen</h4>
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                   Für die offizielle Teilnahme muss lediglich eine standardisierte <strong>Patenschaftsvereinbarung</strong> ausgefüllt werden. 
                   Das gesamte Programm ist <strong>vollständig kostenlos</strong> für alle Teilnehmenden.
                 </p>
               </div>
 
               {/* Förderer Logos & Institutional Backing */}
-              <div className="pt-8 border-t border-gray-100 space-y-5">
+              <div className="pt-8 border-t border-gray-100 dark:border-gray-800 space-y-5">
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-gray-500 block mb-1">
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 block mb-1">
                     Förderung & Unterstützung
                   </span>
-                  <h3 className="text-base font-bold text-gray-900">
+                  <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">
                     Dieses Projekt wird unterstützt und gefördert durch
                   </h3>
                 </div>
@@ -298,7 +298,7 @@ function StaticMenschenStaerken() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   
                   {/* Der Paritätische */}
-                  <div className="p-6 rounded-2xl bg-white border border-gray-200 flex flex-col items-center justify-center text-center gap-4 shadow-2xs hover:shadow-sm transition">
+                  <div className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center text-center gap-4 shadow-2xs hover:shadow-sm dark:shadow-none transition">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img 
                       src="https://lernzirkel-online.de/wp-content/uploads/2020/01/der-paritaetische-v2_LOGO-300x150.jpg" 
@@ -306,13 +306,13 @@ function StaticMenschenStaerken() {
                       className="h-16 w-auto object-contain"
                     />
                     <div>
-                      <h4 className="font-bold text-xs text-gray-900">Der Paritätische Wohlfahrtsverband</h4>
-                      <p className="text-[11px] text-gray-500 mt-0.5">Spitzenverband der Freien Wohlfahrtspflege</p>
+                      <h4 className="font-bold text-xs text-gray-900 dark:text-gray-100">Der Paritätische Wohlfahrtsverband</h4>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">Spitzenverband der Freien Wohlfahrtspflege</p>
                     </div>
                   </div>
 
                   {/* BAFzA */}
-                  <div className="p-6 rounded-2xl bg-white border border-gray-200 flex flex-col items-center justify-center text-center gap-4 shadow-2xs hover:shadow-sm transition">
+                  <div className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center text-center gap-4 shadow-2xs hover:shadow-sm dark:shadow-none transition">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img 
                       src="https://lernzirkel-online.de/wp-content/uploads/2020/04/Bafza-300x124.png" 
@@ -320,8 +320,8 @@ function StaticMenschenStaerken() {
                       className="h-16 w-auto object-contain"
                     />
                     <div>
-                      <h4 className="font-bold text-xs text-gray-900">Bundesamt für Familie und zivilgesellschaftliche Aufgaben (BAFzA)</h4>
-                      <p className="text-[11px] text-gray-500 mt-0.5">Bundesministerium für Familie, Senioren, Frauen und Jugend</p>
+                      <h4 className="font-bold text-xs text-gray-900 dark:text-gray-100">Bundesamt für Familie und zivilgesellschaftliche Aufgaben (BAFzA)</h4>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">Bundesministerium für Familie, Senioren, Frauen und Jugend</p>
                     </div>
                   </div>
 
@@ -335,60 +335,60 @@ function StaticMenschenStaerken() {
           <aside className="lg:col-span-4 space-y-6">
             
             {/* Quick Facts Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-4">
               <span className="text-[11px] font-bold uppercase tracking-wider text-sky-700">Programmdetails</span>
-              <h3 className="text-base font-bold text-gray-900">Steckbrief Patenschaft</h3>
+              <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Steckbrief Patenschaft</h3>
 
-              <div className="space-y-3 pt-2 text-xs text-gray-600">
+              <div className="space-y-3 pt-2 text-xs text-gray-600 dark:text-gray-400">
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Kosten</h5>
-                    <p className="text-gray-500">100 % kostenlos (gefördert)</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Kosten</h5>
+                    <p className="text-gray-500 dark:text-gray-400">100 % kostenlos (gefördert)</p>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <Users className="w-4 h-4 text-sky-700 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Zielgruppe</h5>
-                    <p className="text-gray-500">Geflüchtete, Zuwanderer & ehrenamtliche Pat:innen</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Zielgruppe</h5>
+                    <p className="text-gray-500 dark:text-gray-400">Geflüchtete, Zuwanderer & ehrenamtliche Pat:innen</p>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <MapPin className="w-4 h-4 text-sky-700 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Standort</h5>
-                    <p className="text-gray-500">Ludwigsplatz 9a, Ludwigshafen</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Standort</h5>
+                    <p className="text-gray-500 dark:text-gray-400">Ludwigsplatz 9a, Ludwigshafen</p>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
                   <Ticket className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold text-gray-900">Aktivitäten</h5>
-                    <p className="text-gray-500">Lernen, Freizeit, Ausflüge (Freizeitpark, Kino u.v.m.)</p>
+                    <h5 className="font-bold text-gray-900 dark:text-gray-100">Aktivitäten</h5>
+                    <p className="text-gray-500 dark:text-gray-400">Lernen, Freizeit, Ausflüge (Freizeitpark, Kino u.v.m.)</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Contact & Registration Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-5">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-5">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-sky-700">Mitmachen & Anfragen</span>
-                <h3 className="text-base font-bold text-gray-900">Interesse an einer Patenschaft?</h3>
-                <p className="text-xs text-gray-500 mt-1">
+                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Interesse an einer Patenschaft?</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   Wenn Sie Unterstützung brauchen oder selbst Pate bzw. Patin werden möchten, freuen wir uns auf Ihre Nachricht oder Ihren Anruf!
                 </p>
               </div>
 
-              <div className="space-y-3 text-xs text-gray-600 pt-2 border-t border-gray-100">
+              <div className="space-y-3 text-xs text-gray-600 dark:text-gray-400 pt-2 border-t border-gray-100 dark:border-gray-800">
                 <div className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 text-sky-700 shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">Adresse:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">Adresse:</span>
                     <span>Lernzirkel Ludwigshafen e.V.<br />Ludwigsplatz 9a, 67059 Ludwigshafen</span>
                   </div>
                 </div>
@@ -396,7 +396,7 @@ function StaticMenschenStaerken() {
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-sky-700 shrink-0" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">Telefon:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">Telefon:</span>
                     <a href="tel:062130737271" className="text-sky-700 hover:underline">0621 30737271</a>
                   </div>
                 </div>
@@ -404,7 +404,7 @@ function StaticMenschenStaerken() {
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-sky-700 shrink-0" />
                   <div>
-                    <span className="font-semibold text-gray-900 block">E-Mail:</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 block">E-Mail:</span>
                     <EmailObfuscator 
                       user="info" 
                       domain="lernzirkel-online.de" 
@@ -418,7 +418,7 @@ function StaticMenschenStaerken() {
               <div className="pt-2">
                 <Link
                   href="/kontakt"
-                  className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-sky-800 hover:bg-sky-900 text-xs font-semibold text-white shadow-sm transition"
+                  className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-sky-800 hover:bg-sky-900 text-xs font-semibold text-white shadow-sm dark:shadow-none transition"
                 >
                   <span>Jetzt Patenschaft anfragen / Pate werden</span>
                 </Link>
@@ -426,8 +426,8 @@ function StaticMenschenStaerken() {
             </div>
 
             {/* Other Projects Quick Nav */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-4">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">Weitere Projekte</h4>
+            <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Weitere Projekte</h4>
               <nav className="space-y-1 text-xs font-medium">
                 <Link 
                   href="/projekte/future-connect" 

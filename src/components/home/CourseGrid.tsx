@@ -21,7 +21,7 @@ export default function CourseGrid() {
     : COURSES.filter(c => c.category === activeFilter);
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold text-primary mb-4">Aktuelle Kurse & Angebote</h2>
@@ -43,7 +43,7 @@ export default function CourseGrid() {
                 onClick={() => setActiveFilter(filter.id)}
                 className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${
                   activeFilter === filter.id 
-                    ? 'bg-primary text-white shadow-md' 
+                    ? 'bg-primary text-white shadow-md dark:shadow-none' 
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -64,7 +64,7 @@ export default function CourseGrid() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.2 }}
-                className="bg-white rounded-xl border border-slate-100 shadow-sm hover:shadow-lg p-6 flex flex-col transition-shadow"
+                className="bg-white dark:bg-gray-900 rounded-xl border border-slate-100 shadow-sm dark:shadow-none hover:shadow-lg p-6 flex flex-col transition-shadow"
               >
                 <div className="flex justify-between items-start mb-4">
                   <div className="p-3 bg-primary/5 text-primary rounded-lg">

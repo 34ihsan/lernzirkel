@@ -28,7 +28,7 @@ export default async function KarrierePage() {
   const otherJobs = jobs.filter(j => j.type !== 'LEHRER' && j.type !== 'PRAKTIKANT');
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white dark:bg-gray-900">
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-blue-50/50 to-white -z-10" />
@@ -40,17 +40,17 @@ export default async function KarrierePage() {
               <Sparkles className="w-4 h-4 mr-2 text-blue-600" />
               Gestalte die Zukunft mit uns
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 tracking-tight mb-6 leading-[1.15]">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight mb-6 leading-[1.15]">
               Arbeiten beim <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Lernzirkel</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 mb-10 leading-relaxed max-w-2xl">
+            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-10 leading-relaxed max-w-2xl">
               Wir suchen engagierte Lehrkräfte, motivierte Praktikanten und kluge Köpfe, die mit uns gemeinsam Bildungschancen schaffen und Integration in Ludwigshafen aktiv leben wollen.
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <a href="#offene-stellen" className="inline-flex items-center justify-center bg-primary text-white px-8 py-3.5 rounded-xl font-bold hover:bg-primary-light transition-all shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-1">
                 Zu den offenen Stellen <ChevronRight className="w-5 h-5 ml-1" />
               </a>
-              <Link href="/kontakt?betreff=Initiativbewerbung" className="inline-flex items-center justify-center bg-white text-gray-700 border border-gray-200 px-8 py-3.5 rounded-xl font-bold hover:bg-gray-50 hover:border-gray-300 transition-all">
+              <Link href="/kontakt?betreff=Initiativbewerbung" className="inline-flex items-center justify-center bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 px-8 py-3.5 rounded-xl font-bold hover:bg-gray-50 dark:bg-gray-800 hover:border-gray-300 transition-all">
                 Initiativbewerbung
               </Link>
             </div>
@@ -59,11 +59,11 @@ export default async function KarrierePage() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 bg-gray-50 border-y border-gray-100">
+      <section className="py-20 bg-gray-50 dark:bg-gray-800 border-y border-gray-100 dark:border-gray-800">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Warum bei uns arbeiten?</h2>
-            <p className="text-gray-600">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">Warum bei uns arbeiten?</h2>
+            <p className="text-gray-600 dark:text-gray-400">
               Als anerkannter Bildungsträger bieten wir mehr als nur einen Job. Wir bieten eine sinnstiftende Tätigkeit in einem dynamischen und familiären Umfeld.
             </p>
           </div>
@@ -86,12 +86,12 @@ export default async function KarrierePage() {
                 desc: "Regelmäßige Weiterbildungen, Raum für eigene Ideen und die Möglichkeit, sich beruflich und persönlich weiterzuentwickeln."
               }
             ].map((benefit, idx) => (
-              <div key={idx} className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center hover:-translate-y-1 transition-transform duration-300">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50 mb-6 ring-8 ring-gray-50/50">
+              <div key={idx} className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-800 text-center hover:-translate-y-1 transition-transform duration-300">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50 dark:bg-gray-800 mb-6 ring-8 ring-gray-50/50">
                   {benefit.icon}
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{benefit.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{benefit.desc}</p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3">{benefit.title}</h3>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{benefit.desc}</p>
               </div>
             ))}
           </div>
@@ -102,19 +102,19 @@ export default async function KarrierePage() {
       <section id="offene-stellen" className="py-24">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Offene Stellenangebote</h2>
-            <p className="text-lg text-gray-600 max-w-2xl">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">Offene Stellenangebote</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl">
               Entdecken Sie unsere aktuellen Vakanzen und finden Sie die Position, die perfekt zu Ihnen passt.
             </p>
           </div>
 
           {jobs.length === 0 ? (
-            <div className="text-center p-16 bg-gray-50 rounded-3xl border border-gray-100 border-dashed">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white text-gray-400 mb-6 shadow-sm">
+            <div className="text-center p-16 bg-gray-50 dark:bg-gray-800 rounded-3xl border border-gray-100 dark:border-gray-800 border-dashed">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white dark:bg-gray-900 text-gray-400 mb-6 shadow-sm dark:shadow-none">
                 <Briefcase size={40} />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Aktuell keine offenen Stellen</h3>
-              <p className="text-gray-500 text-lg max-w-md mx-auto mb-8">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Aktuell keine offenen Stellen</h3>
+              <p className="text-gray-500 dark:text-gray-400 text-lg max-w-md mx-auto mb-8">
                 Derzeit haben wir leider keine spezifischen Vakanzen ausgeschrieben. Wir sind jedoch immer auf der Suche nach Talenten!
               </p>
               <Link href="/kontakt?betreff=Initiativbewerbung" className="inline-flex items-center justify-center bg-primary text-white px-6 py-3 rounded-xl font-medium hover:bg-primary-light transition-colors">
@@ -128,7 +128,7 @@ export default async function KarrierePage() {
                 <div>
                   <div className="flex items-center gap-4 mb-8">
                     <div className="h-px bg-gray-200 flex-grow" />
-                    <h3 className="text-2xl font-bold text-gray-900 flex items-center">
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
                       <GraduationCap className="w-7 h-7 mr-3 text-blue-600" /> Lehrkräfte & Dozenten
                     </h3>
                     <div className="h-px bg-gray-200 flex-grow" />
@@ -143,7 +143,7 @@ export default async function KarrierePage() {
                 <div>
                   <div className="flex items-center gap-4 mb-8">
                     <div className="h-px bg-gray-200 flex-grow" />
-                    <h3 className="text-2xl font-bold text-gray-900 flex items-center">
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
                       <Briefcase className="w-7 h-7 mr-3 text-emerald-600" /> Praktika & Werkstudenten
                     </h3>
                     <div className="h-px bg-gray-200 flex-grow" />
@@ -158,7 +158,7 @@ export default async function KarrierePage() {
                 <div>
                   <div className="flex items-center gap-4 mb-8">
                     <div className="h-px bg-gray-200 flex-grow" />
-                    <h3 className="text-2xl font-bold text-gray-900 flex items-center">
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
                       <Sparkles className="w-7 h-7 mr-3 text-amber-600" /> Weitere Positionen
                     </h3>
                     <div className="h-px bg-gray-200 flex-grow" />
@@ -182,7 +182,7 @@ export default async function KarrierePage() {
           </p>
           <Link 
             href="/kontakt?betreff=Initiativbewerbung" 
-            className="inline-flex items-center justify-center bg-white text-primary px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+            className="inline-flex items-center justify-center bg-white dark:bg-gray-900 text-primary px-8 py-4 rounded-xl font-bold hover:bg-gray-100 dark:bg-gray-800/50 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
           >
             Zur Initiativbewerbung <ArrowRight className="w-5 h-5 ml-2" />
           </Link>

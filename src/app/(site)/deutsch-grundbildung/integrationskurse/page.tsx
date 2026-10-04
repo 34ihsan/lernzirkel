@@ -3,16 +3,16 @@ import { ArrowLeft, BookOpen, CheckCircle2, Languages, ArrowRight } from 'lucide
 
 export default function AllgemeineIntegrationskursePage() {
   return (
-    <div className="py-12 bg-gray-50/50 min-h-screen">
+    <div className="py-12 bg-gray-50 dark:bg-gray-800/50 min-h-screen">
       <div className="container mx-auto px-4 max-w-4xl">
         
         {/* Back Link */}
-        <Link href="/deutsch-grundbildung/sprachkurse" className="inline-flex items-center text-sm text-gray-500 hover:text-primary mb-8 font-medium transition-colors">
+        <Link href="/deutsch-grundbildung/sprachkurse" className="inline-flex items-center text-sm text-gray-500 dark:text-gray-400 hover:text-primary mb-8 font-medium transition-colors">
           <ArrowLeft className="w-4 h-4 mr-2" /> Zurück zu den Sprachkursen
         </Link>
         
         {/* Main Content Card */}
-        <div className="bg-white rounded-xl shadow-sm p-8 md:p-14 border border-gray-100 flatsome-card">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none p-8 md:p-14 border border-gray-100 dark:border-gray-800 flatsome-card">
           
           <span className="inline-block px-4 py-1 bg-accent/10 text-accent font-bold rounded-full text-sm mb-6 uppercase tracking-wider">
             Integrationskurse
@@ -22,7 +22,7 @@ export default function AllgemeineIntegrationskursePage() {
             Allgemeine Integrationskurse
           </h1>
 
-          <div className="prose max-w-none text-gray-700">
+          <div className="prose max-w-none text-gray-700 dark:text-gray-300">
             <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-r-lg mb-10">
               <h3 className="font-bold text-blue-900 mb-2 flex items-center">
                 <BookOpen className="w-5 h-5 mr-2" /> Aufbau des Kurses
@@ -37,7 +37,7 @@ export default function AllgemeineIntegrationskursePage() {
               Vor Beginn des Integrationskurses führen wir einen <strong>Einstufungstest</strong> durch. Das Ergebnis hilft uns, zu entscheiden, mit welchem Kursabschnitt Sie beginnen sollten und ob ein spezieller Integrationskurs sinnvoll wäre.
             </p>
             
-            <hr className="my-10 border-gray-200" />
+            <hr className="my-10 border-gray-200 dark:border-gray-700" />
 
             <h3 className="text-2xl font-bold text-foreground mb-4 flex items-center">
               <Languages className="w-6 h-6 mr-3 text-accent" />
@@ -62,11 +62,11 @@ export default function AllgemeineIntegrationskursePage() {
             <p className="leading-relaxed mb-6">
               Außerdem lernen Sie, auf Deutsch Briefe und E-Mails zu schreiben, Formulare auszufüllen, zu telefonieren oder sich auf eine Arbeitsstelle zu bewerben.
             </p>
-            <div className="bg-gray-50 p-4 rounded-lg font-medium text-gray-800 mb-10 border border-gray-100">
+            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg font-medium text-gray-800 dark:text-gray-200 mb-10 border border-gray-100 dark:border-gray-800">
               Der Sprachkurs schließt mit der telc Prüfung <strong>„Deutsch-Test für Zuwanderer“ (DTZ)</strong> ab.
             </div>
 
-            <hr className="my-10 border-gray-200" />
+            <hr className="my-10 border-gray-200 dark:border-gray-700" />
 
             <h3 className="text-2xl font-bold text-foreground mb-4 flex items-center">
               <BookOpen className="w-6 h-6 mr-3 text-accent" />
@@ -84,7 +84,7 @@ export default function AllgemeineIntegrationskursePage() {
               <li className="flex items-start"><span className="text-accent font-bold mr-3">•</span>Werte, die in Deutschland wichtig sind, zum Beispiel Religionsfreiheit, Toleranz und Gleichberechtigung von Frauen und Männern.</li>
             </ul>
 
-            <div className="bg-gray-50 p-4 rounded-lg font-medium text-gray-800 mb-12 border border-gray-100">
+            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg font-medium text-gray-800 dark:text-gray-200 mb-12 border border-gray-100 dark:border-gray-800">
               Den Orientierungskurs schließen Sie mit dem Abschlusstest <strong>„Leben in Deutschland“ (LiD)</strong> ab.
             </div>
 

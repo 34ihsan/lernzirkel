@@ -14,6 +14,16 @@ import {
 import { useRouter } from "next/navigation";
 import SectionRenderer from "@/components/cms/SectionRenderer";
 import { AVAILABLE_ICONS } from "@/components/common/DynamicIcon";
+import { Reorder, useDragControls } from "framer-motion";
+
+function SortableItemWrapper({ item, children }: { item: any, children: (controls: any) => React.ReactNode }) {
+  const controls = useDragControls();
+  return (
+    <Reorder.Item value={item} dragListener={false} dragControls={controls} className="w-full relative">
+      {children(controls)}
+    </Reorder.Item>
+  );
+}
 
 interface Section {
   id: string;
@@ -146,6 +156,11 @@ export default function PageBuilder({
       newSections[index + 1] = newSections[index];
       newSections[index] = temp;
     }
+    newSections.forEach((s, i) => { s.order = i; });
+    setSections(newSections);
+  };
+
+  const handleReorder = (newSections: Section[]) => {
     newSections.forEach((s, i) => { s.order = i; });
     setSections(newSections);
   };
@@ -442,13 +457,15 @@ export default function PageBuilder({
                 </button>
               </div>
             ) : (
-              sections.map((section, index) => {
+              <Reorder.Group axis="y" values={sections} onReorder={handleReorder} className="space-y-4">
+              {sections.map((section, index) => {
                 const isActive = activeSectionId === section.id;
                 const currentSubTab = getSubTab(section.id);
 
                 return (
+                  <SortableItemWrapper key={section.id} item={section}>
+                    {(controls) => (
                   <div 
-                    key={section.id} 
                     className={`bg-white rounded-xl border transition-all ${
                       isActive ? 'border-blue-400 shadow-md ring-2 ring-blue-100' : 'border-gray-200 shadow-sm'
                     } ${section.isHidden ? 'opacity-60 bg-gray-50' : ''}`}
@@ -468,6 +485,13 @@ export default function PageBuilder({
                       </div>
 
                       <div className="flex items-center space-x-1 shrink-0">
+                        <div
+                          onPointerDown={(e) => controls.start(e)}
+                          className="cursor-grab hover:bg-gray-100 p-1.5 rounded text-gray-400 mr-1 active:cursor-grabbing"
+                          title="Sürükle Bırak"
+                        >
+                          <GripVertical size={16} />
+                        </div>
                         <button 
                           onClick={() => toggleHideSection(section.id)}
                           className={`p-1.5 rounded hover:bg-gray-100 ${section.isHidden ? 'text-amber-600' : 'text-gray-400'}`}
@@ -1787,8 +1811,11 @@ export default function PageBuilder({
                       </div>
                     )}
                   </div>
+                    )}
+                  </SortableItemWrapper>
                 );
-              })
+              })}
+              </Reorder.Group>
             )}
 
             {/* Quick Add Button below list */}

@@ -29,7 +29,7 @@ export default function FloatingContact() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => handleTrack('click_whatsapp')}
-            className="flex items-center gap-3 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all border border-gray-100 group"
+            className="flex items-center gap-3 bg-white dark:bg-gray-900 p-3 rounded-full shadow-lg hover:shadow-xl transition-all border border-gray-100 dark:border-gray-800 group"
           >
             <span className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity absolute right-16 pointer-events-none whitespace-nowrap">
               {t('contact.whatsapp', 'WhatsApp')}
@@ -62,7 +62,7 @@ export default function FloatingContact() {
 
           <a
             href={`tel:${phoneNumber}`}
-            className="flex items-center gap-3 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all border border-gray-100 group"
+            className="flex items-center gap-3 bg-white dark:bg-gray-900 p-3 rounded-full shadow-lg hover:shadow-xl transition-all border border-gray-100 dark:border-gray-800 group"
           >
             <span className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity absolute right-16 pointer-events-none whitespace-nowrap">
               {t('contact.call', 'Anrufen')}

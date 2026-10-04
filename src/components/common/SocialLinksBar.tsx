@@ -200,7 +200,7 @@ export default function SocialLinksBar({
             rel="noopener noreferrer"
             title={item.name}
             aria-label={item.name}
-            className="p-1 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-all transform hover:scale-110"
+            className="p-1 rounded-md text-white/80 hover:text-white hover:bg-white dark:bg-gray-900/10 transition-all transform hover:scale-110"
           >
             {item.icon}
           </a>
@@ -220,7 +220,7 @@ export default function SocialLinksBar({
             rel="noopener noreferrer"
             title={item.name}
             aria-label={item.name}
-            className={`w-9 h-9 rounded-xl bg-gray-800/80 border border-gray-700/60 flex items-center justify-center text-gray-400 transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-md ${item.colorHover}`}
+            className={`w-9 h-9 rounded-xl bg-gray-800/80 border border-gray-700/60 flex items-center justify-center text-gray-400 transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-md dark:shadow-none ${item.colorHover}`}
           >
             {item.icon}
           </a>
@@ -231,7 +231,7 @@ export default function SocialLinksBar({
 
   // mobile menu variant
   return (
-    <div className={`flex items-center justify-center gap-3 py-2 border-t border-gray-100 ${className}`}>
+    <div className={`flex items-center justify-center gap-3 py-2 border-t border-gray-100 dark:border-gray-800 ${className}`}>
       {links.map((item) => (
         <a
           key={item.id}
@@ -240,7 +240,7 @@ export default function SocialLinksBar({
           rel="noopener noreferrer"
           title={item.name}
           aria-label={item.name}
-          className="p-2 rounded-lg bg-gray-100 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+          className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300 hover:text-blue-600 hover:bg-blue-50 transition-colors"
         >
           {item.icon}
         </a>

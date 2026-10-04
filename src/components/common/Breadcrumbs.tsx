@@ -42,13 +42,13 @@ export default function Breadcrumbs({ items, className = '' }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <nav aria-label="Breadcrumb" className={`py-3 px-4 bg-gray-100/70 border-b border-gray-200/80 text-xs sm:text-sm text-gray-600 ${className}`}>
+      <nav aria-label="Breadcrumb" className={`py-3 px-4 bg-gray-100 dark:bg-gray-800/50/70 border-b border-gray-200 dark:border-gray-700/80 text-xs sm:text-sm text-gray-600 dark:text-gray-400 ${className}`}>
         <div className="container mx-auto max-w-6xl">
           <ol className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             <li>
               <Link 
                 href="/" 
-                className="flex items-center gap-1 text-gray-500 hover:text-primary transition-colors font-medium"
+                className="flex items-center gap-1 text-gray-500 dark:text-gray-400 hover:text-primary transition-colors font-medium"
                 title="Zur Startseite"
               >
                 <Home size={14} className="text-primary/70" />
@@ -65,14 +65,14 @@ export default function Breadcrumbs({ items, className = '' }: Props) {
                   {isLast || item.isCurrent ? (
                     <span 
                       aria-current="page" 
-                      className="font-bold text-gray-900 truncate max-w-[200px] sm:max-w-none"
+                      className="font-bold text-gray-900 dark:text-gray-100 truncate max-w-[200px] sm:max-w-none"
                     >
                       {item.label}
                     </span>
                   ) : (
                     <Link 
                       href={item.url} 
-                      className="text-gray-600 hover:text-primary transition-colors hover:underline truncate max-w-[150px] sm:max-w-none"
+                      className="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors hover:underline truncate max-w-[150px] sm:max-w-none"
                     >
                       {item.label}
                     </Link>

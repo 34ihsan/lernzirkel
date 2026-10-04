@@ -58,23 +58,23 @@ export default function GlobalSearch() {
       </div>
 
       {isOpen && query.length >= 2 && (
-        <div className="absolute z-50 w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden max-h-96 overflow-y-auto">
+        <div className="absolute z-50 w-full mt-2 bg-white dark:bg-gray-900 rounded-lg shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden max-h-96 overflow-y-auto">
           {results.length > 0 ? (
             <ul>
               {results.map((result) => (
                 <li key={`${result.type}-${result.id}`}>
                   <a
                     href={result.url}
-                    className="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0"
+                    className="block px-4 py-3 hover:bg-gray-50 dark:bg-gray-800 border-b border-gray-50 last:border-0"
                   >
-                    <div className="text-sm font-medium text-gray-900">{result.title}</div>
-                    <div className="text-xs text-gray-500 mt-1">{result.type}</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{result.title}</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{result.type}</div>
                   </a>
                 </li>
               ))}
             </ul>
           ) : (
-            <div className="px-4 py-6 text-center text-sm text-gray-500">
+            <div className="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
               {t('search.noResults', 'Keine Ergebnisse gefunden.')}
             </div>
           )}

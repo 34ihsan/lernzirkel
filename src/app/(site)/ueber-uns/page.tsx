@@ -112,7 +112,7 @@ export default function UeberUnsPage() {
       {/* Auto-redirect #leitbild hash to /ueber-uns/leitbild */}
       <HashRedirect targetHash="#leitbild" redirectTo="/ueber-uns/leitbild" />
       {/* Top Breadcrumb Bar */}
-      <div className="border-b border-gray-200 bg-white">
+      <div className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 max-w-6xl py-3">
           <Breadcrumbs items={breadcrumbs} />
         </div>
@@ -124,7 +124,7 @@ export default function UeberUnsPage() {
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px]"></div>
         
         <div className="container mx-auto px-4 max-w-6xl relative z-10 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-semibold uppercase tracking-wider text-sky-200 mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-gray-900/10 backdrop-blur-md border border-white/15 text-xs font-semibold uppercase tracking-wider text-sky-200 mb-6">
             <Building2 className="w-4 h-4 text-amber-300" />
             <span>Lernzirkel Ludwigshafen e.V. • Seit 2002</span>
           </div>
@@ -140,19 +140,19 @@ export default function UeberUnsPage() {
 
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-6 border-t border-white/15">
-            <div className="p-4 rounded-2xl bg-white/5 backdrop-blur-xs border border-white/10">
+            <div className="p-4 rounded-2xl bg-white dark:bg-gray-900/5 backdrop-blur-xs border border-white/10">
               <div className="text-3xl font-extrabold text-amber-300 mb-1">2002</div>
               <div className="text-xs text-sky-200 font-medium">Gegründet als gemeinnütziger Verein</div>
             </div>
-            <div className="p-4 rounded-2xl bg-white/5 backdrop-blur-xs border border-white/10">
+            <div className="p-4 rounded-2xl bg-white dark:bg-gray-900/5 backdrop-blur-xs border border-white/10">
               <div className="text-3xl font-extrabold text-emerald-300 mb-1">25+</div>
               <div className="text-xs text-sky-200 font-medium">Nationen & Kulturen vereint</div>
             </div>
-            <div className="p-4 rounded-2xl bg-white/5 backdrop-blur-xs border border-white/10">
+            <div className="p-4 rounded-2xl bg-white dark:bg-gray-900/5 backdrop-blur-xs border border-white/10">
               <div className="text-3xl font-extrabold text-sky-300 mb-1">12</div>
               <div className="text-xs text-sky-200 font-medium">Moderne Räume auf 2 Etagen</div>
             </div>
-            <div className="p-4 rounded-2xl bg-white/5 backdrop-blur-xs border border-white/10">
+            <div className="p-4 rounded-2xl bg-white dark:bg-gray-900/5 backdrop-blur-xs border border-white/10">
               <div className="text-3xl font-extrabold text-rose-300 mb-1">100%</div>
               <div className="text-xs text-sky-200 font-medium">Gemeinnützig & unabhängig</div>
             </div>
@@ -162,17 +162,17 @@ export default function UeberUnsPage() {
 
       {/* SUB-PAGES OVERVIEW HUB GRID */}
       <section className="container mx-auto px-4 max-w-6xl -mt-8 relative z-20">
-        <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-gray-100">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-8 border-b border-gray-100 mb-8">
+        <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-10 shadow-xl border border-gray-100 dark:border-gray-800">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-8 border-b border-gray-100 dark:border-gray-800 mb-8">
             <div>
               <span className="text-xs font-bold text-sky-700 uppercase tracking-wider block mb-1">
                 Bereiche & Themen im Überblick
               </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
                 Unsere Angebote & Struktur zu „Über uns“
               </h2>
             </div>
-            <span className="text-xs text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200 self-start sm:self-auto">
+            <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 self-start sm:self-auto">
               5 Hauptbereiche
             </span>
           </div>
@@ -183,7 +183,7 @@ export default function UeberUnsPage() {
               return (
                 <div
                   key={item.id}
-                  className="flex flex-col justify-between p-6 rounded-2xl border border-gray-200 hover:border-sky-300 hover:shadow-lg transition-all duration-200 bg-gradient-to-b from-white to-slate-50/50 group"
+                  className="flex flex-col justify-between p-6 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-sky-300 hover:shadow-lg transition-all duration-200 bg-gradient-to-b from-white to-slate-50/50 group"
                 >
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
@@ -196,16 +196,16 @@ export default function UeberUnsPage() {
                     </div>
 
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900 group-hover:text-sky-800 transition-colors">
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-sky-800 transition-colors">
                         {item.title}
                       </h3>
-                      <p className="text-xs text-gray-600 mt-2 leading-relaxed">
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">
                         {item.description}
                       </p>
                     </div>
                   </div>
 
-                  <div className="pt-6 mt-4 border-t border-gray-100">
+                  <div className="pt-6 mt-4 border-t border-gray-100 dark:border-gray-800">
                     <Link
                       href={item.link}
                       className="inline-flex items-center text-xs font-bold text-sky-700 hover:text-sky-900 group-hover:translate-x-1 transition-all"
@@ -219,7 +219,7 @@ export default function UeberUnsPage() {
             })}
 
             {/* Bonus Card: Organigramm */}
-            <div className="flex flex-col justify-between p-6 rounded-2xl border border-gray-200 hover:border-sky-300 hover:shadow-lg transition-all duration-200 bg-gradient-to-b from-white to-slate-50/50 group">
+            <div className="flex flex-col justify-between p-6 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-sky-300 hover:shadow-lg transition-all duration-200 bg-gradient-to-b from-white to-slate-50/50 group">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="w-12 h-12 rounded-xl bg-sky-50 text-sky-800 flex items-center justify-center group-hover:bg-sky-700 group-hover:text-white transition-colors duration-200 shadow-2xs">
@@ -231,16 +231,16 @@ export default function UeberUnsPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900 group-hover:text-sky-800 transition-colors">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-sky-800 transition-colors">
                     Organigramm & Team
                   </h3>
-                  <p className="text-xs text-gray-600 mt-2 leading-relaxed">
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">
                     Die organisatorische Aufteilung unseres Vereins in Geschäftsführung, Pädagogik, Sprachbereich und Verwaltung.
                   </p>
                 </div>
               </div>
 
-              <div className="pt-6 mt-4 border-t border-gray-100">
+              <div className="pt-6 mt-4 border-t border-gray-100 dark:border-gray-800">
                 <Link
                   href="/ueber-uns/organigramm"
                   className="inline-flex items-center text-xs font-bold text-sky-700 hover:text-sky-900 group-hover:translate-x-1 transition-all"
@@ -258,16 +258,16 @@ export default function UeberUnsPage() {
       <div className="container mx-auto px-4 max-w-6xl py-16 space-y-16">
 
         {/* SECTION 1: UNSER LEITBILD & PROFIL */}
-        <section id="leitbild" className="scroll-mt-24 bg-white rounded-3xl p-8 md:p-14 shadow-sm border border-gray-200">
+        <section id="leitbild" className="scroll-mt-24 bg-white dark:bg-gray-900 rounded-3xl p-8 md:p-14 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
             <div className="max-w-2xl">
               <span className="inline-block px-3.5 py-1 bg-sky-100 text-sky-800 font-bold rounded-full text-xs uppercase tracking-wider mb-3">
                 Unser Profil & Werte
               </span>
-              <h2 className="text-3xl font-extrabold text-gray-900 leading-tight">
+              <h2 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight">
                 Unser Leitbild – Chancengleichheit und Vielfalt als Auftrag
               </h2>
-              <p className="text-gray-600 text-sm md:text-base mt-3 leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base mt-3 leading-relaxed">
                 Mit unseren Angeboten wollen wir unserer gesellschaftlichen Verantwortung in Ludwigshafen und in der Region gerecht werden. 
                 Denn nur wenn Menschen ausreichend Möglichkeiten geboten werden, ihre Stärken und Potenziale zu entfalten, 
                 können sie aktiv am gesellschaftlichen Leben teilhaben.
@@ -287,8 +287,8 @@ export default function UeberUnsPage() {
               <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-800 flex items-center justify-center font-bold">
                 <Users className="w-5 h-5" />
               </div>
-              <h4 className="font-bold text-gray-900 text-base">Chancengleichheit & Vielfalt</h4>
-              <p className="text-xs text-gray-600 leading-relaxed">
+              <h4 className="font-bold text-gray-900 dark:text-gray-100 text-base">Chancengleichheit & Vielfalt</h4>
+              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                 Unsere Angebote stehen grundsätzlich allen Kindern, Jugendlichen und Erwachsenen offen – unabhängig von Herkunft, Religion, Status oder Vorbildung.
               </p>
             </div>
@@ -297,8 +297,8 @@ export default function UeberUnsPage() {
               <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <h4 className="font-bold text-gray-900 text-base">Qualitätssicherung</h4>
-              <p className="text-xs text-gray-600 leading-relaxed">
+              <h4 className="font-bold text-gray-900 dark:text-gray-100 text-base">Qualitätssicherung</h4>
+              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                 Als lernende Organisation reflektieren wir unser Handeln fortlaufend durch Qualitätsaudits, Evaluationen und Feedback unserer Kursteilnehmer.
               </p>
             </div>
@@ -307,8 +307,8 @@ export default function UeberUnsPage() {
               <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
                 <Award className="w-5 h-5" />
               </div>
-              <h4 className="font-bold text-gray-900 text-base">Wirtschaftlichkeit</h4>
-              <p className="text-xs text-gray-600 leading-relaxed">
+              <h4 className="font-bold text-gray-900 dark:text-gray-100 text-base">Wirtschaftlichkeit</h4>
+              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                 Effektiver Einsatz von Fördermitteln. Gemeinnützige Angebote werden umgesetzt, auch wenn sie betriebswirtschaftlich keine hohen Erträge erwarten lassen.
               </p>
             </div>
@@ -329,21 +329,21 @@ export default function UeberUnsPage() {
         </section>
 
         {/* SECTION 2: ENTSTEHUNG UND INTENTION (PHILOSOPHIE) */}
-        <section className="bg-white rounded-3xl p-8 md:p-14 shadow-sm border border-gray-200">
+        <section className="bg-white dark:bg-gray-900 rounded-3xl p-8 md:p-14 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7 space-y-4">
               <span className="inline-block px-3.5 py-1 bg-amber-100 text-amber-800 font-bold rounded-full text-xs uppercase tracking-wider">
                 Unsere Geschichte & Philosophie
               </span>
-              <h2 className="text-3xl font-extrabold text-gray-900 leading-tight">
+              <h2 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight">
                 Entstehung und Intention des Lernzirkel e.V.
               </h2>
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                 Entstanden im <strong>Januar 2002</strong> aus einer Privatinitiative engagierter Eltern, Pädagogen, 
                 Studenten und Sozialarbeiter hat sich der Verein rasch zu einem unverzichtbaren Knotenpunkt 
                 für Bildung und Integration in Ludwigshafen entwickelt.
               </p>
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                 Nach dem Umzug im Januar 2011 an den Ludwigsplatz 9a wurden aus ursprünglich 3 kleinen Räumen 
                 mittlerweile <strong>12 voll ausgestattete Unterrichtsräume</strong>. Im Jahr 2022 konnte eine komplette zweite Etage angemietet werden, 
                 um den steigenden Bedarf in der Erwachsenenbildung und bei telc Sprachprüfungen abzudecken.
@@ -361,15 +361,15 @@ export default function UeberUnsPage() {
             </div>
 
             <div className="lg:col-span-5 bg-gradient-to-br from-amber-500/10 via-amber-100/30 to-sky-50 p-6 sm:p-8 rounded-3xl border border-amber-200/80 space-y-4">
-              <h4 className="font-bold text-gray-900 text-base flex items-center gap-2">
+              <h4 className="font-bold text-gray-900 dark:text-gray-100 text-base flex items-center gap-2">
                 <Globe className="w-5 h-5 text-amber-700" />
                 <span>Menschen aus über 25 Ländern</span>
               </h4>
-              <p className="text-xs text-gray-700 leading-relaxed">
+              <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
                 Unser Team aus qualifizierten Dozenten, Lehrkräften, ehrenamtlichen Helfern und Beratern begleitet 
                 Teilnehmende vom Analphabetismus bis zum universitären telc C1 Hochschule Zertifikat.
               </p>
-              <div className="pt-2 border-t border-amber-200/60 text-xs text-gray-600 font-medium space-y-1.5">
+              <div className="pt-2 border-t border-amber-200/60 text-xs text-gray-600 dark:text-gray-400 font-medium space-y-1.5">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                   <span>Jugendarbeit & kostenlose Nachhilfe (BuT)</span>
@@ -388,17 +388,17 @@ export default function UeberUnsPage() {
         </section>
 
         {/* SECTION 3: SATZUNG & ORGANISATION */}
-        <section className="bg-white rounded-3xl p-8 md:p-14 shadow-sm border border-gray-200">
+        <section className="bg-white dark:bg-gray-900 rounded-3xl p-8 md:p-14 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-5 bg-gradient-to-br from-indigo-50 to-sky-50 p-6 sm:p-8 rounded-3xl border border-indigo-100 space-y-4">
               <div className="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-800 flex items-center justify-center">
                 <Scale className="w-6 h-6" />
               </div>
-              <h4 className="font-bold text-gray-900 text-base">Rechtliche Grundlagen & Gemeinnützigkeit</h4>
-              <p className="text-xs text-gray-600 leading-relaxed">
+              <h4 className="font-bold text-gray-900 dark:text-gray-100 text-base">Rechtliche Grundlagen & Gemeinnützigkeit</h4>
+              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                 Der Verein verfolgt ausschließlich und unmittelbar steuerbegünstigte, gemeinnützige Zwecke im Sinne der Abgabenordnung (§§ 51 ff. AO).
               </p>
-              <div className="p-3 bg-white rounded-xl border border-indigo-100 text-xs text-indigo-950 font-medium">
+              <div className="p-3 bg-white dark:bg-gray-900 rounded-xl border border-indigo-100 text-xs text-indigo-950 font-medium">
                 Amtsgericht Ludwigshafen am Rhein • VR 2748
               </div>
             </div>
@@ -407,14 +407,14 @@ export default function UeberUnsPage() {
               <span className="inline-block px-3.5 py-1 bg-indigo-100 text-indigo-800 font-bold rounded-full text-xs uppercase tracking-wider">
                 Satzung & Struktur
               </span>
-              <h2 className="text-3xl font-extrabold text-gray-900 leading-tight">
+              <h2 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight">
                 Satzung und Vereinsorganisation
               </h2>
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                 Der Vereinszweck (§ 2) ist nicht auf wirtschaftlichen Geschäftsbetrieb ausgerichtet. 
                 Wir unterstützen Schüler und Eltern bei Bildungs-, Erziehungs- und Integrationsfragen und setzen uns für den Abbau von Vorurteilen ein.
               </p>
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                 Die Vereinsorgane bestehen aus der Mitgliederversammlung und dem ehrenamtlichen Vorstand, 
                 unterstützt durch zwei gewählte Kassenprüfer zur Sicherstellung höchster Transparenz bei der Verwendung von Mitteln.
               </p>
@@ -440,16 +440,16 @@ export default function UeberUnsPage() {
         </section>
 
         {/* SECTION 4: BILDERGALERIE & RÄUMLICHKEITEN */}
-        <section className="bg-white rounded-3xl p-8 md:p-14 shadow-sm border border-gray-200">
+        <section className="bg-white dark:bg-gray-900 rounded-3xl p-8 md:p-14 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
               <span className="inline-block px-3.5 py-1 bg-emerald-100 text-emerald-800 font-bold rounded-full text-xs uppercase tracking-wider mb-2">
                 Einblicke vor Ort
               </span>
-              <h2 className="text-3xl font-extrabold text-gray-900 leading-tight">
+              <h2 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight">
                 Bildergalerie & Räumlichkeiten
               </h2>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
                 Zentral am Ludwigsplatz 9a gelegen – moderne Ausstattung für eine angenehme Lernatmosphäre.
               </p>
             </div>
@@ -468,7 +468,7 @@ export default function UeberUnsPage() {
             {previewImages.map((img, idx) => (
               <div
                 key={idx}
-                className="group relative rounded-2xl overflow-hidden border border-gray-200 shadow-2xs hover:shadow-md transition duration-200 bg-slate-100"
+                className="group relative rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-2xs hover:shadow-md dark:shadow-none transition duration-200 bg-slate-100"
               >
                 <div className="relative h-48 w-full overflow-hidden">
                   <Image
@@ -488,7 +488,7 @@ export default function UeberUnsPage() {
             ))}
           </div>
 
-          <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+          <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500 dark:text-gray-400">
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-emerald-600" />
               <span>Ludwigsplatz 9a, 67059 Ludwigshafen am Rhein (Eingang Ludwigsplatz & Bismarckstraße)</span>
@@ -504,10 +504,10 @@ export default function UeberUnsPage() {
 
         {/* SECTION 5: SPENDEN & UNTERSTÜTZEN */}
         <section className="bg-gradient-to-br from-rose-900 via-[#8A1C29] to-rose-950 text-white rounded-3xl p-8 md:p-14 shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white dark:bg-gray-900/5 rounded-full blur-3xl pointer-events-none"></div>
 
           <div className="max-w-3xl relative z-10 space-y-5">
-            <span className="inline-block px-3.5 py-1 bg-white/20 backdrop-blur-md text-white font-bold rounded-full text-xs uppercase tracking-wider">
+            <span className="inline-block px-3.5 py-1 bg-white dark:bg-gray-900/20 backdrop-blur-md text-white font-bold rounded-full text-xs uppercase tracking-wider">
               Bildungschancen für alle
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold leading-tight">
@@ -522,13 +522,13 @@ export default function UeberUnsPage() {
             <div className="pt-3 flex flex-wrap items-center gap-4">
               <Link
                 href="/spenden"
-                className="px-6 py-3 bg-white text-rose-900 hover:bg-rose-50 font-bold text-xs rounded-xl shadow-md transition"
+                className="px-6 py-3 bg-white dark:bg-gray-900 text-rose-900 hover:bg-rose-50 font-bold text-xs rounded-xl shadow-md dark:shadow-none transition"
               >
                 Jetzt Spenden & Fördermitglied werden
               </Link>
               <Link
                 href="/kontakt"
-                className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/25 text-white font-medium text-xs rounded-xl transition"
+                className="px-6 py-3 bg-white dark:bg-gray-900/10 hover:bg-white dark:bg-gray-900/20 border border-white/25 text-white font-medium text-xs rounded-xl transition"
               >
                 Kontakt für Kooperationen
               </Link>
@@ -537,10 +537,10 @@ export default function UeberUnsPage() {
         </section>
 
         {/* CONTACT / VISIT FOOTER BANNER */}
-        <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm dark:shadow-none">
           <div className="space-y-1 text-center md:text-left">
-            <h4 className="font-bold text-gray-900 text-base">Haben Sie Fragen zu unseren Angeboten oder unserem Verein?</h4>
-            <p className="text-xs text-gray-500">
+            <h4 className="font-bold text-gray-900 dark:text-gray-100 text-base">Haben Sie Fragen zu unseren Angeboten oder unserem Verein?</h4>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               Besuchen Sie uns persönlich am Ludwigsplatz 9a oder rufen Sie uns direkt an (Mo–Fr: 09:00–17:00 Uhr).
             </p>
           </div>
@@ -556,7 +556,7 @@ export default function UeberUnsPage() {
 
             <Link
               href="/kontakt"
-              className="px-5 py-2.5 bg-sky-800 hover:bg-sky-900 text-white rounded-xl text-xs font-semibold shadow-sm transition"
+              className="px-5 py-2.5 bg-sky-800 hover:bg-sky-900 text-white rounded-xl text-xs font-semibold shadow-sm dark:shadow-none transition"
             >
               Kontaktformular
             </Link>

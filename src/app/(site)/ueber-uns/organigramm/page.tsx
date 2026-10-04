@@ -39,7 +39,7 @@ export default async function OrganigrammPage() {
     });
 
     return (
-      <article className="min-h-screen bg-gray-50">
+      <article className="min-h-screen bg-gray-50 dark:bg-gray-800">
         <Breadcrumbs items={breadcrumbs} />
         {page.sections.map((section: any) => (
           <SectionRenderer key={section.id} section={section} />
@@ -53,16 +53,16 @@ export default async function OrganigrammPage() {
 
 function StaticOrganigramm() {
   return (
-    <div className="py-12 bg-gray-50/50 min-h-screen">
+    <div className="py-12 bg-gray-50 dark:bg-gray-800/50 min-h-screen">
       <div className="container mx-auto px-4 max-w-5xl">
         
         {/* Back Link */}
-        <Link href="/ueber-uns" className="inline-flex items-center text-sm text-gray-500 hover:text-primary mb-8 font-medium transition-colors">
+        <Link href="/ueber-uns" className="inline-flex items-center text-sm text-gray-500 dark:text-gray-400 hover:text-primary mb-8 font-medium transition-colors">
           <ArrowLeft className="w-4 h-4 mr-2" /> Zurück zu Über Uns
         </Link>
         
         {/* Main Content Card */}
-        <div className="bg-white rounded-xl shadow-sm p-8 md:p-14 border border-gray-100 flatsome-card">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none p-8 md:p-14 border border-gray-100 dark:border-gray-800 flatsome-card">
           
           <span className="inline-block px-4 py-1 bg-blue-100 text-blue-700 font-bold rounded-full text-sm mb-6 uppercase tracking-wider">
             Struktur
@@ -72,8 +72,8 @@ function StaticOrganigramm() {
             Organigramm des Lernzirkel Ludwigshafen e.V.
           </h1>
           
-          <div className="prose max-w-none text-gray-700 mt-10">
-            <div className="relative w-full overflow-hidden rounded-xl border border-gray-200 shadow-sm bg-white p-4">
+          <div className="prose max-w-none text-gray-700 dark:text-gray-300 mt-10">
+            <div className="relative w-full overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm dark:shadow-none bg-white dark:bg-gray-900 p-4">
                {/* Using standard img for now since we are hot-linking to WP uploads. 
                    We will configure next/image domains later if needed, or download the image. */}
                <img 

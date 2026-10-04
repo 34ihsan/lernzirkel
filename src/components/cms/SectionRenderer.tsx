@@ -18,8 +18,8 @@ export default function SectionRenderer({ section }: { section: any }) {
   if (isHidden) return null;
 
   // Design styles
-  const bgColor = design?.backgroundColor || "bg-white";
-  const textColor = design?.textColor || "text-gray-900";
+  const bgColor = design?.backgroundColor || "bg-white dark:bg-gray-900";
+  const textColor = design?.textColor || "text-gray-900 dark:text-gray-100";
   const padding = design?.padding || "py-16";
   const containerWidth = design?.containerWidth || "max-w-7xl";
   const isCustomBg = design?.backgroundColor?.startsWith("#") || design?.backgroundColor?.startsWith("rgb");
@@ -83,7 +83,7 @@ export default function SectionRenderer({ section }: { section: any }) {
               </span>
             )}
             {content.title && (
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 drop-shadow-sm leading-tight">
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 drop-shadow-sm dark:shadow-none leading-tight">
                 {content.title}
               </h1>
             )}
@@ -106,7 +106,7 @@ export default function SectionRenderer({ section }: { section: any }) {
                 {content.secondaryButtonText && content.secondaryButtonLink && (
                   <Link 
                     href={content.secondaryButtonLink} 
-                    className="flatsome-button text-base px-8 py-3.5 bg-white text-primary hover:bg-gray-100 shadow-md"
+                    className="flatsome-button text-base px-8 py-3.5 bg-white dark:bg-gray-900 text-primary hover:bg-gray-100 dark:bg-gray-800/50 shadow-md dark:shadow-none"
                   >
                     {content.secondaryButtonText}
                   </Link>
@@ -141,7 +141,7 @@ export default function SectionRenderer({ section }: { section: any }) {
                   </h2>
                 )}
                 {content.subtitle && (
-                  <p className="text-gray-600 text-lg leading-relaxed">
+                  <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed">
                     {content.subtitle}
                   </p>
                 )}
@@ -163,7 +163,7 @@ export default function SectionRenderer({ section }: { section: any }) {
                   <CardWrapper
                     key={idx}
                     {...(wrapperProps as any)}
-                    className="flatsome-card p-6 flex flex-col group bg-white shadow-sm hover:shadow-md transition-all border border-gray-100 rounded-xl"
+                    className="flatsome-card p-6 flex flex-col group bg-white dark:bg-gray-900 shadow-sm dark:shadow-none hover:shadow-md dark:shadow-none transition-all border border-gray-100 dark:border-gray-800 rounded-xl"
                   >
                     {item.imageUrl && (
                       <div className="w-full h-44 relative mb-4 rounded-lg overflow-hidden">
@@ -188,7 +188,7 @@ export default function SectionRenderer({ section }: { section: any }) {
                       </h3>
                     )}
                     {item.description && (
-                      <div className="text-gray-500 text-sm mb-4 leading-relaxed flex-grow" dangerouslySetInnerHTML={{ __html: item.description }} />
+                      <div className="text-gray-500 dark:text-gray-400 text-sm mb-4 leading-relaxed flex-grow" dangerouslySetInnerHTML={{ __html: item.description }} />
                     )}
                     {item.linkText && (
                       <span className="text-primary text-sm flex items-center font-semibold mt-auto pt-2">
@@ -223,14 +223,14 @@ export default function SectionRenderer({ section }: { section: any }) {
           <div className={`relative z-10 w-full ${containerWidth} mx-auto px-6 flex flex-col ${contentAlign}`}>
             {content.eyebrow && (
               <span 
-                className="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-bold uppercase tracking-wider mb-4 text-white"
+                className="inline-block px-3 py-1 bg-white dark:bg-gray-900/20 backdrop-blur-sm rounded-full text-xs font-bold uppercase tracking-wider mb-4 text-white"
               >
                 {content.eyebrow}
               </span>
             )}
             {content.title && (
               <h2
-                className="text-3xl md:text-5xl font-extrabold leading-tight mb-4 text-white drop-shadow-md"
+                className="text-3xl md:text-5xl font-extrabold leading-tight mb-4 text-white drop-shadow-md dark:shadow-none"
               >
                 {content.title}
               </h2>
@@ -244,7 +244,7 @@ export default function SectionRenderer({ section }: { section: any }) {
             )}
 
             {content.noticeText && (
-              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg px-4 py-2 text-white text-sm mb-6 inline-flex items-center">
+              <div className="bg-white dark:bg-gray-900/10 backdrop-blur-sm border border-white/20 rounded-lg px-4 py-2 text-white text-sm mb-6 inline-flex items-center">
                 <CheckCircle2 className="w-4 h-4 mr-2 text-green-300 shrink-0" />
                 <span>{content.noticeText}</span>
               </div>
@@ -265,7 +265,7 @@ export default function SectionRenderer({ section }: { section: any }) {
               {content.secondaryButtonText && content.secondaryButtonLink && (
                 <Link
                   href={content.secondaryButtonLink}
-                  className="flatsome-button bg-white text-primary hover:bg-gray-100 shadow-md text-base px-8 py-3.5"
+                  className="flatsome-button bg-white dark:bg-gray-900 text-primary hover:bg-gray-100 dark:bg-gray-800/50 shadow-md dark:shadow-none text-base px-8 py-3.5"
                 >
                   {content.secondaryButtonText}
                 </Link>
@@ -282,7 +282,7 @@ export default function SectionRenderer({ section }: { section: any }) {
         <section className={`${!isCustomBg ? bgColor : ''} ${!isCustomText ? textColor : ''} ${padding}`} style={sectionStyle}>
           <div className={`${containerWidth} mx-auto px-4 sm:px-6 lg:px-8`}>
             <div className={`flex flex-col md:flex-row items-center gap-12 ${isRight ? 'md:flex-row-reverse' : ''}`}>
-              <div className="flex-1 w-full relative h-72 md:h-[400px] rounded-2xl overflow-hidden shadow-lg border border-gray-100">
+              <div className="flex-1 w-full relative h-72 md:h-[400px] rounded-2xl overflow-hidden shadow-lg border border-gray-100 dark:border-gray-800">
                 {content.imageUrl ? (
                   <Image src={content.imageUrl} alt={content.title || "Image"} fill className="object-cover" />
                 ) : (
@@ -299,14 +299,14 @@ export default function SectionRenderer({ section }: { section: any }) {
                 )}
                 {content.title && <h2 className="text-3xl md:text-4xl font-bold mb-6 text-primary">{content.title}</h2>}
                 {content.text && (
-                  <div className="prose max-w-none text-gray-700 mb-6 leading-relaxed" dangerouslySetInnerHTML={{ __html: content.text }} />
+                  <div className="prose max-w-none text-gray-700 dark:text-gray-300 mb-6 leading-relaxed" dangerouslySetInnerHTML={{ __html: content.text }} />
                 )}
                 {Array.isArray(content.bullets) && content.bullets.length > 0 && (
                   <ul className="space-y-3 mb-8">
                     {content.bullets.map((bullet: string, bIdx: number) => (
                       <li key={bIdx} className="flex items-start">
                         <CheckCircle2 className="w-5 h-5 text-accent mr-3 shrink-0 mt-0.5" />
-                        <span className="text-gray-700">{bullet}</span>
+                        <span className="text-gray-700 dark:text-gray-300">{bullet}</span>
                       </li>
                     ))}
                   </ul>
@@ -334,9 +334,9 @@ export default function SectionRenderer({ section }: { section: any }) {
               </span>
             )}
             {content.title && <h2 className="text-3xl md:text-4xl font-bold mb-6 text-primary">{content.title}</h2>}
-            {content.leadText && <p className="text-xl text-gray-600 mb-6 font-light leading-relaxed">{content.leadText}</p>}
+            {content.leadText && <p className="text-xl text-gray-600 dark:text-gray-400 mb-6 font-light leading-relaxed">{content.leadText}</p>}
             {content.text && (
-              <div className="prose max-w-none text-gray-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: content.text }} />
+              <div className="prose max-w-none text-gray-700 dark:text-gray-300 leading-relaxed" dangerouslySetInnerHTML={{ __html: content.text }} />
             )}
           </div>
         </section>
@@ -348,17 +348,17 @@ export default function SectionRenderer({ section }: { section: any }) {
         <section className={`${!isCustomBg ? bgColor : ''} ${!isCustomText ? textColor : ''} ${padding}`} style={sectionStyle}>
           <div className={`${containerWidth} mx-auto px-4 sm:px-6 lg:px-8`}>
             {content.title && <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center text-primary">{content.title}</h2>}
-            {content.subtitle && <p className="text-lg text-gray-600 text-center mb-12 max-w-3xl mx-auto">{content.subtitle}</p>}
+            {content.subtitle && <p className="text-lg text-gray-600 dark:text-gray-400 text-center mb-12 max-w-3xl mx-auto">{content.subtitle}</p>}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {(content.items || []).map((item: any, idx: number) => (
-                <div key={idx} className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <div key={idx} className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm dark:shadow-none hover:shadow-md dark:shadow-none transition-shadow">
                   {item.icon && (
                     <div className="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-4">
                       <DynamicIcon name={item.icon} className="w-6 h-6" />
                     </div>
                   )}
                   {item.title && <h3 className="text-xl font-bold mb-3 text-foreground">{item.title}</h3>}
-                  {item.text && <div className="text-gray-600 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: item.text }} />}
+                  {item.text && <div className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: item.text }} />}
                 </div>
               ))}
             </div>
@@ -374,12 +374,12 @@ export default function SectionRenderer({ section }: { section: any }) {
             {(content.title || content.subtitle) && (
               <div className="text-center mb-12">
                 {content.title && <h2 className="text-3xl font-bold mb-2 text-primary">{content.title}</h2>}
-                {content.subtitle && <p className="text-gray-600">{content.subtitle}</p>}
+                {content.subtitle && <p className="text-gray-600 dark:text-gray-400">{content.subtitle}</p>}
               </div>
             )}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               {(content.items || []).map((stat: any, idx: number) => (
-                <div key={idx} className="p-6 bg-white rounded-xl border border-gray-100 shadow-sm">
+                <div key={idx} className="p-6 bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm dark:shadow-none">
                   {stat.icon && (
                     <div className="flex justify-center mb-3 text-accent">
                       <DynamicIcon name={stat.icon} className="w-8 h-8" />
@@ -388,7 +388,7 @@ export default function SectionRenderer({ section }: { section: any }) {
                   <div className="text-3xl md:text-5xl font-extrabold text-primary mb-2">
                     {stat.number}{stat.suffix || ''}
                   </div>
-                  <div className="text-sm font-medium text-gray-500">{stat.label}</div>
+                  <div className="text-sm font-medium text-gray-500 dark:text-gray-400">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -564,7 +564,7 @@ export default function SectionRenderer({ section }: { section: any }) {
 
     default:
       return (
-        <div className="p-8 text-center text-gray-500 bg-gray-50 border border-gray-200 m-4 rounded-xl">
+        <div className="p-8 text-center text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 m-4 rounded-xl">
           Bölüm Tipi: {type}
         </div>
       );
@@ -591,20 +591,20 @@ function FaqSection({ content, isCustomBg, hasGradient, bgColor, textColor, isCu
           </span>
         )}
         {content.title && <h2 className="text-3xl font-bold mb-4 text-center text-primary">{content.title}</h2>}
-        {content.subtitle && <p className="text-gray-600 text-center mb-10 max-w-2xl mx-auto">{content.subtitle}</p>}
+        {content.subtitle && <p className="text-gray-600 dark:text-gray-400 text-center mb-10 max-w-2xl mx-auto">{content.subtitle}</p>}
         <div className="space-y-4">
           {(content.items || []).map((faq: any, i: number) => (
-            <div key={i} className="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-xs transition-all">
+            <div key={i} className="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden bg-white dark:bg-gray-900 shadow-xs transition-all">
               <button
                 onClick={() => toggle(i)}
-                className="w-full text-left px-6 py-4.5 font-semibold text-gray-900 flex justify-between items-center hover:bg-gray-50/80 transition"
+                className="w-full text-left px-6 py-4.5 font-semibold text-gray-900 dark:text-gray-100 flex justify-between items-center hover:bg-gray-50 dark:bg-gray-800/80 transition"
               >
                 <span className="text-base">{faq.question}</span>
                 <ChevronDown className={`w-5 h-5 shrink-0 ml-4 transition-transform duration-200 ${openIndex === i ? 'rotate-180 text-primary' : 'text-gray-400'}`} />
               </button>
               {openIndex === i && (
                 <div 
-                  className="px-6 py-4 bg-gray-50/60 border-t border-gray-100 text-gray-600 text-sm leading-relaxed animate-in fade-in prose max-w-none"
+                  className="px-6 py-4 bg-gray-50 dark:bg-gray-800/60 border-t border-gray-100 dark:border-gray-800 text-gray-600 dark:text-gray-400 text-sm leading-relaxed animate-in fade-in prose max-w-none"
                   dangerouslySetInnerHTML={{ __html: faq.answer }}
                 />
               )}
@@ -661,7 +661,7 @@ function InteractiveFormSection({ content, design, sectionStyle, bgColor, textCo
               </h2>
             )}
             {content.subtitle && (
-              <p className="text-gray-600 text-base leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 text-base leading-relaxed">
                 {content.subtitle}
               </p>
             )}
@@ -670,16 +670,16 @@ function InteractiveFormSection({ content, design, sectionStyle, bgColor, textCo
 
         <div className={`grid grid-cols-1 ${showSideInfo ? 'lg:grid-cols-12 gap-8' : 'max-w-2xl mx-auto'} items-start`}>
           {/* Form Card */}
-          <div className={`${showSideInfo ? 'lg:col-span-7' : 'w-full'} bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-gray-100`}>
+          <div className={`${showSideInfo ? 'lg:col-span-7' : 'w-full'} bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-xl border border-gray-100 dark:border-gray-800`}>
             {submitted ? (
               <div className="text-center py-12 space-y-4 animate-in fade-in zoom-in-95">
-                <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-sm">
+                <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-sm dark:shadow-none">
                   <CheckCircle size={36} />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {content.successTitle || t('form.successTitle', "Talebiniz Başarıyla Alındı!")}
                 </h3>
-                <p className="text-gray-600 text-sm max-w-md mx-auto leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-400 text-sm max-w-md mx-auto leading-relaxed">
                   {content.successMessage || t('form.successDesc', "Mesajınız bize ulaştı. Eğitim danışmanlarımız en kısa sürede sizinle iletişime geçecektir.")}
                 </p>
                 <button
@@ -688,7 +688,7 @@ function InteractiveFormSection({ content, design, sectionStyle, bgColor, textCo
                     setSubmitted(false);
                     setFormData({ name: '', email: '', phone: '', subject: '', message: '', consent: false });
                   }}
-                  className="mt-4 px-6 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-semibold transition-colors"
+                  className="mt-4 px-6 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-800/50 hover:bg-gray-200 text-gray-800 dark:text-gray-200 text-sm font-semibold transition-colors"
                 >
                   {t('form.newSubmission', "Yeni Mesaj Gönder")}
                 </button>
@@ -697,7 +697,7 @@ function InteractiveFormSection({ content, design, sectionStyle, bgColor, textCo
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1.5">
+                    <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">
                       {content.nameLabel || t('form.fullName', "Adınız & Soyadınız")} *
                     </label>
                     <input
@@ -706,11 +706,11 @@ function InteractiveFormSection({ content, design, sectionStyle, bgColor, textCo
                       placeholder="Örn: Mehmet Yılmaz"
                       value={formData.name}
                       onChange={e => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full rounded-xl border border-gray-200 p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50/50"
+                      className="w-full rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 dark:bg-gray-800/50"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1.5">
+                    <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">
                       {content.emailLabel || t('form.email', "E-Posta Adresiniz")} *
                     </label>
                     <input
@@ -719,14 +719,14 @@ function InteractiveFormSection({ content, design, sectionStyle, bgColor, textCo
                       placeholder="ornek@domain.de"
                       value={formData.email}
                       onChange={e => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full rounded-xl border border-gray-200 p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50/50"
+                      className="w-full rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 dark:bg-gray-800/50"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1.5">
+                    <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">
                       {content.phoneLabel || t('form.phone', "Telefon Numaranız")}
                     </label>
                     <input
@@ -734,17 +734,17 @@ function InteractiveFormSection({ content, design, sectionStyle, bgColor, textCo
                       placeholder="0621 / ..."
                       value={formData.phone}
                       onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full rounded-xl border border-gray-200 p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50/50"
+                      className="w-full rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 dark:bg-gray-800/50"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1.5">
+                    <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">
                       {content.selectLabel || t('form.interest', "İlgilendiğiniz Alan")}
                     </label>
                     <select
                       value={formData.subject}
                       onChange={e => setFormData({ ...formData, subject: e.target.value })}
-                      className="w-full rounded-xl border border-gray-200 p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50/50"
+                      className="w-full rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 dark:bg-gray-800/50"
                     >
                       <option value="">Lütfen Seçiniz</option>
                       {(content.options || [
@@ -762,7 +762,7 @@ function InteractiveFormSection({ content, design, sectionStyle, bgColor, textCo
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 mb-1.5">
+                  <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">
                     {content.messageLabel || t('form.message', "Mesajınız / Sorunuz")} *
                   </label>
                   <textarea
@@ -771,7 +771,7 @@ function InteractiveFormSection({ content, design, sectionStyle, bgColor, textCo
                     placeholder="Nasıl yardımcı olabiliriz? Lütfen kısaca belirtin..."
                     value={formData.message}
                     onChange={e => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full rounded-xl border border-gray-200 p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50/50"
+                    className="w-full rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 dark:bg-gray-800/50"
                   />
                 </div>
 
@@ -784,7 +784,7 @@ function InteractiveFormSection({ content, design, sectionStyle, bgColor, textCo
                     onChange={e => setFormData({ ...formData, consent: e.target.checked })}
                     className="mt-1 rounded text-blue-600 focus:ring-blue-500 h-4 w-4"
                   />
-                  <label htmlFor="consent-check" className="text-xs text-gray-500 leading-relaxed cursor-pointer">
+                  <label htmlFor="consent-check" className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed cursor-pointer">
                     {content.consentText || "Kişisel verilerimin KVKK ve GDPR kapsamında iletişim ve bilgilendirme amacıyla işlenmesini onaylıyorum."}
                   </label>
                 </div>
@@ -792,7 +792,7 @@ function InteractiveFormSection({ content, design, sectionStyle, bgColor, textCo
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full mt-3 py-3.5 px-6 rounded-xl bg-primary hover:bg-primary-light text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="w-full mt-3 py-3.5 px-6 rounded-xl bg-primary hover:bg-primary-light text-white font-bold text-sm shadow-md dark:shadow-none hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   {loading ? (
                     <span>Gönderiliyor...</span>
@@ -824,7 +824,7 @@ function InteractiveFormSection({ content, design, sectionStyle, bgColor, textCo
 
               <div className="space-y-4 pt-2">
                 <div className="flex items-start gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-white dark:bg-gray-900/10 flex items-center justify-center shrink-0">
                     <MapPin className="w-5 h-5 text-accent" />
                   </div>
                   <div>
@@ -834,7 +834,7 @@ function InteractiveFormSection({ content, design, sectionStyle, bgColor, textCo
                 </div>
 
                 <div className="flex items-start gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-white dark:bg-gray-900/10 flex items-center justify-center shrink-0">
                     <Phone className="w-5 h-5 text-accent" />
                   </div>
                   <div>
@@ -846,7 +846,7 @@ function InteractiveFormSection({ content, design, sectionStyle, bgColor, textCo
                 </div>
 
                 <div className="flex items-start gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-white dark:bg-gray-900/10 flex items-center justify-center shrink-0">
                     <Mail className="w-5 h-5 text-accent" />
                   </div>
                   <div>
@@ -858,7 +858,7 @@ function InteractiveFormSection({ content, design, sectionStyle, bgColor, textCo
                 </div>
 
                 <div className="flex items-start gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-white dark:bg-gray-900/10 flex items-center justify-center shrink-0">
                     <Clock className="w-5 h-5 text-accent" />
                   </div>
                   <div>
@@ -897,7 +897,7 @@ function TestimonialsSection({ content, design, sectionStyle, bgColor, textColor
               </h2>
             )}
             {content.subtitle && (
-              <p className="text-gray-600 text-base leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 text-base leading-relaxed">
                 {content.subtitle}
               </p>
             )}
@@ -908,7 +908,7 @@ function TestimonialsSection({ content, design, sectionStyle, bgColor, textColor
           {(content.items || []).map((item: any, idx: number) => (
             <div 
               key={idx} 
-              className="bg-white rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 flex flex-col justify-between"
+              className="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-7 shadow-sm dark:shadow-none hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 dark:border-gray-800 flex flex-col justify-between"
             >
               <div>
                 {/* Stars */}
@@ -917,13 +917,13 @@ function TestimonialsSection({ content, design, sectionStyle, bgColor, textColor
                     <Star key={i} size={16} className="fill-current" />
                   ))}
                 </div>
-                <div className="text-gray-700 text-sm sm:text-base italic leading-relaxed mb-6">
+                <div className="text-gray-700 dark:text-gray-300 text-sm sm:text-base italic leading-relaxed mb-6">
                   &ldquo;<span dangerouslySetInnerHTML={{ __html: item.quote }} />&rdquo;
                 </div>
               </div>
 
               {/* Author info */}
-              <div className="flex items-center gap-3.5 pt-4 border-t border-gray-100">
+              <div className="flex items-center gap-3.5 pt-4 border-t border-gray-100 dark:border-gray-800">
                 {item.avatarUrl ? (
                   <div className="w-12 h-12 rounded-full overflow-hidden relative shrink-0 border border-blue-100">
                     <Image src={item.avatarUrl} alt={item.name || "Kullanıcı"} fill className="object-cover" />
@@ -934,8 +934,8 @@ function TestimonialsSection({ content, design, sectionStyle, bgColor, textColor
                   </div>
                 )}
                 <div className="min-w-0 flex-1">
-                  <div className="font-bold text-gray-900 text-sm truncate">{item.name}</div>
-                  <div className="text-xs text-gray-500 truncate">{item.role || item.course}</div>
+                  <div className="font-bold text-gray-900 dark:text-gray-100 text-sm truncate">{item.name}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 truncate">{item.role || item.course}</div>
                 </div>
                 {item.badge && (
                   <span className="text-[10px] bg-emerald-50 text-emerald-700 font-semibold px-2 py-0.5 rounded-full shrink-0 border border-emerald-200">
@@ -973,7 +973,7 @@ function TimelineSection({ content, design, sectionStyle, bgColor, textColor, pa
               </h2>
             )}
             {content.subtitle && (
-              <p className="text-gray-600 text-base leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 text-base leading-relaxed">
                 {content.subtitle}
               </p>
             )}
@@ -984,11 +984,11 @@ function TimelineSection({ content, design, sectionStyle, bgColor, textColor, pa
           {(content.items || []).map((step: any, idx: number) => (
             <div 
               key={idx}
-              className="bg-white rounded-3xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 flex flex-col relative group"
+              className="bg-white dark:bg-gray-900 rounded-3xl p-6 shadow-sm dark:shadow-none hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 dark:border-gray-800 flex flex-col relative group"
             >
               {/* Step number badge */}
               <div className="flex items-center justify-between mb-4">
-                <span className="w-10 h-10 rounded-2xl bg-blue-600 text-white font-extrabold flex items-center justify-center text-sm shadow-md">
+                <span className="w-10 h-10 rounded-2xl bg-blue-600 text-white font-extrabold flex items-center justify-center text-sm shadow-md dark:shadow-none">
                   {step.stepNumber || idx + 1}
                 </span>
                 {step.icon && (
@@ -998,10 +998,10 @@ function TimelineSection({ content, design, sectionStyle, bgColor, textColor, pa
                 )}
               </div>
 
-              <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-blue-600 transition-colors">
                 {step.title}
               </h3>
-              <div className="text-gray-500 text-xs sm:text-sm leading-relaxed mb-4 flex-1" dangerouslySetInnerHTML={{ __html: step.description }} />
+              <div className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm leading-relaxed mb-4 flex-1" dangerouslySetInnerHTML={{ __html: step.description }} />
 
               {step.badge && (
                 <span className="text-[11px] font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg w-fit">
@@ -1038,7 +1038,7 @@ function TeamGridSection({ content, design, sectionStyle, bgColor, textColor, pa
               </h2>
             )}
             {content.subtitle && (
-              <p className="text-gray-600 text-base leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 text-base leading-relaxed">
                 {content.subtitle}
               </p>
             )}
@@ -1049,9 +1049,9 @@ function TeamGridSection({ content, design, sectionStyle, bgColor, textColor, pa
           {(content.items || []).map((member: any, idx: number) => (
             <div 
               key={idx}
-              className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 flex flex-col group"
+              className="bg-white dark:bg-gray-900 rounded-3xl overflow-hidden shadow-sm dark:shadow-none hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 dark:border-gray-800 flex flex-col group"
             >
-              <div className="relative h-64 w-full bg-gray-100 overflow-hidden">
+              <div className="relative h-64 w-full bg-gray-100 dark:bg-gray-800/50 overflow-hidden">
                 {member.imageUrl ? (
                   <Image 
                     src={member.imageUrl} 
@@ -1060,26 +1060,26 @@ function TeamGridSection({ content, design, sectionStyle, bgColor, textColor, pa
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
+                  <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100 dark:bg-gray-800/50">
                     <User size={64} className="opacity-40" />
                   </div>
                 )}
                 {member.badge && (
-                  <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-blue-800 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-xs">
+                  <div className="absolute top-3 left-3 bg-white dark:bg-gray-900/90 backdrop-blur-sm text-blue-800 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-xs">
                     {member.badge}
                   </div>
                 )}
               </div>
 
               <div className="p-5 flex-1 flex flex-col">
-                <h3 className="text-base font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 transition-colors">
                   {member.name}
                 </h3>
                 <div className="text-xs font-semibold text-blue-700 mb-2">
                   {member.role}
                 </div>
                 {member.bio && (
-                  <p className="text-xs text-gray-500 line-clamp-3 leading-relaxed mb-4 flex-1">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-3 leading-relaxed mb-4 flex-1">
                     {member.bio}
                   </p>
                 )}
@@ -1087,7 +1087,7 @@ function TeamGridSection({ content, design, sectionStyle, bgColor, textColor, pa
                 {member.email && (
                   <a 
                     href={`mailto:${member.email}`}
-                    className="mt-auto pt-3 border-t border-gray-100 text-xs text-gray-600 hover:text-blue-600 flex items-center gap-1.5 font-medium transition-colors"
+                    className="mt-auto pt-3 border-t border-gray-100 dark:border-gray-800 text-xs text-gray-600 dark:text-gray-400 hover:text-blue-600 flex items-center gap-1.5 font-medium transition-colors"
                   >
                     <Mail size={13} />
                     <span className="truncate">{member.email}</span>
@@ -1124,7 +1124,7 @@ function PricingSection({ content, design, sectionStyle, bgColor, textColor, pad
               </h2>
             )}
             {content.subtitle && (
-              <p className="text-gray-600 text-base leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 text-base leading-relaxed">
                 {content.subtitle}
               </p>
             )}
@@ -1140,22 +1140,22 @@ function PricingSection({ content, design, sectionStyle, bgColor, textColor, pad
                 className={`rounded-3xl p-7 flex flex-col relative transition-all duration-300 ${
                   isFeatured 
                     ? 'bg-gradient-to-b from-[#0F4761] to-[#0A3042] text-white shadow-2xl scale-105 z-10 border-2 border-blue-400' 
-                    : 'bg-white text-gray-900 shadow-lg border border-gray-100 hover:shadow-xl'
+                    : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-lg border border-gray-100 dark:border-gray-800 hover:shadow-xl'
                 }`}
               >
                 {plan.badge && (
                   <span className={`text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider w-fit mb-4 ${
-                    isFeatured ? 'bg-accent text-white shadow-sm' : 'bg-blue-100 text-blue-800'
+                    isFeatured ? 'bg-accent text-white shadow-sm dark:shadow-none' : 'bg-blue-100 text-blue-800'
                   }`}>
                     {plan.badge}
                   </span>
                 )}
 
-                <h3 className={`text-xl font-bold mb-2 ${isFeatured ? 'text-white' : 'text-gray-900'}`}>
+                <h3 className={`text-xl font-bold mb-2 ${isFeatured ? 'text-white' : 'text-gray-900 dark:text-gray-100'}`}>
                   {plan.title}
                 </h3>
                 {plan.description && (
-                  <div className={`text-xs mb-6 ${isFeatured ? 'text-blue-100' : 'text-gray-500'}`} dangerouslySetInnerHTML={{ __html: plan.description }} />
+                  <div className={`text-xs mb-6 ${isFeatured ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'}`} dangerouslySetInnerHTML={{ __html: plan.description }} />
                 )}
 
                 <div className="mb-6 flex items-baseline gap-1.5">
@@ -1172,7 +1172,7 @@ function PricingSection({ content, design, sectionStyle, bgColor, textColor, pad
                   {(plan.features || []).map((feat: string, fIdx: number) => (
                     <li key={fIdx} className="flex items-start gap-2.5 text-xs sm:text-sm">
                       <Check className={`w-4 h-4 shrink-0 mt-0.5 ${isFeatured ? 'text-green-300' : 'text-emerald-600'}`} />
-                      <span className={isFeatured ? 'text-blue-50' : 'text-gray-600'}>{feat}</span>
+                      <span className={isFeatured ? 'text-blue-50' : 'text-gray-600 dark:text-gray-400'}>{feat}</span>
                     </li>
                   ))}
                 </ul>
@@ -1180,7 +1180,7 @@ function PricingSection({ content, design, sectionStyle, bgColor, textColor, pad
                 {plan.buttonText && plan.buttonLink && (
                   <Link
                     href={plan.buttonLink}
-                    className={`w-full py-3.5 rounded-xl font-bold text-center text-sm shadow-md hover:shadow-lg transition-all ${
+                    className={`w-full py-3.5 rounded-xl font-bold text-center text-sm shadow-md dark:shadow-none hover:shadow-lg transition-all ${
                       isFeatured 
                         ? 'bg-accent hover:bg-red-700 text-white' 
                         : 'bg-primary hover:bg-primary-light text-white'
@@ -1231,7 +1231,7 @@ function VideoShowcaseSection({ content, design, sectionStyle, bgColor, textColo
               </h2>
             )}
             {content.subtitle && (
-              <p className="text-gray-600 text-base leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 text-base leading-relaxed">
                 {content.subtitle}
               </p>
             )}
@@ -1239,7 +1239,7 @@ function VideoShowcaseSection({ content, design, sectionStyle, bgColor, textColo
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-7 relative rounded-3xl overflow-hidden shadow-2xl bg-black aspect-video border border-gray-100">
+          <div className="lg:col-span-7 relative rounded-3xl overflow-hidden shadow-2xl bg-black aspect-video border border-gray-100 dark:border-gray-800">
             {content.videoUrl ? (
               <iframe
                 src={getEmbedUrl(content.videoUrl)}
@@ -1258,12 +1258,12 @@ function VideoShowcaseSection({ content, design, sectionStyle, bgColor, textColo
 
           <div className="lg:col-span-5 space-y-6">
             {content.leadTitle && (
-              <h3 className="text-2xl font-bold text-gray-900">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                 {content.leadTitle}
               </h3>
             )}
             {content.text && (
-              <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base leading-relaxed">
                 {content.text}
               </p>
             )}
@@ -1273,7 +1273,7 @@ function VideoShowcaseSection({ content, design, sectionStyle, bgColor, textColo
                 {content.highlights.map((h: string, i: number) => (
                   <div key={i} className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                    <span className="text-gray-700 text-sm font-medium">{h}</span>
+                    <span className="text-gray-700 dark:text-gray-300 text-sm font-medium">{h}</span>
                   </div>
                 ))}
               </div>
@@ -1317,7 +1317,7 @@ function LogoCloudSection({ content, design, sectionStyle, bgColor, textColor, p
               </h2>
             )}
             {content.subtitle && (
-              <p className="text-gray-500 text-sm">
+              <p className="text-gray-500 dark:text-gray-400 text-sm">
                 {content.subtitle}
               </p>
             )}
@@ -1335,7 +1335,7 @@ function LogoCloudSection({ content, design, sectionStyle, bgColor, textColor, p
               <PartnerWrapper
                 key={idx}
                 {...(wrapperProps as any)}
-                className="bg-white p-4 rounded-2xl border border-gray-100 shadow-xs hover:shadow-md hover:border-blue-200 transition-all duration-300 flex flex-col items-center justify-center text-center h-28 group"
+                className="bg-white dark:bg-gray-900 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-xs hover:shadow-md dark:shadow-none hover:border-blue-200 transition-all duration-300 flex flex-col items-center justify-center text-center h-28 group"
               >
                 {partner.logoUrl ? (
                   <div className="w-full h-12 relative grayscale group-hover:grayscale-0 transition-all opacity-70 group-hover:opacity-100">
@@ -1344,7 +1344,7 @@ function LogoCloudSection({ content, design, sectionStyle, bgColor, textColor, p
                 ) : (
                   <Building size={28} className="text-gray-400 group-hover:text-blue-600 transition-colors mb-1" />
                 )}
-                <span className="text-xs font-semibold text-gray-700 group-hover:text-blue-700 transition-colors mt-2 line-clamp-1">
+                <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 group-hover:text-blue-700 transition-colors mt-2 line-clamp-1">
                   {partner.name}
                 </span>
               </PartnerWrapper>
@@ -1378,7 +1378,7 @@ function DownloadsSection({ content, design, sectionStyle, bgColor, textColor, p
               </h2>
             )}
             {content.subtitle && (
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                 {content.subtitle}
               </p>
             )}
@@ -1389,7 +1389,7 @@ function DownloadsSection({ content, design, sectionStyle, bgColor, textColor, p
           {(content.items || []).map((doc: any, idx: number) => (
             <div 
               key={idx}
-              className="bg-white rounded-3xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 flex flex-col justify-between group"
+              className="bg-white dark:bg-gray-900 rounded-3xl p-6 shadow-sm dark:shadow-none hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 dark:border-gray-800 flex flex-col justify-between group"
             >
               <div>
                 <div className="flex items-start justify-between mb-4">
@@ -1397,17 +1397,17 @@ function DownloadsSection({ content, design, sectionStyle, bgColor, textColor, p
                     <FileText size={24} />
                   </div>
                   {doc.fileSize && (
-                    <span className="text-[11px] font-bold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
+                    <span className="text-[11px] font-bold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800/50 px-2.5 py-1 rounded-full">
                       {doc.fileSize}
                     </span>
                   )}
                 </div>
 
-                <h3 className="text-base font-bold text-gray-900 group-hover:text-blue-700 transition-colors mb-2">
+                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 group-hover:text-blue-700 transition-colors mb-2">
                   {doc.title}
                 </h3>
                 {doc.description && (
-                  <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed mb-6">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed mb-6">
                     {doc.description}
                   </p>
                 )}
@@ -1418,7 +1418,7 @@ function DownloadsSection({ content, design, sectionStyle, bgColor, textColor, p
                 download
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-2.5 px-4 rounded-xl bg-gray-50 hover:bg-blue-600 hover:text-white text-gray-700 text-xs font-bold transition-all flex items-center justify-center gap-2 border border-gray-200 hover:border-transparent group/btn"
+                className="w-full py-2.5 px-4 rounded-xl bg-gray-50 dark:bg-gray-800 hover:bg-blue-600 hover:text-white text-gray-700 dark:text-gray-300 text-xs font-bold transition-all flex items-center justify-center gap-2 border border-gray-200 dark:border-gray-700 hover:border-transparent group/btn"
               >
                 <Download size={14} className="group-hover/btn:translate-y-0.5 transition-transform" />
                 <span>{doc.buttonText || "İndir (PDF)"}</span>

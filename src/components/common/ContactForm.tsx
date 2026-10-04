@@ -34,7 +34,7 @@ export default function ContactForm() {
             setSubmitted(false);
             setFormData({ name: '', email: '', topic: 'Allgemeine Anfrage', message: '' });
           }}
-          className="mt-4 inline-block text-xs font-bold text-emerald-800 bg-white border border-emerald-300 px-4 py-2 rounded-lg hover:bg-emerald-100 transition-colors"
+          className="mt-4 inline-block text-xs font-bold text-emerald-800 bg-white dark:bg-gray-900 border border-emerald-300 px-4 py-2 rounded-lg hover:bg-emerald-100 transition-colors"
         >
           Neue Nachricht verfassen
         </button>
@@ -46,7 +46,7 @@ export default function ContactForm() {
     <form className="space-y-6" onSubmit={handleSubmit}>
       <div className="grid md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Vor- und Nachname *</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Vor- und Nachname *</label>
           <input 
             type="text" 
             value={formData.name}
@@ -57,7 +57,7 @@ export default function ContactForm() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">E-Mail Adresse *</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">E-Mail Adresse *</label>
           <input 
             type="email" 
             value={formData.email}
@@ -70,11 +70,11 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Bereich / Thema</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bereich / Thema</label>
         <select 
           value={formData.topic}
           onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
-          className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white"
+          className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white dark:bg-gray-900"
         >
           <option>Allgemeine Anfrage</option>
           <option>Deutsch & Integrationskurse</option>
@@ -86,7 +86,7 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Ihre Nachricht *</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Ihre Nachricht *</label>
         <textarea 
           rows={5} 
           value={formData.message}
@@ -97,7 +97,7 @@ export default function ContactForm() {
         />
       </div>
 
-      <div className="flex items-center text-sm text-gray-500 bg-gray-50 p-4 rounded-md border border-gray-200">
+      <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-4 rounded-md border border-gray-200 dark:border-gray-700">
         <ShieldCheck className="w-5 h-5 text-green-600 mr-3 shrink-0" />
         Ihre Daten werden sicher und verschlüsselt übertragen. (Spamschutz aktiv)
       </div>
