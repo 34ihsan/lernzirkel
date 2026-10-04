@@ -226,6 +226,10 @@ body {
   html {
     @apply font-sans;
   }
+  /* Fix Next.js Image warning globally by ensuring auto-height */
+  img[data-nimg] {
+    height: auto;
+  }
 }
 /* Accessibility Classes */
 html.high-contrast {

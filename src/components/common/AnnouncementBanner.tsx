@@ -28,6 +28,7 @@ export type AnnouncementType = {
   linkUrl?: string | null;
   linkText?: string | null;
   translations?: any | null;
+  updatedAt?: string | Date;
 };
 
 export default function AnnouncementBanner({ 
@@ -38,7 +39,7 @@ export default function AnnouncementBanner({
   const pathname = usePathname();
   const { language } = useLanguage();
   const [activeAnnouncements, setActiveAnnouncements] = useState<AnnouncementType[]>([]);
-  const [dismissedIds, setDismissedIds] = useState<string[]>([]);
+  const [dismissedAnnouncements, setDismissedAnnouncements] = useState<Record<string, string>>({});
   const [mounted, setMounted] = useState(false);
 
   const [activeIndices, setActiveIndices] = useState({
@@ -49,10 +50,10 @@ export default function AnnouncementBanner({
 
   // Component mount olduğunda localStorage'dan kapatılan duyuruları al
   useEffect(() => {
-    const stored = localStorage.getItem("dismissed_announcements_v2");
+    const stored = localStorage.getItem("dismissed_announcements_v3");
     if (stored) {
       try {
-        setDismissedIds(JSON.parse(stored));
+        setDismissedAnnouncements(JSON.parse(stored));
       } catch (e) {
         console.error("Failed to parse dismissed announcements", e);
       }
@@ -66,11 +67,13 @@ export default function AnnouncementBanner({
 
     // Geçerli URL'nin slug'ını çıkar
     // Örn: /hakkimizda -> hakkimizda. Ana sayfa -> ""
-    const currentSlug = pathname.replace(/^\//, "").split("/")[0] || "";
+    const currentSlug = pathname ? pathname.replace(/^\//, "").split("/")[0] || "" : "";
 
     const filtered = announcements.filter(ann => {
-      // 1. Kullanıcı kapatmış mı?
-      if (dismissedIds.includes(ann.id)) return false;
+      // 1. Kullanıcı kapatmış mı? (Eğer son güncellenme tarihi aynıysa kapatılmış say)
+      const dismissedUpdatedAt = dismissedAnnouncements[ann.id];
+      const isDismissed = dismissedUpdatedAt && (!ann.updatedAt || dismissedUpdatedAt === String(ann.updatedAt));
+      if (isDismissed) return false;
 
       // 2. Kapsam eşleşiyor mu?
       if (ann.targetScope === "ALL") return true;
@@ -84,12 +87,14 @@ export default function AnnouncementBanner({
     console.log("Active announcements:", filtered, "All:", announcements);
 
     setActiveAnnouncements(filtered);
-  }, [pathname, announcements, dismissedIds, mounted]);
+  }, [pathname, announcements, dismissedAnnouncements, mounted]);
 
   const handleDismiss = (id: string) => {
-    const newDismissed = [...dismissedIds, id];
-    setDismissedIds(newDismissed);
-    localStorage.setItem("dismissed_announcements_v2", JSON.stringify(newDismissed));
+    const ann = announcements.find(a => a.id === id);
+    const updatedVal: string = ann?.updatedAt ? String(ann.updatedAt) : 'unknown';
+    const newDismissed: Record<string, string> = { ...dismissedAnnouncements, [id]: updatedVal };
+    setDismissedAnnouncements(newDismissed);
+    localStorage.setItem("dismissed_announcements_v3", JSON.stringify(newDismissed));
   };
 
   // --- KATEGORİLENDİRME (Çoklu Duyuru Yönetimi İçin) ---

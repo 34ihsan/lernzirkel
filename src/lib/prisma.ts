@@ -10,7 +10,7 @@ const prismaClientSingleton = () => {
   return new PrismaClient({ adapter })
 }
 
-const SCHEMA_VERSION = 6 // bumped for Article
+const SCHEMA_VERSION = 8 // bumped for Course categories
 
 declare const globalThis: {
   prismaGlobal: ReturnType<typeof prismaClientSingleton>;

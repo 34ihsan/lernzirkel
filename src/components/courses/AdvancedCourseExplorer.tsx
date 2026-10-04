@@ -263,7 +263,7 @@ export default function AdvancedCourseExplorer({ initialCourses = [] }: Props) {
       return {
         id: db.id,
         title: db.title,
-        link: `/kurse#${db.id}`,
+        link: db.design?.slug ? `/kurse/${db.design.slug}` : `/kurse/${db.id}`,
         category: db.category || 'ANDERE',
         categoryLabel: db.category === 'INTEGRATION' ? 'Integrationskurse' :
                        db.category === 'GRUNDBILDUNG' ? 'Alphabetisierung' :
@@ -275,8 +275,8 @@ export default function AdvancedCourseExplorer({ initialCourses = [] }: Props) {
         costsInfo: db.costsInfo || 'Auf Anfrage',
         fundingType,
         fundingLabel: db.costsInfo || 'Verfügbar',
-        level: ['A1', 'A2', 'B1'],
-        schedule: db.startDate ? `Ab ${new Date(db.startDate).toLocaleDateString('de-DE')}` : 'Laufender Einstieg',
+        level: db.design?.level ? db.design.level.split(',').map((l: string) => l.trim()) : ['A1', 'A2', 'B1'],
+        schedule: db.design?.schedule || (db.startDate ? `Ab ${new Date(db.startDate).toLocaleDateString('de-DE')}` : 'Laufender Einstieg'),
         duration: db.endDate ? `Bis ${new Date(db.endDate).toLocaleDateString('de-DE')}` : 'Flexibel',
         badge: 'Aktuelles Angebot',
         badgeColor: 'bg-blue-100 text-blue-800 border-blue-200',

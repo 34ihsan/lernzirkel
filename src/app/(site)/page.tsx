@@ -50,7 +50,22 @@ export default async function Home() {
   return <StaticHome />;
 }
 
-function StaticHome() {
+import { Calendar, Newspaper } from 'lucide-react';
+
+async function StaticHome() {
+  const now = new Date();
+  const latestNews = await prisma.news.findMany({
+    where: {
+      publishDate: { lte: now },
+      OR: [
+        { archiveDate: null },
+        { archiveDate: { gt: now } }
+      ]
+    },
+    orderBy: { publishDate: 'desc' },
+    take: 3
+  }).catch(() => []);
+
   return (
     <>
       {/* 1. Hero Section */}
@@ -219,8 +234,54 @@ function StaticHome() {
         </div>
       </section>
 
+      {/* 5.5 Aktuelles */}
+      {latestNews.length > 0 && (
+        <section className="py-16 bg-white border-t border-gray-100">
+          <div className="container mx-auto px-4">
+            <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between">
+              <div className="max-w-2xl">
+                <h2 className="text-3xl font-bold text-primary mb-4">Aktuelles aus dem Lernzirkel</h2>
+                <p className="text-gray-600">
+                  Neuigkeiten, Ankündigungen und Einblicke in unsere Vereinsarbeit.
+                </p>
+              </div>
+              <Link href="/aktuelles" className="text-primary font-bold hover:underline mt-4 md:mt-0 flex items-center">
+                Alle News ansehen <ArrowRight className="w-4 h-4 ml-1" />
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {latestNews.map((news: any) => (
+                <Link href={`/aktuelles/${news.id}`} key={news.id} className="group flex flex-col bg-gray-50 rounded-2xl overflow-hidden hover:shadow-lg transition-all border border-gray-100 hover:border-primary/20">
+                  <div className="h-48 bg-gray-200 relative overflow-hidden">
+                    {news.imageUrl ? (
+                      <img src={news.imageUrl} alt={news.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-primary/10 text-primary/30">
+                        <Newspaper size={40} />
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-6 flex flex-col flex-grow">
+                    <div className="flex items-center text-xs text-gray-400 mb-3 font-medium">
+                      <Calendar size={14} className="mr-1.5" />
+                      {new Date(news.publishDate).toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })}
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                      {news.title}
+                    </h3>
+                    <div className="mt-auto flex items-center text-primary font-semibold text-sm">
+                      Weiterlesen <ArrowRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* 6. Projekte & Wettbewerbe */}
-      <section className="py-16 bg-white border-t border-gray-100">
+      <section className="py-16 bg-gray-50 border-t border-gray-100">
         <div className="container mx-auto px-4">
           <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between">
             <div className="max-w-2xl">
@@ -233,6 +294,7 @@ function StaticHome() {
               Alle Projekte ansehen <ArrowRight className="w-4 h-4 ml-1" />
             </Link>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Link href="/future-connect" className="flatsome-card p-6 flex items-start group border border-gray-100 hover:border-secondary transition-colors">
               <div className="w-12 h-12 rounded-lg bg-blue-50 text-primary flex items-center justify-center shrink-0 mr-4 group-hover:bg-primary group-hover:text-white transition-colors">

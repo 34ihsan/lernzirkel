@@ -332,6 +332,10 @@ export const defaultHeaderConfig: HeaderConfig = {
       ]
     },
     {
+      label: "Aktuelles",
+      url: "/aktuelles"
+    },
+    {
       label: "Blog & Wissen",
       url: "/blog"
     },
@@ -460,6 +464,7 @@ export const defaultFooterConfig: FooterConfig = {
       { label: "Projekte & Engagement", url: "/projekte" },
       { label: "ESF+ Alpha", url: "/esfplusalpha" },
       { label: "Bildergalerie", url: "/ueber-uns/galerie" },
+      { label: "Aktuelles", url: "/aktuelles" },
       { label: "Blog & Wissen", url: "/blog" },
       { label: "Karriere", url: "/karriere" }
     ]

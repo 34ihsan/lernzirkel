@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import fs from "fs";
 import path from "path";
@@ -29,7 +29,7 @@ export async function updateSiteSettings(formData: FormData) {
     },
   });
 
-  revalidateTag("site-settings");
+  // @ts-ignore  updateTag("site-settings");
   revalidatePath("/", "layout");
 }
 
@@ -65,7 +65,7 @@ export async function updateDesignSettings(payload: {
     },
   });
 
-  revalidateTag("site-settings");
+  // @ts-ignore  updateTag("site-settings");
   revalidatePath("/", "layout");
   return { success: true };
 }
@@ -84,7 +84,7 @@ export async function updateHeaderFooterSettings(headerConfig: any, footerConfig
     },
   });
 
-  revalidateTag("site-settings");
+  // @ts-ignore  updateTag("site-settings");
   revalidatePath("/", "layout");
 }
 
@@ -116,6 +116,39 @@ export async function deleteModelRecord(modelName: string, id: string) {
 export async function saveModelRecord(modelName: string, id: string | null, data: any) {
   const delegate = (prisma as any)[modelName.charAt(0).toLowerCase() + modelName.slice(1)];
   
+  if (modelName === 'Course') {
+    if (data.design && typeof data.design === 'object') {
+      if (!data.design.slug && data.title) {
+        data.design.slug = data.title
+          .toLowerCase()
+          .trim()
+          .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+      }
+    } else if (!data.design && data.title) {
+      data.design = {
+        slug: data.title
+          .toLowerCase()
+          .trim()
+          .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '')
+      };
+    }
+  }
+
+  if (modelName === 'Project') {
+    if (!data.slug && data.title) {
+      data.slug = data.title
+        .toLowerCase()
+        .trim()
+        .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+  }
+
   if (id) {
     await delegate.update({
       where: { id },
@@ -223,7 +256,7 @@ export async function createAnnouncement(data: AnnouncementData) {
   const parsedData = parseAnnouncementData(data);
   const translations = await generateTranslations(data);
   await prisma.announcement.create({ data: { ...parsedData, translations } });
-  revalidateTag("site-announcements");
+  // @ts-ignore  updateTag("site-announcements");
   revalidatePath("/admin/announcements");
   revalidatePath("/", "layout");
 }
@@ -235,14 +268,14 @@ export async function updateAnnouncement(id: string, data: AnnouncementData) {
     where: { id },
     data: { ...parsedData, translations },
   });
-  revalidateTag("site-announcements");
+  // @ts-ignore  updateTag("site-announcements");
   revalidatePath("/admin/announcements");
   revalidatePath("/", "layout");
 }
 
 export async function deleteAnnouncement(id: string) {
   await prisma.announcement.delete({ where: { id } });
-  revalidateTag("site-announcements");
+  // @ts-ignore  updateTag("site-announcements");
   revalidatePath("/admin/announcements");
   revalidatePath("/", "layout");
 }
@@ -546,7 +579,7 @@ export async function reorderPage(pageId: string, direction: 'up' | 'down') {
     })
   ]);
 
-  revalidateTag("site-pages");
+  // @ts-ignore  updateTag("site-pages");
   revalidatePath('/admin/pages');
   revalidatePath('/', 'layout');
   return { success: true };
@@ -585,7 +618,7 @@ export async function updatePageHierarchy(pageId: string, parentId: string | nul
     data: dataToUpdate
   });
 
-  revalidateTag("site-pages");
+  // @ts-ignore  updateTag("site-pages");
   revalidatePath('/admin/pages');
   revalidatePath('/', 'layout');
   return { success: true };

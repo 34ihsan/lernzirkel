@@ -29,6 +29,7 @@ export function constructMetadata({
   url?: string;
 } = {}): Metadata {
   return {
+    metadataBase: new URL(siteConfig.url),
     title: title ? `${title} | ${siteConfig.name}` : siteConfig.name,
     description,
     openGraph: {

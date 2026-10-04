@@ -34,6 +34,13 @@ enum CourseCategory {
   SPRACHE
   NACHHILFE
   GRUNDBILDUNG
+  BERUFSBEZOGEN
+  PRUEFUNGSVORBEREITUNG
+  ALPHABETISIERUNG
+  ERSTORIENTIERUNG
+  FRAUENKURSE
+  FERIENKURSE
+  WEITERBILDUNG
   ANDERE
 }
 
@@ -48,6 +55,7 @@ model Course {
   startDate      DateTime?
   endDate        DateTime?
   isActive       Boolean        @default(true)
+  design         Json?
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
   registrations  Registration[]
@@ -60,11 +68,21 @@ enum ProjectStatus {
 
 model Project {
   id              String        @id @default(uuid())
+  slug            String?       @unique
   title           String
   status          ProjectStatus @default(AKTIV)
   description     String
   goals           String?
   targetGroup     String?
+  startDate       DateTime?
+  endDate         DateTime?
+  budget          String?
+  fundingSource   String?
+  partners        String?
+  location        String?
+  results         String?
+  actionText      String?
+  actionUrl       String?
   contactPersonId String?
   contactPerson   TeamMember?   @relation(fields: [contactPersonId], references: [id], onDelete: SetNull)
   imageUrl        String?

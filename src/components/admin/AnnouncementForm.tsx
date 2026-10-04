@@ -210,7 +210,11 @@ export default function AnnouncementForm({
                 <label className="block text-sm font-medium text-gray-700 mb-1">Başlangıç Tarihi (Opsiyonel)</label>
                 <input
                   type="datetime-local"
-                  value={formData.startDate ? new Date(formData.startDate).toISOString().slice(0, 16) : ""}
+                  value={formData.startDate ? (() => {
+                    const d = new Date(formData.startDate);
+                    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+                    return d.toISOString().slice(0, 16);
+                  })() : ""}
                   onChange={(e) => setFormData({ ...formData, startDate: e.target.value ? new Date(e.target.value).toISOString() : null })}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
                 />
@@ -219,7 +223,11 @@ export default function AnnouncementForm({
                 <label className="block text-sm font-medium text-gray-700 mb-1">Bitiş Tarihi (Opsiyonel)</label>
                 <input
                   type="datetime-local"
-                  value={formData.endDate ? new Date(formData.endDate).toISOString().slice(0, 16) : ""}
+                  value={formData.endDate ? (() => {
+                    const d = new Date(formData.endDate);
+                    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+                    return d.toISOString().slice(0, 16);
+                  })() : ""}
                   onChange={(e) => setFormData({ ...formData, endDate: e.target.value ? new Date(e.target.value).toISOString() : null })}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
                 />
