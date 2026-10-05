@@ -41,6 +41,18 @@ export default async function NewModelPage({ params }: { params: Promise<{ model
       data.design = design;
     }
 
+    const translationsStr = formData.get("translations");
+    if (translationsStr) {
+      try {
+        const translationsObj = JSON.parse(translationsStr as string);
+        if (Object.keys(translationsObj).length > 0) {
+          data.translations = translationsObj;
+        }
+      } catch (e) {
+        console.error("Failed to parse translations", e);
+      }
+    }
+
     await saveModelRecord(model, null, data);
   }
 

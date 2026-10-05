@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import ImageUploadInput from './ImageUploadInput';
+import AutoTranslateButton from './AutoTranslateButton';
 
 // Lazy-load preview bileşenleri
 const NewsPreview = dynamic(() => import('./previews/NewsPreview'), { ssr: false });
@@ -66,6 +67,11 @@ export default function EditFormWithPreview({
   const [showPreview, setShowPreview] = useState(true);
   const [isPending, startTransition] = useTransition();
   const [isUploading, setIsUploading] = useState<Record<string, boolean>>({});
+  
+  // Çevirileri tutacak state (eğer initialData'da varsa al)
+  const [translations, setTranslations] = useState<any>(
+    initialData.translations ? JSON.parse(initialData.translations) : {}
+  );
 
   const handleChange = (name: string, value: string) => {
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -129,7 +135,19 @@ export default function EditFormWithPreview({
           </button>
         </div>
 
+        <div className="mb-4 flex items-center justify-between bg-blue-50/50 p-4 rounded-lg border border-blue-100">
+          <div>
+            <h3 className="text-sm font-semibold text-blue-900">Çoklu Dil (AI Çeviri)</h3>
+            <p className="text-xs text-blue-700 mt-1">İçeriği Almanca girin, tek tıkla diğer dillere çevirin.</p>
+          </div>
+          <AutoTranslateButton 
+            fieldsToTranslate={formData}
+            onTranslationComplete={(trans) => setTranslations(trans)}
+          />
+        </div>
+
         <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-5">
+          <input type="hidden" name="translations" value={JSON.stringify(translations)} />
           {fields.map(field => {
             const rawVal = formData[field.name] ?? '';
             const displayVal = field.type === 'date' ? formatDate(rawVal) : rawVal;

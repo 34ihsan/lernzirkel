@@ -149,6 +149,30 @@ export async function saveModelRecord(modelName: string, id: string | null, data
     }
   }
 
+  // Handle Translations
+  if (data.translations && typeof data.translations === 'object') {
+    const transObj = data.translations;
+    delete data.translations; // Remove from root to avoid collision
+
+    const translationList = Object.keys(transObj).map(lang => ({
+      language: lang,
+      ...transObj[lang]
+    }));
+
+    if (translationList.length > 0) {
+      if (id) {
+        data.translations = {
+          deleteMany: {}, // Clear old translations
+          create: translationList // Insert new
+        };
+      } else {
+        data.translations = {
+          create: translationList
+        };
+      }
+    }
+  }
+
   if (id) {
     await delegate.update({
       where: { id },

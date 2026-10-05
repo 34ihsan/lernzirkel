@@ -17,11 +17,24 @@ export default async function EditModelPage({ params }: { params: Promise<{ mode
   try {
     // @ts-ignore
     record = await prisma[model.charAt(0).toLowerCase() + model.slice(1)].findUnique({
-      where: { id }
+      where: { id },
+      include: { translations: true }
     });
   } catch(e) {}
 
   if (!record) return notFound();
+
+  // Convert translations array to dictionary map for the form
+  if (record.translations && Array.isArray(record.translations)) {
+    const transMap: any = {};
+    for (const t of record.translations) {
+      if (t.language) {
+        const { id: _, language, ...rest } = t;
+        transMap[language] = rest;
+      }
+    }
+    record.translations = JSON.stringify(transMap);
+  }
 
   async function handleSave(formData: FormData) {
     "use server";
@@ -51,6 +64,18 @@ export default async function EditModelPage({ params }: { params: Promise<{ mode
 
     if (Object.keys(design).length > 0) {
       data.design = design;
+    }
+
+    const translationsStr = formData.get("translations");
+    if (translationsStr) {
+      try {
+        const translationsObj = JSON.parse(translationsStr as string);
+        if (Object.keys(translationsObj).length > 0) {
+          data.translations = translationsObj;
+        }
+      } catch (e) {
+        console.error("Failed to parse translations", e);
+      }
     }
 
     await saveModelRecord(model, id, data);
