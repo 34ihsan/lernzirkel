@@ -15,7 +15,7 @@ export default function CookiesContent() {
       sections: [
         {
           id: "einfuehrung",
-          title: "1. Was sind Cookies und ähnliche Technologien?",
+          title: "Was sind Cookies und ähnliche Technologien?",
           content: (
             <>
               <p>
@@ -29,7 +29,7 @@ export default function CookiesContent() {
         },
         {
           id: "kategorien",
-          title: "2. Kategorien der verwendeten Cookies",
+          title: "Kategorien der verwendeten Cookies",
           content: (
             <>
               <p>
@@ -60,7 +60,7 @@ export default function CookiesContent() {
         },
         {
           id: "rechtsgrundlage",
-          title: "3. Rechtsgrundlage der Datenverarbeitung",
+          title: "Rechtsgrundlage der Datenverarbeitung",
           content: (
             <p>
               Die Speicherung von Informationen erfolgt auf Grundlage von <strong>§ 25 Abs. 1 TDDDG</strong> (Einwilligung) bzw. <strong>§ 25 Abs. 2 Nr. 2 TDDDG</strong> (technische Notwendigkeit). <br /><br />
@@ -70,7 +70,7 @@ export default function CookiesContent() {
         },
         {
           id: "drittanbieter",
-          title: "4. Dienste von Drittanbietern & Datenübermittlung",
+          title: "Dienste von Drittanbietern & Datenübermittlung",
           content: (
             <>
               <p>
@@ -87,7 +87,7 @@ export default function CookiesContent() {
         },
         {
           id: "verwaltung",
-          title: "5. Verwaltung Ihrer Cookie-Präferenzen",
+          title: "Verwaltung Ihrer Cookie-Präferenzen",
           content: (
             <>
               <p>
@@ -101,7 +101,7 @@ export default function CookiesContent() {
         },
         {
           id: "kontakt",
-          title: "6. Kontakt",
+          title: "Kontakt",
           content: (
             <p>
               Bei Fragen wenden Sie sich an: <br /><br />
@@ -119,7 +119,7 @@ export default function CookiesContent() {
       sections: [
         {
           id: "giris",
-          title: "1. Çerezler ve Benzeri Teknolojiler Nelerdir?",
+          title: "Çerezler ve Benzeri Teknolojiler Nelerdir?",
           content: (
             <>
               <p>
@@ -133,7 +133,7 @@ export default function CookiesContent() {
         },
         {
           id: "kategoriler",
-          title: "2. Kullanılan Çerez Kategorileri",
+          title: "Kullanılan Çerez Kategorileri",
           content: (
             <>
               <p>
@@ -164,7 +164,7 @@ export default function CookiesContent() {
         },
         {
           id: "yasal-dayanak",
-          title: "3. Veri İşlemenin Yasal Dayanağı",
+          title: "Veri İşlemenin Yasal Dayanağı",
           content: (
             <p>
               Kullanıcı cihazında bilgi depolamak veya bilgilere erişmek, <strong>TDDDG § 25 paragraf 1</strong> (Onay) veya <strong>TDDDG § 25 paragraf 2</strong> (Teknik zorunluluk) temeline dayanır. <br /><br />
@@ -174,7 +174,7 @@ export default function CookiesContent() {
         },
         {
           id: "ucuncu-taraflar",
-          title: "4. Üçüncü Taraf Hizmetleri ve Veri Aktarımı",
+          title: "Üçüncü Taraf Hizmetleri ve Veri Aktarımı",
           content: (
             <>
               <p>
@@ -191,7 +191,7 @@ export default function CookiesContent() {
         },
         {
           id: "yonetim",
-          title: "5. Çerez Tercihlerinizin Yönetimi",
+          title: "Çerez Tercihlerinizin Yönetimi",
           content: (
             <>
               <p>
@@ -205,7 +205,7 @@ export default function CookiesContent() {
         },
         {
           id: "iletisim",
-          title: "6. İletişim",
+          title: "İletişim",
           content: (
             <p>
               Sorularınız için bizimle iletişime geçebilirsiniz: <br /><br />
@@ -223,7 +223,7 @@ export default function CookiesContent() {
       sections: [
         {
           id: "intro",
-          title: "1. What are cookies and similar technologies?",
+          title: "What are cookies and similar technologies?",
           content: (
             <>
               <p>
@@ -234,7 +234,7 @@ export default function CookiesContent() {
         },
         {
           id: "categories",
-          title: "2. Categories of cookies used",
+          title: "Categories of cookies used",
           content: (
             <>
               <h4 className="font-bold mt-6 mb-2 text-slate-800 dark:text-slate-200">A. Strictly Necessary Cookies</h4>
@@ -250,7 +250,7 @@ export default function CookiesContent() {
         },
         {
           id: "disclaimer",
-          title: "3. Third-Party Disclaimer",
+          title: "Third-Party Disclaimer",
           content: (
             <p>
               <strong>Lernzirkel Ludwigshafen e.V. assumes no liability</strong> for the processing of your data by third-party providers (e.g. in the USA) once it leaves our sphere of influence.
@@ -259,7 +259,7 @@ export default function CookiesContent() {
         },
         {
           id: "contact",
-          title: "4. Contact",
+          title: "Contact",
           content: (
             <p>
               Email: <a href={`mailto:${LEGAL.email}`} className="text-primary hover:underline">{LEGAL.email}</a>
@@ -274,12 +274,12 @@ export default function CookiesContent() {
       sections: [
         {
           id: "intro",
-          title: "1. ما هي ملفات تعريف الارتباط؟",
+          title: "ما هي ملفات تعريف الارتباط؟",
           content: <p>ملفات تعريف الارتباط هي ملفات نصية صغيرة يتم تخزينها على جهازك...</p>,
         },
         {
           id: "contact",
-          title: "2. اتصل بنا",
+          title: "اتصل بنا",
           content: (
             <p>البريد الإلكتروني: <a href={`mailto:${LEGAL.email}`} className="text-primary hover:underline">{LEGAL.email}</a></p>
           ),
