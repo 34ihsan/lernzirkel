@@ -4,8 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Accessibility, Type, Contrast, X, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function A11yPanel() {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [highContrast, setHighContrast] = useState(false);
   const [textSize, setTextSize] = useState<'normal' | 'large' | 'xlarge'>('normal');
@@ -59,7 +61,7 @@ export default function A11yPanel() {
         size="icon"
         className="h-14 w-14 rounded-full shadow-royal bg-primary text-white hover:bg-primary/90 flex items-center justify-center transition-transform hover:scale-105"
         onClick={() => setIsOpen(!isOpen)}
-        aria-label="Erişilebilirlik Seçenekleri (Barrierefreiheit)"
+        aria-label={t('a11y.title', 'Barrierefreiheit')}
       >
         <Accessibility className="h-7 w-7" />
       </Button>
@@ -77,12 +79,12 @@ export default function A11yPanel() {
             <div className="bg-primary p-4 flex justify-between items-center text-white">
               <h3 className="font-semibold text-lg flex items-center gap-2">
                 <Accessibility className="h-5 w-5" />
-                Barrierefreiheit
+                {t('a11y.title', 'Barrierefreiheit')}
               </h3>
               <button 
                 onClick={() => setIsOpen(false)}
                 className="text-white/80 hover:text-white transition-colors"
-                aria-label="Schließen"
+                aria-label={t('header.close', 'Schließen')}
               >
                 <X className="h-5 w-5" />
               </button>
@@ -93,7 +95,7 @@ export default function A11yPanel() {
               <div className="space-y-3">
                 <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
                   <Type className="h-4 w-4 text-primary" />
-                  Textgröße (Metin Boyutu)
+                  {t('a11y.textSize', 'Textgröße')}
                 </label>
                 <div className="flex gap-2">
                   <Button 
@@ -127,14 +129,14 @@ export default function A11yPanel() {
               <div className="space-y-3">
                 <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
                   <Contrast className="h-4 w-4 text-primary" />
-                  Kontrast (Yüksek Kontrast)
+                  {t('a11y.contrast', 'Kontrast')}
                 </label>
                 <Button 
                   variant={highContrast ? 'default' : 'outline'} 
                   className="w-full justify-between"
                   onClick={() => setHighContrast(!highContrast)}
                 >
-                  Hoher Kontrast
+                  {t('a11y.highContrast', 'Hoher Kontrast')}
                   {highContrast && <Check className="h-4 w-4" />}
                 </Button>
               </div>
@@ -143,18 +145,18 @@ export default function A11yPanel() {
               <div className="space-y-3 pt-2 border-t border-slate-100">
                 <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
                   <span className="text-lg">🗣️</span>
-                  Sprache (Dil Seçeneği)
+                  {t('a11y.language', 'Sprache')}
                 </label>
                 <Button 
                   variant={easyLanguage ? 'default' : 'outline'} 
                   className={`w-full justify-between ${easyLanguage ? 'bg-green-600 hover:bg-green-700 text-white' : ''}`}
                   onClick={() => setEasyLanguage(!easyLanguage)}
                 >
-                  Leichte Sprache
+                  {t('a11y.easyLanguage', 'Leichte Sprache')}
                   {easyLanguage && <Check className="h-4 w-4" />}
                 </Button>
                 <p className="text-xs text-slate-500 mt-1">
-                  Aktiviert vereinfachte Texte für bessere Verständlichkeit.
+                  {t('a11y.easyLangDesc', 'Aktiviert vereinfachte Texte für bessere Verständlichkeit.')}
                 </p>
               </div>
             </div>

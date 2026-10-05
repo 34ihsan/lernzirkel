@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 import prisma from '@/lib/prisma';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 export const alt = 'Lernzirkel Projekt';
 export const size = {
   width: 1200,

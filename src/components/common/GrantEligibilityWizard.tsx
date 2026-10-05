@@ -315,8 +315,34 @@ export default function GrantEligibilityWizard({ isOpen = true, onClose, inline 
                   <option value="Ludwigshafen">Ludwigshafen am Rhein</option>
                   <option value="Mannheim">Mannheim</option>
                   <option value="Frankenthal">Frankenthal</option>
-                  <option value="Mutterstadt / Limburgerhof">Mutterstadt / Limburgerhof</option>
                   <option value="Speyer">Speyer</option>
+                  <optgroup label="Rhein-Pfalz-Kreis">
+                    <option value="Altrip">Altrip</option>
+                    <option value="Beindersheim">Beindersheim</option>
+                    <option value="Birkenheide">Birkenheide</option>
+                    <option value="Bobenheim-Roxheim">Bobenheim-Roxheim</option>
+                    <option value="Böhl-Iggelheim">Böhl-Iggelheim</option>
+                    <option value="Dannstadt-Schauernheim">Dannstadt-Schauernheim</option>
+                    <option value="Dudenhofen">Dudenhofen</option>
+                    <option value="Fußgönheim">Fußgönheim</option>
+                    <option value="Großniedesheim">Großniedesheim</option>
+                    <option value="Hanhofen">Hanhofen</option>
+                    <option value="Harthausen">Harthausen</option>
+                    <option value="Heßheim">Heßheim</option>
+                    <option value="Heuchelheim">Heuchelheim bei Frankenthal</option>
+                    <option value="Hochdorf-Assenheim">Hochdorf-Assenheim</option>
+                    <option value="Kleinniedesheim">Kleinniedesheim</option>
+                    <option value="Lambsheim">Lambsheim</option>
+                    <option value="Limburgerhof">Limburgerhof</option>
+                    <option value="Maxdorf">Maxdorf</option>
+                    <option value="Mutterstadt">Mutterstadt</option>
+                    <option value="Neuhofen">Neuhofen</option>
+                    <option value="Otterstadt">Otterstadt</option>
+                    <option value="Rödersheim-Gronau">Rödersheim-Gronau</option>
+                    <option value="Römerberg">Römerberg</option>
+                    <option value="Schifferstadt">Schifferstadt</option>
+                    <option value="Waldsee">Waldsee</option>
+                  </optgroup>
                   <option value="Andere">Andere Region</option>
                 </select>
               </div>

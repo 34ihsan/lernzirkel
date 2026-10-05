@@ -1,0 +1,15 @@
+export const LEGAL = {
+  name: "Lernzirkel Ludwigshafen e.V.",
+  subtitle: "Bildungszentrum",
+  street: "Ludwigsplatz 9A",
+  city: "67059 Ludwigshafen",
+  phone: "0621 / 307 37 271",
+  fax: "0621 / 307 37 272",
+  email: "info@lernzirkel-online.de",
+  web: "www.lernzirkel-online.de",
+  register: "Amtsgericht Ludwigshafen, VR 2429 LU",
+  taxNumber: "27/662/1175/9",
+  chair: "Dr. Mustafa Degirmenci",
+  lastUpdated: "Oktober 2026",
+  dataRetentionDays: 60,
+} as const;

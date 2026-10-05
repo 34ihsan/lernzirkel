@@ -1,0 +1,77 @@
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+// Basic in-memory rate limiting map for edge (not 100% accurate across instances, but stops basic floods)
+// In production on Vercel, it's better to use Upstash Redis for global rate limiting.
+const ipRequestCount = new Map<string, { count: number; resetTime: number }>();
+
+const RATE_LIMIT = 100; // max requests
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+
+export function middleware(request: NextRequest) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || '127.0.0.1';
+  
+  // 1. Basic Rate Limiting
+  const now = Date.now();
+  const requestInfo = ipRequestCount.get(ip) || { count: 0, resetTime: now + RATE_LIMIT_WINDOW };
+  
+  if (now > requestInfo.resetTime) {
+    requestInfo.count = 1;
+    requestInfo.resetTime = now + RATE_LIMIT_WINDOW;
+  } else {
+    requestInfo.count++;
+  }
+  
+  ipRequestCount.set(ip, requestInfo);
+  
+  // If rate limit exceeded, block request (except for static assets)
+  if (requestInfo.count > RATE_LIMIT && !request.nextUrl.pathname.startsWith('/_next') && !request.nextUrl.pathname.startsWith('/assets')) {
+    return new NextResponse(
+      JSON.stringify({ error: 'Too many requests, please try again later.' }),
+      { status: 429, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+
+  // 2. Clone the response to modify headers
+  const response = NextResponse.next();
+
+  // 3. Set Security Headers (Elite Pro Level)
+  
+  // Prevents the browser from doing MIME-type sniffing
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  
+  // Prevents the site from being embedded in an iframe (Clickjacking protection)
+  response.headers.set('X-Frame-Options', 'DENY');
+  
+  // Enables Cross-Site Scripting (XSS) filter built into most recent web browsers
+  response.headers.set('X-XSS-Protection', '1; mode=block');
+  
+  // Controls how much referrer information is included with requests
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  
+  // Strict-Transport-Security (HSTS)
+  response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  
+  // Content Security Policy (Basic restrictive, can be expanded based on external scripts needed)
+  // Allow unsafe-inline for styles because Next.js and Tailwind use it heavily.
+  // response.headers.set('Content-Security-Policy', "default-src 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:;");
+  
+  // Permissions Policy (Camera, Mic, Geolocation disabled by default)
+  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), browsing-topics=()');
+
+  return response;
+}
+
+// Ensure the middleware runs only on relevant paths
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api/media (we don't rate limit the media API heavily here)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api/media|_next/static|_next/image|favicon.ico).*)',
+  ],
+};

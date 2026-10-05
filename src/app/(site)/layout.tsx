@@ -16,6 +16,7 @@ import FloatingAIAssistant from "@/components/common/FloatingAIAssistant";
 import SmoothScrollProvider from "@/components/common/SmoothScrollProvider";
 
 import A11yPanel from "@/components/ui/A11yPanel";
+import CookieBanner from "@/components/common/CookieBanner";
 
 const fontInter = Inter({ 
   subsets: ["latin", "latin-ext"], 
@@ -183,6 +184,7 @@ export default async function RootLayout({
             <MobileActionBar />
             <FloatingAIAssistant />
               <A11yPanel />
+              <CookieBanner />
               <Footer config={footerConfig} designConfig={design} />
             </LanguageProvider>
           </ThemeProvider>

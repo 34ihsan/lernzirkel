@@ -538,7 +538,8 @@ export const defaultFooterConfig: FooterConfig = {
   legalLinks: [
     { label: "Impressum", url: "/impressum" },
     { label: "Datenschutz", url: "/datenschutz" },
-    { label: "AGB", url: "/agb" }
+    { label: "AGB", url: "/agb" },
+    { label: "Cookies", url: "/cookies" }
   ],
   design: {
     backgroundColor: "#111111",

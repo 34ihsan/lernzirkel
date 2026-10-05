@@ -93,7 +93,23 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     'footer.quickLinks': 'Schnellzugriff',
     'footer.contact': 'Kontakt & Anfahrt',
     'footer.legal': 'Impressum & Datenschutz',
-    'footer.rights': 'Alle Rechte vorbehalten.'
+    'footer.rights': 'Alle Rechte vorbehalten.',
+
+    // Accessibility
+    'a11y.title': 'Barrierefreiheit',
+    'a11y.textSize': 'Textgröße',
+    'a11y.contrast': 'Kontrast',
+    'a11y.highContrast': 'Hoher Kontrast',
+    'a11y.language': 'Sprache',
+    'a11y.easyLanguage': 'Leichte Sprache',
+    'a11y.easyLangDesc': 'Aktiviert vereinfachte Texte für bessere Verständlichkeit.',
+
+    // Cookie Banner
+    'cookie.title': 'Wir verwenden Cookies',
+    'cookie.message': 'Wir nutzen Cookies und ähnliche Technologien, um die ordnungsgemäße Funktion unserer Website zu gewährleisten, Inhalte zu personalisieren und unseren Datenverkehr zu analysieren. Weitere Informationen finden Sie in unserer',
+    'cookie.policy': 'Cookie-Richtlinie',
+    'cookie.accept': 'Alle akzeptieren',
+    'cookie.decline': 'Ablehnen'
   },
 
   tr: {
@@ -144,7 +160,23 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     'footer.quickLinks': 'Hızlı Menü',
     'footer.contact': 'İletişim & Ulaşım',
     'footer.legal': 'Künye & Gizlilik Bildirimi',
-    'footer.rights': 'Tüm hakları saklıdır.'
+    'footer.rights': 'Tüm hakları saklıdır.',
+
+    // Accessibility
+    'a11y.title': 'Erişilebilirlik',
+    'a11y.textSize': 'Metin Boyutu',
+    'a11y.contrast': 'Kontrast',
+    'a11y.highContrast': 'Yüksek Kontrast',
+    'a11y.language': 'Dil Seçeneği',
+    'a11y.easyLanguage': 'Sade Dil',
+    'a11y.easyLangDesc': 'Daha iyi anlaşılabilirlik için basitleştirilmiş metinleri etkinleştirir.',
+
+    // Cookie Banner
+    'cookie.title': 'Çerezleri kullanıyoruz',
+    'cookie.message': 'Web sitemizin düzgün çalışmasını sağlamak, içerikleri kişiselleştirmek ve trafiğimizi analiz etmek için çerezler ve benzer teknolojiler kullanıyoruz. Daha fazla bilgi için lütfen inceleyin:',
+    'cookie.policy': 'Çerez Politikası',
+    'cookie.accept': 'Tümünü kabul et',
+    'cookie.decline': 'Reddet'
   },
 
   en: {
@@ -195,7 +227,23 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     'footer.quickLinks': 'Quick Links',
     'footer.contact': 'Contact & Directions',
     'footer.legal': 'Imprint & Privacy Policy',
-    'footer.rights': 'All rights reserved.'
+    'footer.rights': 'All rights reserved.',
+
+    // Accessibility
+    'a11y.title': 'Accessibility',
+    'a11y.textSize': 'Text Size',
+    'a11y.contrast': 'Contrast',
+    'a11y.highContrast': 'High Contrast',
+    'a11y.language': 'Language',
+    'a11y.easyLanguage': 'Easy Language',
+    'a11y.easyLangDesc': 'Enables simplified texts for better understanding.',
+
+    // Cookie Banner
+    'cookie.title': 'We use cookies',
+    'cookie.message': 'We use cookies and similar technologies to ensure our website functions properly, personalize content, and analyze our traffic. For more information, please see our',
+    'cookie.policy': 'Cookie Policy',
+    'cookie.accept': 'Accept all',
+    'cookie.decline': 'Decline'
   },
 
   ar: {
@@ -246,6 +294,22 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     'footer.quickLinks': 'روابط سريعة',
     'footer.contact': 'العنوان والاتصال',
     'footer.legal': 'بيانات النشر والخصوصية',
-    'footer.rights': 'جميع الحقوق محفوظة.'
+    'footer.rights': 'جميع الحقوق محفوظة.',
+
+    // Accessibility
+    'a11y.title': 'إمكانية الوصول',
+    'a11y.textSize': 'حجم النص',
+    'a11y.contrast': 'التباين',
+    'a11y.highContrast': 'تباين عالي',
+    'a11y.language': 'اللغة',
+    'a11y.easyLanguage': 'لغة مبسطة',
+    'a11y.easyLangDesc': 'تفعيل نصوص مبسطة لتسهيل الفهم.',
+
+    // Cookie Banner
+    'cookie.title': 'نحن نستخدم ملفات تعريف الارتباط',
+    'cookie.message': 'نستخدم ملفات تعريف الارتباط والتقنيات المشابهة لضمان عمل موقعنا بشكل صحيح وتخصيص المحتوى وتحليل حركة المرور لدينا. لمزيد من المعلومات، يرجى الاطلاع على',
+    'cookie.policy': 'سياسة ملفات تعريف الارتباط',
+    'cookie.accept': 'قبول الكل',
+    'cookie.decline': 'رفض'
   }
 };
