@@ -132,14 +132,18 @@ export default function HeaderFooterEditor({ initialHeader, initialFooter }: Pro
     }
   };
 
-  // Smart merge: ensure all categories have their submenus even if initialHeader in DB has partial/missing children
+  // Smart merge: eski kayıtlarda (children alanı hiç yokken kaydedilmiş) eksik alt menüleri
+  // varsayılandan tamamlar. ÖNEMLİ: boş dizi ([]) ile "alan hiç yok" (undefined) birbirinden
+  // ayrılmalı — admin bir menüden tüm alt öğeleri bilerek sildiyse (children: []), bu kasıtlı
+  // seçim sayılmalı ve varsayılan alt menüyle geri doldurulmamalı. Önceki hali `.length > 0`
+  // kontrolü yaptığı için silme işlemi her sayfa yenilemesinde geri alınıyordu.
   const initialNavLinks = (() => {
-    const base = (initialHeader?.navLinks && initialHeader.navLinks.length > 0)
+    const base = initialHeader?.navLinks !== undefined
       ? initialHeader.navLinks
       : defaultHeaderConfig.navLinks;
 
     return (base || []).map(link => {
-      if (link.children && link.children.length > 0) return link;
+      if (link.children !== undefined) return link;
       const fallback = defaultHeaderConfig.navLinks?.find(
         def => def.label.trim().toLowerCase() === link.label.trim().toLowerCase() ||
                (link.url !== '/' && def.url.trim().toLowerCase() === link.url.trim().toLowerCase())
@@ -154,10 +158,11 @@ export default function HeaderFooterEditor({ initialHeader, initialFooter }: Pro
     });
   })();
 
-  // Initial partners calculation
-  const initialPartners = initialFooter?.badges?.partners && initialFooter.badges.partners.length > 0
+  // Initial partners calculation — aynı "boş dizi = alan yok" karışıklığına düşmemek için
+  // undefined kontrolü kullanılıyor (bkz. initialNavLinks'teki açıklama).
+  const initialPartners = initialFooter?.badges?.partners !== undefined
     ? initialFooter.badges.partners
-    : (initialFooter?.badges?.items && initialFooter.badges.items.length > 0
+    : (initialFooter?.badges?.items !== undefined
         ? initialFooter.badges.items.map(item => ({ name: item, logoUrl: '', url: '', width: 120, height: 40 }))
         : (defaultFooterConfig.badges?.partners || []));
 
@@ -178,23 +183,26 @@ export default function HeaderFooterEditor({ initialHeader, initialFooter }: Pro
     about: { ...defaultFooterConfig.about, ...initialFooter?.about },
     quickLinks: {
       title: initialFooter?.quickLinks?.title || defaultFooterConfig.quickLinks?.title,
-      links: initialFooter?.quickLinks?.links?.length ? initialFooter.quickLinks.links : defaultFooterConfig.quickLinks?.links,
+      links: initialFooter?.quickLinks?.links !== undefined ? initialFooter.quickLinks.links : defaultFooterConfig.quickLinks?.links,
     },
     badges: {
       title: initialFooter?.badges?.title || defaultFooterConfig.badges?.title,
       showTitle: initialFooter?.badges?.showTitle ?? defaultFooterConfig.badges?.showTitle ?? true,
-      items: initialFooter?.badges?.items?.length ? initialFooter.badges.items : defaultFooterConfig.badges?.items,
+      items: initialFooter?.badges?.items !== undefined ? initialFooter.badges.items : defaultFooterConfig.badges?.items,
       partners: initialPartners,
     },
     donateBlock: { ...defaultFooterConfig.donateBlock, ...initialFooter?.donateBlock },
     openingHours: {
       title: initialFooter?.openingHours?.title || defaultFooterConfig.openingHours?.title || "Öffnungszeiten",
       showTitle: initialFooter?.openingHours?.showTitle ?? defaultFooterConfig.openingHours?.showTitle ?? true,
-      departments: (initialFooter?.openingHours?.departments && initialFooter.openingHours.departments.length > 0)
+      departments: initialFooter?.openingHours?.departments !== undefined
         ? initialFooter.openingHours.departments
         : (defaultFooterConfig.openingHours?.departments || [])
     },
-    legalLinks: initialFooter?.legalLinks?.length ? initialFooter.legalLinks : defaultFooterConfig.legalLinks,
+    // Not: boş dizi ([]) artık "admin tüm linkleri bilerek sildi" olarak kabul ediliyor ve
+    // varsayılana geri dönülmüyor — önceki `.length` kontrolü silme işlemini her sayfa
+    // yenilemesinde sessizce geri alıyordu.
+    legalLinks: initialFooter?.legalLinks !== undefined ? initialFooter.legalLinks : defaultFooterConfig.legalLinks,
     design: { ...defaultFooterConfig.design, ...initialFooter?.design }
   });
 

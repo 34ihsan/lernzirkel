@@ -9,6 +9,7 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { getCachedSiteSettings, getCachedAnnouncements, getCachedUnpublishedPageSlugs } from "@/lib/cached-settings";
 
 import { constructMetadata, generateOrganizationSchema } from "@/lib/seo";
+import { AVAILABLE_FONTS } from "@/lib/design-defaults";
 import { JsonLd } from "@/components/seo/JsonLd";
 import FloatingContact from "@/components/common/FloatingContact";
 import MobileActionBar from "@/components/common/MobileActionBar";
@@ -93,6 +94,20 @@ export default async function RootLayout({
   const bodyFont = typography.bodyFont || "Inter";
   const headingFont = typography.headingFont || "Outfit";
 
+  // Admin'in Tasarım Editöründe seçtiği font (örn. Roboto/Poppins) next/font ile statik
+  // olarak önceden yüklenemez (next/font build-time'da sabit font ister) — bu yüzden
+  // Google Fonts CSS2 API'sinden dinamik <link> ile yüklüyoruz. next/font'tan gelen
+  // Inter/Outfit, bu yüklenemezse veya admin hiç seçim yapmamışsa güvenli fallback olarak kalır.
+  const googleFontsQuery = Array.from(
+    new Set(
+      [headingFont, bodyFont]
+        .map((name) => AVAILABLE_FONTS.find((f) => f.name === name)?.googleName)
+        .filter((g): g is string => Boolean(g))
+    )
+  )
+    .map((g) => `family=${g}`)
+    .join('&');
+
   const getRadiusPx = (r: string) => {
     switch (r) {
       case 'none': return '0px';
@@ -132,6 +147,13 @@ export default async function RootLayout({
     <html lang="de" suppressHydrationWarning>
       <head>
         <link rel="manifest" href="/manifest.json" />
+        {googleFontsQuery && (
+          <>
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+            <link rel="stylesheet" href={`https://fonts.googleapis.com/css2?${googleFontsQuery}&display=swap`} />
+          </>
+        )}
         <style>{`
           :root {
             --background: ${background};
@@ -148,8 +170,8 @@ export default async function RootLayout({
             --radius-btn: ${radiusBtn};
             --shadow-card: ${cardShadow};
             --btn-transform: ${btnTransform};
-            --font-body: var(--font-sans), system-ui, -apple-system, sans-serif;
-            --font-heading: var(--font-heading), var(--font-sans), sans-serif;
+            --font-body: '${bodyFont}', var(--font-sans), system-ui, -apple-system, sans-serif;
+            --font-heading: '${headingFont}', var(--font-heading), var(--font-sans), sans-serif;
           }
           .dark {
             --background: #121212;

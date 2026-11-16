@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { requireAdminSession } from "@/lib/auth-server";
 
 // GET /api/admin/announcements — tüm duyuruları listele
 export async function GET() {
+  try {
+    await requireAdminSession();
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const announcements = await prisma.announcement.findMany({
       orderBy: { createdAt: "desc" },
@@ -15,6 +22,12 @@ export async function GET() {
 
 // POST /api/admin/announcements — yeni duyuru oluştur
 export async function POST(req: NextRequest) {
+  try {
+    await requireAdminSession();
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const body = await req.json();
     const announcement = await prisma.announcement.create({

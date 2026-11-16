@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { SESSION_COOKIE_NAME, verifySessionToken } from '@/lib/auth';
 
 // Basic in-memory store for rate limiting in Edge/Middleware
 const rateLimitCache = new Map<string, { count: number; expiresAt: number }>();
@@ -28,26 +29,24 @@ function applyRateLimit(ip: string, limit: number, windowMs: number) {
   return { success: true, remaining: limit - record.count };
 }
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const url = request.nextUrl;
-  
-  // Sadece /admin ile başlayan yolları koru
-  if (url.pathname.startsWith('/admin')) {
-    const authHeader = request.headers.get('authorization');
-    
-    // Basit Basic Auth kontrolü (Kullanıcı: admin, Şifre: admin123)
-    if (authHeader !== 'Basic YWRtaW46YWRtaW4xMjM=') {
-      return new NextResponse('Authentication required', {
-        status: 401,
-        headers: {
-          'WWW-Authenticate': 'Basic realm="Secure Area"',
-        },
-      });
+
+  // /admin altındaki sayfaları (login hariç) gerçek oturum ile koru
+  if (url.pathname.startsWith('/admin') && url.pathname !== '/admin/login') {
+    const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+    const session = await verifySessionToken(token);
+
+    if (!session) {
+      const loginUrl = new URL('/admin/login', request.url);
+      loginUrl.searchParams.set('next', url.pathname);
+      return NextResponse.redirect(loginUrl);
     }
   }
 
   // Add security headers to all responses
   const headers = new Headers(request.headers);
+  headers.set('x-pathname', url.pathname);
   const response = NextResponse.next({
     request: {
       headers,

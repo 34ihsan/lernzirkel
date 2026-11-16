@@ -1,25 +1,19 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-
-function parseJsonSafely(val: any) {
-  if (!val) return {};
-  if (typeof val === "object") return val;
-  if (typeof val === "string") {
-    try {
-      return JSON.parse(val);
-    } catch {
-      return { text: val };
-    }
-  }
-  return {};
-}
+import { requireAdminSession } from "@/lib/auth-server";
 
 // GET /api/admin/pages/[id]
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  try {
+    await requireAdminSession();
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const { id } = await params;
     const page = await prisma.page.findUnique({
@@ -49,103 +43,21 @@ export async function GET(
   }
 }
 
-// PUT /api/admin/pages/[id]
-export async function PUT(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id } = await params;
-  
-  try {
-    const body = await request.json();
-    const { sections, title, slug, description, isPublished, parentId, order } = body;
-
-    // Prevent cycle where page is its own parent
-    if (parentId && parentId === id) {
-      return NextResponse.json({ error: "Bir sayfa kendisinin üst sayfası olamaz." }, { status: 400 });
-    }
-    
-    // Check if the slug is already taken by another page
-    if (slug !== undefined) {
-      const cleanSlug = slug.replace(/^\/+/, "").trim();
-      const existing = await prisma.page.findUnique({ where: { slug: cleanSlug } });
-      if (existing && existing.id !== id) {
-        return NextResponse.json({ error: `Bu URL adresi (${cleanSlug}) zaten başka bir sayfada kullanılıyor. Lütfen farklı bir adres girin.` }, { status: 400 });
-      }
-    }
-    
-    await prisma.$transaction(async (tx) => {
-      // update page metadata if provided
-      const updateData: any = {};
-      if (title !== undefined) updateData.title = title;
-      if (slug !== undefined) updateData.slug = slug.replace(/^\/+/, "").trim();
-      if (description !== undefined) updateData.description = description;
-      if (isPublished !== undefined) updateData.isPublished = isPublished;
-      if (parentId !== undefined) updateData.parentId = parentId || null;
-      if (order !== undefined) updateData.order = typeof order === 'number' ? order : parseInt(order) || 0;
-
-      if (Object.keys(updateData).length > 0) {
-        await tx.page.update({
-          where: { id },
-          data: updateData
-        });
-      }
-
-
-
-      // delete existing sections
-      await tx.section.deleteMany({
-        where: { pageId: id }
-      });
-      
-      // create new sections
-      if (sections && sections.length > 0) {
-        const createData = sections.map((s: any, index: number) => ({
-          pageId: id,
-          type: s.type,
-          content: parseJsonSafely(s.content),
-          design: parseJsonSafely(s.design),
-          order: index
-        }));
-        
-        await tx.section.createMany({
-          data: createData
-        });
-      }
-    });
-
-    const updated = await prisma.page.findUnique({
-      where: { id },
-      include: {
-        sections: {
-          orderBy: { order: "asc" }
-        }
-      }
-    });
-
-    const { syncPageHierarchy } = await import("@/actions/admin");
-    await syncPageHierarchy();
-
-    revalidatePath("/", "layout");
-    if (updated?.slug) {
-      revalidatePath(`/${updated.slug}`);
-    }
-
-    return NextResponse.json({ success: true, page: updated });
-  } catch (error: any) {
-    console.error("Error saving page:", error);
-    return NextResponse.json(
-      { error: "Sayfa kaydedilemedi", details: error?.message || String(error) },
-      { status: 500 }
-    );
-  }
-}
+// PUT /api/admin/pages/[id] kaldırıldı — Tier 1 ile birlikte kaydetme/yayınlama akışı
+// src/actions/pages.ts'teki saveDraft/publishPage server action'larına taşındı
+// (revizyon geçmişi + optimistic-lock + taslak/canlı ayrımı için).
 
 // DELETE /api/admin/pages/[id]
 export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  try {
+    await requireAdminSession();
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const { id } = await params;
     const page = await prisma.page.findUnique({ where: { id } });

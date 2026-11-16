@@ -10,7 +10,7 @@ const prismaClientSingleton = () => {
   return new PrismaClient({ adapter })
 }
 
-const SCHEMA_VERSION = 8 // bumped for Course categories
+const SCHEMA_VERSION = 13 // bumped: removed LeadApplication, added Registration.assignedTo*/lastContactedAt
 
 declare const globalThis: {
   prismaGlobal: ReturnType<typeof prismaClientSingleton>;

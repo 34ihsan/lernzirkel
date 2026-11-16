@@ -1,14 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Phone, X, Sparkles } from 'lucide-react';
+import { Phone, X } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { trackEvent } from '@/actions/analytics';
-import GrantEligibilityWizard from './GrantEligibilityWizard';
 
 export default function FloatingContact() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isWizardOpen, setIsWizardOpen] = useState(false);
   const { t, language } = useLanguage();
 
   const phoneNumber = '+4917612345678'; // Replace with actual number
@@ -41,25 +39,6 @@ export default function FloatingContact() {
             </div>
           </a>
 
-          {/* 0€ Förderungs-Rechner */}
-          <button
-            type="button"
-            onClick={() => {
-              setIsWizardOpen(true);
-              setIsOpen(false);
-              handleTrack('open_grant_wizard');
-            }}
-            className="flex items-center gap-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all group"
-            aria-label="0€ Förderungs-Rechner"
-          >
-            <span className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity absolute right-16 pointer-events-none whitespace-nowrap">
-              0€ Förderungs-Rechner (BAMF & BuT)
-            </span>
-            <div className="text-white p-2 rounded-full">
-              <Sparkles size={24} />
-            </div>
-          </button>
-
           <a
             href={`tel:${phoneNumber}`}
             className="flex items-center gap-3 bg-white dark:bg-gray-900 p-3 rounded-full shadow-lg hover:shadow-xl transition-all border border-gray-100 dark:border-gray-800 group"
@@ -88,12 +67,6 @@ export default function FloatingContact() {
           </svg>
         )}
       </button>
-
-      {/* Wizard Modal */}
-      <GrantEligibilityWizard
-        isOpen={isWizardOpen}
-        onClose={() => setIsWizardOpen(false)}
-      />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 
-import prisma from "./src/lib/prisma";
+import prisma from "../src/lib/prisma";
 
 async function run() {
   const page = await prisma.page.findUnique({

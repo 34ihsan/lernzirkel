@@ -378,9 +378,9 @@ export default async function Footer({
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-800 pt-6 mt-6 flex flex-col md:flex-row justify-between items-center text-gray-500 dark:text-gray-400">
+        <div className="border-t border-gray-800 pt-6 mt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left text-gray-500 dark:text-gray-400">
           <p>{copyrightText}</p>
-          <div className="flex space-x-4 mt-4 md:mt-0">
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
             {footer.legalLinks?.map((item, idx) => (
               <Link key={idx} href={item.url} className="hover:text-white transition-colors">
                 {item.label}

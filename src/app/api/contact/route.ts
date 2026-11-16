@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { verifyTurnstileToken } from '@/lib/turnstile';
 
 // Simple in-memory rate limiting (Note: in serverless environments like Vercel this is instance-scoped,
 // but works as a basic layer of protection).
@@ -53,6 +54,13 @@ export async function POST(req: Request) {
         console.warn(`Form filled too quickly from IP: ${ip}. Time: ${timeDiff}ms`);
         return NextResponse.json({ success: true, message: 'Nachricht gesendet.' });
       }
+    }
+
+    // CAPTCHA doğrulaması (TURNSTILE_SECRET_KEY tanımlı değilse otomatik atlanır)
+    const turnstileToken = formData.get('turnstileToken') as string | null;
+    const captchaValid = await verifyTurnstileToken(turnstileToken, ip);
+    if (!captchaValid) {
+      return NextResponse.json({ error: 'CAPTCHA-Überprüfung fehlgeschlagen. Bitte versuchen Sie es erneut.' }, { status: 400 });
     }
 
     // Extract real data

@@ -39,6 +39,8 @@ yarn-error.log*
 # typescript
 /src/generated/prisma
 
-# DSGVO Document Uploads
-public/uploads/documents/*
+# Kullanıcı yüklemeleri — VPS'te UPLOADS_DIR ile kalıcı diskte tutulur, repo'ya girmez
+# (DSGVO: kişisel veri/belge içerebilir, ayrıca deploy.sh backup.sh ile ayrıca yedeklenir)
+public/uploads/*
+!public/uploads/.gitkeep
 !public/uploads/documents/.gitkeep

@@ -1,13 +1,15 @@
 import React from 'react';
 import { getCachedCourseById } from '@/lib/cached-content';
+import { getCourseAvailability } from '@/actions/register';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { 
-  ArrowLeft, Calendar, Clock, MapPin, User, CheckCircle2, 
-  GraduationCap, Euro, FileText, Sparkles, Phone, Mail
+import {
+  ArrowLeft, Calendar, Clock, MapPin, User, CheckCircle2,
+  GraduationCap, FileText, Sparkles, Phone, Mail
 } from 'lucide-react';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { generateCourseSchema } from '@/lib/seo';
+import CourseRegistrationForm from '@/components/courses/CourseRegistrationForm';
 
 export const revalidate = 60;
 
@@ -51,6 +53,8 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
   if (!course) {
     notFound();
   }
+
+  const availability = await getCourseAvailability(course.id);
 
   const design: any = {};
   const categoryLabels: Record<string, string> = {
@@ -220,17 +224,6 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
               <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 mb-6">Teilnahme & Anmeldung</h3>
               
               <div className="space-y-4 mb-8">
-                {course.costsInfo && (
-                  <div className="flex gap-4">
-                    <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
-                      <Euro className="text-blue-600" size={20} />
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">Kosten & Förderung</div>
-                      <div className="font-medium text-gray-900 dark:text-gray-100">{course.costsInfo}</div>
-                    </div>
-                  </div>
-                )}
                 {design.instructor && (
                   <div className="flex gap-4">
                     <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center shrink-0">
@@ -245,13 +238,21 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
               </div>
 
               <div className="space-y-3">
-                <Link 
-                  href={design.linkUrl || `/kontakt?kurs=${encodeURIComponent(course.title)}`}
-                  className="w-full flex items-center justify-center gap-2 py-4 px-6 text-white font-bold rounded-xl transition-all shadow-md dark:shadow-none hover:shadow-lg hover:-translate-y-0.5"
-                  style={{ backgroundColor: highlightColor }}
-                >
-                  {design.linkText || 'Jetzt anmelden'}
-                </Link>
+                {design.linkUrl ? (
+                  <Link
+                    href={design.linkUrl}
+                    className="w-full flex items-center justify-center gap-2 py-4 px-6 text-white font-bold rounded-xl transition-all shadow-md dark:shadow-none hover:shadow-lg hover:-translate-y-0.5"
+                    style={{ backgroundColor: highlightColor }}
+                  >
+                    {design.linkText || 'Jetzt anmelden'}
+                  </Link>
+                ) : (
+                  <CourseRegistrationForm
+                    courseId={course.id}
+                    highlightColor={highlightColor}
+                    availability={availability ?? { capacity: null, remaining: null, isFull: false, allowWaitlist: true }}
+                  />
+                )}
                 <div className="text-center">
                   <span className="text-xs text-gray-500 dark:text-gray-400">oder kontaktieren Sie uns direkt:</span>
                 </div>

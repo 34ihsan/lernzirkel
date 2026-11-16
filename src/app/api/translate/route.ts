@@ -1,9 +1,17 @@
 import { generateObject } from 'ai';
-import { google } from '@ai-sdk/google';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { z } from 'zod';
 import { NextResponse } from 'next/server';
+import { requireAdminSession } from '@/lib/auth-server';
+import prisma from '@/lib/prisma';
 
 export async function POST(req: Request) {
+  try {
+    await requireAdminSession();
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const body = await req.json();
     const { fields, targetLanguages = ['en', 'tr', 'ar'] } = body;
@@ -12,6 +20,18 @@ export async function POST(req: Request) {
     if (!fields || typeof fields !== 'object') {
       return NextResponse.json({ error: "Invalid fields object provided." }, { status: 400 });
     }
+
+    // /admin/ai-settings'te kaydedilen anahtarı kullan (chat asistanıyla aynı kaynak) —
+    // önceden burada env var bekleniyordu ama o hiçbir yerde set edilmiyordu.
+    const settings = await prisma.siteSettings.findFirst();
+    const aiConfig = (settings?.aiConfig as any) || {};
+    if (!aiConfig.apiKey || aiConfig.provider !== 'gemini') {
+      return NextResponse.json(
+        { error: 'AI henüz yapılandırılmamış. /admin/ai-settings üzerinden bir Gemini API anahtarı ekleyin.' },
+        { status: 503 }
+      );
+    }
+    const google = createGoogleGenerativeAI({ apiKey: aiConfig.apiKey });
 
     // Google Gemini 1.5 Flash is extremely fast, high quality, and has a very generous free tier.
     const result = await generateObject({

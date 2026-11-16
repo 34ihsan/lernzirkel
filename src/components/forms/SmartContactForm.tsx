@@ -1,22 +1,24 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 import { Send, CheckCircle, AlertCircle, Paperclip } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useSearchParams } from 'next/navigation';
+import TurnstileWidget from '@/components/common/TurnstileWidget';
 
 export default function SmartContactForm() {
   const searchParams = useSearchParams();
   const betreffParam = searchParams?.get('betreff');
-  
+
   const [topic, setTopic] = useState('allgemein');
   const [initialMessage, setInitialMessage] = useState('');
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [consentGiven, setConsentGiven] = useState(false);
+  const turnstileTokenRef = useRef<string>('');
   
   // Anti-Spam: Time to complete form
   const [formStartTime, setFormStartTime] = useState<string>('');
@@ -46,7 +48,8 @@ export default function SmartContactForm() {
     const formData = new FormData(form);
     
     formData.append('formStartTime', formStartTime);
-    
+    formData.append('turnstileToken', turnstileTokenRef.current);
+
     // Topic specific details - handled as JSON string in form data
     const details: any = {};
     if (topic === 'nachhilfe') {
@@ -248,12 +251,14 @@ export default function SmartContactForm() {
           </label>
         </div>
 
+        <TurnstileWidget onToken={(token) => { turnstileTokenRef.current = token; }} />
+
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
           <p className="text-xs text-slate-500 max-w-sm">
             Alternativ können Sie uns auch direkt schreiben: <br/>
             <EmailObfuscator user="info" domain="lernzirkel-online.de" className="font-semibold text-primary" />
           </p>
-          <Button 
+          <Button
             type="submit" 
             disabled={isSubmitting}
             className="w-full sm:w-auto px-8 py-6 rounded-full bg-primary hover:bg-primary-light transition-all flex items-center gap-2"

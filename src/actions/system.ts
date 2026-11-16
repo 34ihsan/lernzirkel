@@ -12,12 +12,12 @@ export async function getSystemHealthMetrics() {
     dbLatency = -1;
   }
 
-  const [auditLogs, totalLeads, totalEvents, totalCourses, totalPages] = await Promise.all([
+  const [auditLogs, totalRegistrations, totalEvents, totalCourses, totalPages] = await Promise.all([
     prisma.auditLog.findMany({
       take: 40,
       orderBy: { createdAt: "desc" },
     }),
-    prisma.leadApplication.count(),
+    prisma.registration.count(),
     prisma.eventLog.count(),
     prisma.course.count(),
     prisma.page.count(),
@@ -35,7 +35,7 @@ export async function getSystemHealthMetrics() {
     },
     counts: {
       auditLogs: auditLogs.length,
-      totalLeads,
+      totalRegistrations,
       totalEvents,
       totalCourses,
       totalPages,

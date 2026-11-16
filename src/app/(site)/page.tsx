@@ -2,10 +2,11 @@ import { Calendar, Newspaper } from 'lucide-react';
 import prisma from '@/lib/prisma';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 import Link from 'next/link';
-import { 
-  ArrowRight, BookOpen, Users, GraduationCap, LifeBuoy, 
-  Info, HandHeart, Phone, FileText, Globe, School, 
-  MessageCircle, HeartHandshake, Lightbulb, Users2, 
+import { constructMetadata } from '@/lib/seo';
+import {
+  ArrowRight, BookOpen, Users, GraduationCap, LifeBuoy,
+  Info, HandHeart, Phone, FileText, Globe, School,
+  MessageCircle, HeartHandshake, Lightbulb, Users2,
   Shield, Languages, FileCheck, CheckCircle
 } from 'lucide-react';
 
@@ -14,20 +15,26 @@ export async function generateMetadata() {
     where: { slug: 'home' }
   });
   if (page?.title) {
-    return {
+    return constructMetadata({
       title: page.title,
-      description: page.description || undefined
-    };
+      description: page.description || undefined,
+      image: page.ogImage || undefined,
+      noIndex: page.noIndex,
+      url: 'https://www.lernzirkel-ludwigshafen.de/',
+    });
   }
-  return {
+  return constructMetadata({
     title: 'Lernzirkel Ludwigshafen e.V. | Bildung & Integration',
-    description: 'Gemeinsam Potenziale entfalten – in Ludwigshafen und der Metropolregion Rhein-Neckar.'
-  };
+    description: 'Gemeinsam Potenziale entfalten – in Ludwigshafen und der Metropolregion Rhein-Neckar.',
+    url: 'https://www.lernzirkel-ludwigshafen.de/',
+  });
 }
 
 import TrustBanner from '@/components/home/TrustBanner';
 import CourseGrid from '@/components/home/CourseGrid';
 import AnimatedHero from '@/components/home/AnimatedHero';
+import { getCachedCourses } from '@/lib/cached-content';
+import { defaultFooterConfig } from '@/lib/site-defaults';
 
 export default async function Home() {
   const homePage = await prisma.page.findUnique({
@@ -54,27 +61,36 @@ export default async function Home() {
 
 async function StaticHome() {
   const now = new Date();
-  const latestNews = await prisma.news.findMany({
-    where: {
-      publishDate: { lte: now },
-      OR: [
-        { archiveDate: null },
-        { archiveDate: { gt: now } }
-      ]
-    },
-    orderBy: { publishDate: 'desc' },
-    take: 3
-  }).catch(() => []);
+  const [latestNews, courses, siteSettings] = await Promise.all([
+    prisma.news.findMany({
+      where: {
+        publishDate: { lte: now },
+        OR: [
+          { archiveDate: null },
+          { archiveDate: { gt: now } }
+        ]
+      },
+      orderBy: { publishDate: 'desc' },
+      take: 3
+    }).catch(() => []),
+    getCachedCourses().catch(() => []),
+    prisma.siteSettings.findUnique({ where: { id: 'global' } }).catch(() => null),
+  ]);
+
+  const footerConfig = (siteSettings?.footerConfig as { badges?: typeof defaultFooterConfig.badges } | null) || {};
+  const badges = (footerConfig.badges?.partners && footerConfig.badges.partners.length > 0)
+    ? footerConfig.badges
+    : defaultFooterConfig.badges;
 
   return (
     <>
       <AnimatedHero />
 
       {/* 2. Trust Banner (Zertifikate) */}
-      <TrustBanner />
+      <TrustBanner title={badges?.title} partners={badges?.partners} />
 
       {/* 3. Kurs Raster (Course Grid mit Filter) */}
-      <CourseGrid />
+      <CourseGrid courses={courses.slice(0, 6)} />
 
       {/* 4. Über Uns */}
       <section className="py-16 bg-gray-50 dark:bg-gray-800">

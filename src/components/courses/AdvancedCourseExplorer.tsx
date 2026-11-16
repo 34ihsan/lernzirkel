@@ -47,213 +47,21 @@ export interface CourseItem {
   level?: string[]; // e.g. ['A1', 'A2', 'B1']
   schedule?: string;
   duration?: string;
+  dateRange?: string; // e.g. "25.11.2026 – 01.02.2027"
   badge?: string;
   badgeColor?: string;
   isPopular?: boolean;
 }
-
-// Comprehensive catalog of Lernzirkel courses and programs
-const defaultCatalogCourses: CourseItem[] = [
-  {
-    id: 'bamf-allgemein',
-    title: 'Allgemeine Integrationskurse (BAMF)',
-    link: '/deutsch-grundbildung/integrationskurse',
-    category: 'INTEGRATION',
-    categoryLabel: 'Integrationskurse',
-    description: 'Vom Bundesamt für Migration und Flüchtlinge (BAMF) geförderte Deutschkurse vom Sprachniveau A1 bis B1 (600 UE Sprachkurs) plus 100 UE Orientierungskurs zur Vorbereitung auf den Deutsch-Test für Zuwanderer (DTZ).',
-    targetAudience: 'Zuwanderer, Geflüchtete und Migranten mit Bleibeperspektive',
-    requirements: 'BAMF-Berechtigungsschein oder Verpflichtung durch Jobcenter / Ausländerbehörde',
-    costsInfo: 'Kostenlos bei Leistungsbezug (Bürgergeld/AsylbLG), ansonsten geförderter Eigenanteil (2,29 € / UE)',
-    fundingType: 'bamf',
-    fundingLabel: 'BAMF-gefördert',
-    level: ['A1', 'A2', 'B1'],
-    schedule: 'Vormittags (08:30 - 12:45 Uhr) & Nachmittags',
-    duration: '700 Unterrichtsstunden (ca. 7 Monate)',
-    badge: 'BAMF-zertifiziert',
-    badgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
-    isPopular: true,
-  },
-  {
-    id: 'bamf-alpha',
-    title: 'Integrationskurs mit Alphabetisierung',
-    link: '/deutsch-grundbildung/integrationskurse-alpha',
-    category: 'GRUNDBILDUNG',
-    categoryLabel: 'Alphabetisierung',
-    description: 'Spezialkurs für Teilnehmende, die das lateinische Alphabet nicht oder nur unzureichend beherrschen. Neben Deutschlernen wird das Lesen und Schreiben von Grund auf vermittelt.',
-    targetAudience: 'Primäre und funktionale Analphabeten, Zweitschriftlernende',
-    requirements: 'Einstufungstest vor Ort im Lernzirkel e.V.',
-    costsInfo: '100% Kostenübernahme über BAMF / Jobcenter möglich',
-    fundingType: 'bamf',
-    fundingLabel: 'BAMF-gefördert',
-    level: ['Alphabetisierung', 'A1', 'A2'],
-    schedule: 'Mo. - Do. Vormittags',
-    duration: 'Bis zu 1.200 Unterrichtsstunden',
-    badge: 'Alphabetisierung',
-    badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
-    isPopular: true,
-  },
-  {
-    id: 'esf-alpha',
-    title: 'ESF+ Alpha: Grundbildung & Alltagskompetenzen',
-    link: '/esfplusalpha',
-    category: 'GRUNDBILDUNG',
-    categoryLabel: 'Alphabetisierung',
-    description: 'Niedrigschwellige Grundbildung für Erwachsene mit Unterstützung des Europäischen Sozialfonds (ESF+). Lesen, Schreiben, einfache Mathematik und digitale Alltagskompetenzen.',
-    targetAudience: 'Erwachsene mit Förderbedarf in Grundbildung',
-    requirements: 'Keine formellen Voraussetzungen nötig',
-    costsInfo: 'Vollständig gebührenfrei dank Europäischer Union (ESF+) & Land RLP',
-    fundingType: 'esf',
-    fundingLabel: 'ESF+ Förderung (Kostenlos)',
-    level: ['Alphabetisierung', 'A1'],
-    schedule: 'Flexible Vormittags- und Nachmittagsmodule',
-    duration: 'Laufender Moduleinstieg möglich',
-    badge: '100% Kostenlos',
-    badgeColor: 'bg-teal-100 text-teal-800 border-teal-200',
-    isPopular: true,
-  },
-  {
-    id: 'but-nachhilfe',
-    title: 'Kostenlose Lernförderung & Nachhilfe (BuT)',
-    link: '/kostenlose-lernfoerderung_b',
-    category: 'NACHHILFE',
-    categoryLabel: 'Schüler & Nachhilfe',
-    description: 'Gezielte, individuelle Nachhilfe in Kleingruppen für alle Schulfächer (Mathematik, Deutsch, Englisch etc.) über das Bildungs- und Teilhabepaket (BuT). Notenverbesserung und Versetzungsabsicherung.',
-    targetAudience: 'Schülerinnen & Schüler der Klassen 1 bis 13 (Grundschule bis Abitur)',
-    requirements: 'BuT-Berechtigung (Leistungsbezug: Bürgergeld, Wohngeld, Kinderzuschlag)',
-    costsInfo: '100% kostenlos über das BuT-Gutscheinsystem der Stadt Ludwigshafen / Jobcenter',
-    fundingType: 'but',
-    fundingLabel: 'BuT (100% Kostenlos)',
-    level: ['Schule', 'Grundschule', 'Sek I', 'Sek II'],
-    schedule: 'Mo. - Fr. 14:00 - 19:00 Uhr & Sa. 10:00 - 14:00 Uhr',
-    duration: 'Begleitend zum gesamten Schuljahr',
-    badge: 'BuT Kostenlos',
-    badgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
-    isPopular: true,
-  },
-  {
-    id: 'telc-pruefungen',
-    title: 'telc Sprachprüfungen & Prüfungszentrum',
-    link: '/telc-pruefungen',
-    category: 'PRUEFUNG',
-    categoryLabel: 'telc Prüfungen',
-    description: 'Offiziell lizenziertes telc Prüfungszentrum. Wir nehmen anerkannte Sprachprüfungen für A1, A2, B1 (DTZ), B2 und C1 ab. Ideal für Einbürgerung, Berufsausübung und Hochschulzulassung.',
-    targetAudience: 'Alle Personen, die ein international anerkanntes Sprachzertifikat benötigen',
-    requirements: 'Rechtzeitige Anmeldung (mindestens 30 Tage vor Prüfungstermin)',
-    costsInfo: 'Prüfungsgebühren nach telc Richtlinien oder im Integrationskurs inbegriffen',
-    fundingType: 'bamf',
-    fundingLabel: 'Offizielles Prüfungszentrum',
-    level: ['A1', 'A2', 'B1', 'B2', 'C1'],
-    schedule: 'Regelmäßige monatliche Prüfungssamstage',
-    duration: 'Schriftliche & Mündliche Prüfung an einem Tag',
-    badge: 'telc Zentrum',
-    badgeColor: 'bg-purple-100 text-purple-800 border-purple-200',
-    isPopular: true,
-  },
-  {
-    id: 'abiturvorbereitung',
-    title: 'Abitur- & Abschlussprüfungsvorbereitung',
-    link: '/abiturvorbereitung',
-    category: 'NACHHILFE',
-    categoryLabel: 'Schüler & Nachhilfe',
-    description: 'Intensives Training für zentrale Prüfungen: Mittlere Reife, Fachabitur und Abitur. Schließen von Wissenslücken, Klausurtraining, Altklausuren und Prüfungsstrategien unter erfahrener Anleitung.',
-    targetAudience: 'Abschlussklassen an Gymnasien, IGS, Realschulen Plus und Fachoberschulen',
-    requirements: 'Voranmeldung zur individuellen Bedarfsanalyse',
-    costsInfo: 'Kostenübernahme über BuT möglich oder günstige Monatstarife',
-    fundingType: 'but',
-    fundingLabel: 'BuT / Privat',
-    level: ['Schule', 'Sek I', 'Sek II', 'Abitur'],
-    schedule: 'Nachmittags & Intensiv-Wochenenden',
-    duration: '3 bis 6 Monate gezielte Vorbereitung',
-    badge: 'Erfolgsquote >90%',
-    badgeColor: 'bg-rose-100 text-rose-800 border-rose-200',
-    isPopular: false,
-  },
-  {
-    id: 'blockunterricht',
-    title: 'Ferienkurse & Blockunterricht',
-    link: '/blockunterricht',
-    category: 'NACHHILFE',
-    categoryLabel: 'Schüler & Nachhilfe',
-    description: 'Kompaktkurse in den Oster-, Sommer- und Herbstferien. Ideal, um Versäumnisse aus dem Schuljahr strukturiert aufzuholen und mit Selbstvertrauen ins neue Halbjahr zu starten.',
-    targetAudience: 'Klassenstufen 1 bis 13',
-    requirements: 'Offen für alle Schüler',
-    costsInfo: 'BuT-Förderung anrechenbar oder Feriencamp-Pauschale',
-    fundingType: 'but',
-    fundingLabel: 'BuT / Feriencamp',
-    level: ['Schule', 'Grundschule', 'Sek I', 'Sek II'],
-    schedule: 'Täglich 3-4 Stunden in den Schulferien',
-    duration: '1 bis 2 Wochen Kompaktblock',
-    badge: 'Ferienprogramm',
-    badgeColor: 'bg-sky-100 text-sky-800 border-sky-200',
-    isPopular: false,
-  },
-  {
-    id: 'land-sprachkurse',
-    title: 'Landesgeförderte Sprachkurse Rheinland-Pfalz',
-    link: '/deutsch-grundbildung/sprachkurse',
-    category: 'SPRACHE',
-    categoryLabel: 'Sprachkurse',
-    description: 'Niedrigschwellige Deutschkurse zur gesellschaftlichen Teilhabe, gefördert durch das Land Rheinland-Pfalz. Für Menschen, die keinen direkten BAMF-Zugang haben.',
-    targetAudience: 'Bürgerinnen & Bürger mit Migrationshintergrund in Ludwigshafen & RLP',
-    requirements: 'Wohnsitz in Rheinland-Pfalz',
-    costsInfo: 'Gefördert durch Landesmittel, geringer oder kein Eigenanteil',
-    fundingType: 'land',
-    fundingLabel: 'Landesförderung RLP',
-    level: ['A1', 'A2'],
-    schedule: 'Vormittags & Nachmittags',
-    duration: 'Je nach Kursabschnitt (100 - 300 UE)',
-    badge: 'Land RLP',
-    badgeColor: 'bg-indigo-100 text-indigo-800 border-indigo-200',
-    isPopular: false,
-  },
-  {
-    id: 'privat-beruf',
-    title: 'Privatkurse, Einzelunterricht & Firmenkurse',
-    link: '/deutsch-grundbildung/privatkurse',
-    category: 'SPRACHE',
-    categoryLabel: 'Sprachkurse',
-    description: 'Maßgeschneiderte Sprachschulungen für Führungskräfte, Unternehmen, Pflege- und Fachkräfte. Flexibler Stundenplan, fachspezifischer Wortschatz und individuelles Lerntempo.',
-    targetAudience: 'Berufstätige, Firmenkunden, medizinisches Personal, Privatpersonen',
-    requirements: 'Individuelle Terminabsprache',
-    costsInfo: 'Transparente Stundensätze oder Firmenpauschalen nach Vereinbarung',
-    fundingType: 'private',
-    fundingLabel: 'Privat & Firmen',
-    level: ['A1', 'A2', 'B1', 'B2', 'C1'],
-    schedule: 'Höchst flexibel: Vor Ort, Online oder In-House beim Kunden',
-    duration: 'Frei wählbar nach individuellem Ziel',
-    badge: 'Maßgeschneidert',
-    badgeColor: 'bg-zinc-100 text-zinc-800 border-zinc-200',
-    isPopular: false,
-  },
-  {
-    id: 'orientierung-lid',
-    title: 'Orientierungskurs & Leben in Deutschland (LiD)',
-    link: '/deutsch-grundbildung/integrationskurse',
-    category: 'INTEGRATION',
-    categoryLabel: 'Integrationskurse',
-    description: '100 Unterrichtsstunden zu deutscher Geschichte, Politik, Rechtssystem, Grundwerten und Kultur. Schließt mit dem bundesweiten Test "Leben in Deutschland" (Einbürgerungstest) ab.',
-    targetAudience: 'Integrationskursteilnehmer sowie Einbürgerungsbewerber',
-    requirements: 'Ausreichende Deutschkenntnisse (mindestens Niveau B1 empfohlen)',
-    costsInfo: 'Im BAMF-Integrationskurs enthalten oder günstige Modulteilnahme',
-    fundingType: 'bamf',
-    fundingLabel: 'BAMF / Einbürgerung',
-    level: ['B1', 'B2'],
-    schedule: 'Vormittags oder Blockseminar',
-    duration: '100 Unterrichtsstunden (ca. 4-5 Wochen)',
-    badge: 'Einbürgerungstest',
-    badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
-    isPopular: false,
-  },
-];
 
 interface Props {
   initialCourses?: any[];
 }
 
 export default function AdvancedCourseExplorer({ initialCourses = [] }: Props) {
-  // Merge dynamic DB courses with default catalog
+  // Kurslar tamamen veritabanından gelir (admin panelindeki Kurslar yönetimi) —
+  // koda gömülü sabit katalog kaldırıldı.
   const allCourses: CourseItem[] = useMemo(() => {
-    const formattedDbCourses: CourseItem[] = (initialCourses || []).map((db: any) => {
+    return (initialCourses || []).map((db: any) => {
       let fundingType: CourseItem['fundingType'] = 'private';
       const costsLower = (db.costsInfo || '').toLowerCase();
       if (costsLower.includes('bamf')) fundingType = 'bamf';
@@ -278,14 +86,16 @@ export default function AdvancedCourseExplorer({ initialCourses = [] }: Props) {
         level: db.design?.level ? db.design.level.split(',').map((l: string) => l.trim()) : ['A1', 'A2', 'B1'],
         schedule: db.design?.schedule || (db.startDate ? `Ab ${new Date(db.startDate).toLocaleDateString('de-DE')}` : 'Laufender Einstieg'),
         duration: db.endDate ? `Bis ${new Date(db.endDate).toLocaleDateString('de-DE')}` : 'Flexibel',
+        dateRange: db.startDate && db.endDate
+          ? `${new Date(db.startDate).toLocaleDateString('de-DE')} – ${new Date(db.endDate).toLocaleDateString('de-DE')}`
+          : db.startDate
+            ? `Start: ${new Date(db.startDate).toLocaleDateString('de-DE')}`
+            : undefined,
         badge: 'Aktuelles Angebot',
         badgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
         isPopular: false
       };
     });
-
-    // Deduplicate or append
-    return [...defaultCatalogCourses, ...formattedDbCourses];
   }, [initialCourses]);
 
   // State
@@ -701,6 +511,12 @@ export default function AdvancedCourseExplorer({ initialCourses = [] }: Props) {
 
                   {/* Specs List */}
                   <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-800 space-y-2 text-xs text-gray-600 dark:text-gray-400">
+                    {course.dateRange && (
+                      <div className="flex items-start gap-2">
+                        <Calendar className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
+                        <span><strong>Zeitraum:</strong> {course.dateRange}</span>
+                      </div>
+                    )}
                     {course.schedule && (
                       <div className="flex items-start gap-2">
                         <Clock className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
@@ -780,6 +596,12 @@ export default function AdvancedCourseExplorer({ initialCourses = [] }: Props) {
                 </p>
 
                 <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 flex-wrap pt-1">
+                  {course.dateRange && (
+                    <span className="flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-primary" />
+                      {course.dateRange}
+                    </span>
+                  )}
                   {course.schedule && (
                     <span className="flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5 text-primary" />

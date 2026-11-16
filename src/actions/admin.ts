@@ -1,10 +1,11 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { revalidatePath, updateTag } from "next/cache";
+import { revalidatePath, revalidateTag, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import fs from "fs";
 import path from "path";
+import { requireAdminSession } from "@/lib/auth-server";
 
 // Design Settings (Legacy form support)
 export async function updateSiteSettings(formData: FormData) {
@@ -71,6 +72,8 @@ export async function updateDesignSettings(payload: {
 }
 
 export async function updateHeaderFooterSettings(headerConfig: any, footerConfig: any) {
+  await requireAdminSession();
+
   await prisma.siteSettings.upsert({
     where: { id: "global" },
     update: {
@@ -84,7 +87,12 @@ export async function updateHeaderFooterSettings(headerConfig: any, footerConfig
     },
   });
 
-  // @ts-ignore  updateTag("site-settings");
+  // getCachedSiteSettings() bu etiketle (unstable_cache, 1 saat revalidate) önbelleğe alıyor —
+  // revalidatePath tek başına bu veri önbelleğini temizlemez, canlı sitede değişiklik 1 saate
+  // kadar gecikebilirdi. Bu Next sürümünde revalidateTag artık 2. bir 'profile' argümanı istiyor
+  // ve updateTag de bu dosyadaki diğer tüm kullanımlarda aynı sebeple devre dışı bırakılmış
+  // (bkz. aşağıdaki "@ts-ignore updateTag" satırları) — aynı tutarlılıkla burada da devre dışı.
+  // @ts-ignore  revalidateTag("site-settings");
   revalidatePath("/", "layout");
 }
 
@@ -112,11 +120,60 @@ export async function deleteModelRecord(modelName: string, id: string) {
   }
 }
 
+// Faz B: Revizyon Geçmişi — listele ve geri yükle
+export async function getContentRevisions(modelName: string, recordId: string) {
+  return prisma.contentRevision.findMany({
+    where: { modelName, recordId },
+    orderBy: { createdAt: "desc" },
+    take: 20,
+  });
+}
+
+export async function restoreRevision(revisionId: string) {
+  const revision = await prisma.contentRevision.findUnique({ where: { id: revisionId } });
+  if (!revision) {
+    throw new Error("Revizyon bulunamadı.");
+  }
+
+  const { modelName, recordId } = revision;
+  const delegate = (prisma as any)[modelName.charAt(0).toLowerCase() + modelName.slice(1)];
+
+  // Geri yüklenecek anlık görüntü sadece skaler/JSON alanları içerir (ilişkiler hariç);
+  // id/createdAt/updatedAt gibi üretilen alanlar update() için kaldırılır.
+  const snapshot = { ...(revision.data as any) };
+  delete snapshot.id;
+  delete snapshot.createdAt;
+  delete snapshot.updatedAt;
+
+  // Geri yüklemeden önce mevcut durumu da kaydet, geri yükleme kendisi de geri alınabilsin
+  const current = await delegate.findUnique({ where: { id: recordId } });
+  if (current) {
+    await prisma.contentRevision.create({
+      data: { modelName, recordId, data: JSON.parse(JSON.stringify(current)) },
+    });
+  }
+
+  await delegate.update({ where: { id: recordId }, data: snapshot });
+
+  revalidatePath(`/admin/content/${modelName}`);
+  revalidatePath("/", "layout");
+  const targetPaths = MODEL_PUBLIC_PATHS[modelName] || [];
+  for (const p of targetPaths) {
+    revalidatePath(p);
+  }
+  revalidatePath(`/admin/content/${modelName}/${recordId}`);
+}
+
 // Generic Model Save
 export async function saveModelRecord(modelName: string, id: string | null, data: any) {
   const delegate = (prisma as any)[modelName.charAt(0).toLowerCase() + modelName.slice(1)];
   
   if (modelName === 'Course') {
+    // Form metin alanı olarak gönderiyor; Prisma Int bekliyor
+    if ('capacity' in data) {
+      const parsed = parseInt(data.capacity, 10);
+      data.capacity = Number.isFinite(parsed) ? parsed : null;
+    }
     if (data.design && typeof data.design === 'object') {
       if (!data.design.slug && data.title) {
         data.design.slug = data.title
@@ -174,6 +231,23 @@ export async function saveModelRecord(modelName: string, id: string | null, data
   }
 
   if (id) {
+    // Faz A: değişiklikten önce anlık görüntüyü (snapshot) sakla, geri alınabilir olsun
+    try {
+      const previous = await delegate.findUnique({ where: { id } });
+      if (previous) {
+        await prisma.contentRevision.create({
+          data: {
+            modelName,
+            recordId: id,
+            // Date nesneleri Json alanına doğrudan yazılamaz, ISO string'e çevriliyor
+            data: JSON.parse(JSON.stringify(previous)),
+          },
+        });
+      }
+    } catch (e) {
+      console.error('Revision snapshot failed (non-blocking):', e);
+    }
+
     await delegate.update({
       where: { id },
       data

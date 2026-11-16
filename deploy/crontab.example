@@ -1,0 +1,11 @@
+# deploy kullanıcısının crontab'ı: crontab -u deploy -e ile düzenlenir.
+# CRON_SECRET değerini .env.production'dakiyle aynı yapın.
+
+# Zamanlanmış içerik yayınlama (publishAt geçmiş Page/Article) — her 15 dakikada
+*/15 * * * * curl -fsS -X GET -H "Authorization: Bearer __CRON_SECRET__" https://lernzirkel-online.de/api/cron/publish >> /var/log/lernzirkel/cron.log 2>&1
+
+# Veritabanı + upload yedeği (pg_dump, yerel diske) — her gün 04:00
+0 4 * * * /var/www/lernzirkel/deploy/backup.sh >> /var/log/lernzirkel/backup.log 2>&1
+
+# Let's Encrypt sertifika yenileme kontrolü certbot kurulumunda systemd timer olarak
+# otomatik gelir (certbot.timer) — buraya ayrıca eklemeye gerek yok.

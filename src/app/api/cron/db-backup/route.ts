@@ -1,19 +1,15 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { verifyCronSecret } from '@/lib/cron-auth';
 
-// This is a secure endpoint designed to be called by a CRON job (e.g. Vercel Cron or GitHub Actions)
-// It exports critical DB tables to a JSON format which can be picked up and stored in AWS S3 or a local secure vault.
+// Bu endpoint seçili içerik tablolarının JSON anlık görüntüsünü döner (hızlı/insan-okunabilir
+// bir yedek). VPS üzerindeki asıl veritabanı yedeği deploy/backup.sh'teki pg_dump ile alınır —
+// bu route ona ek, birincil yedekleme mekanizması değildir.
 
 export async function GET(req: Request) {
   try {
-    // Basic API Key verification
-    const authHeader = req.headers.get('authorization');
-    const CRON_SECRET = process.env.CRON_SECRET || 'lernzirkel-default-cron-secret-2026';
-    
-    // Check if authorization matches Bearer token
-    if (authHeader !== `Bearer ${CRON_SECRET}`) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const authError = verifyCronSecret(req);
+    if (authError) return authError;
 
     // Export Core Content (Projects, Courses, News, Messages, SiteSettings)
     const [projects, courses, news, messages, settings] = await Promise.all([

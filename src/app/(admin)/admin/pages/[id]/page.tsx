@@ -1,8 +1,9 @@
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import PageBuilder from "@/components/admin/PageBuilder";
+import PageBuilder, { type DraftData } from "@/components/admin/PageBuilder";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { saveDraft, discardDraft, publishPage, getPageRevisions, restorePageRevision } from "@/actions/pages";
 
 export const dynamic = "force-dynamic";
 
@@ -54,7 +55,19 @@ export default async function PageEditorPage({ params }: { params: Promise<{ id:
       </div>
       
       {/* Client Component */}
-      <PageBuilder page={page} initialSections={page.sections} availableParents={allPages} />
+      <PageBuilder
+        page={page}
+        initialSections={page.sections}
+        availableParents={allPages}
+        draftData={page.draftData as unknown as DraftData | null}
+        draftSavedAt={page.draftSavedAt ? page.draftSavedAt.toISOString() : null}
+        initialVersion={page.contentVersion}
+        saveDraftAction={saveDraft}
+        discardDraftAction={discardDraft}
+        publishAction={publishPage}
+        getRevisionsAction={getPageRevisions}
+        restoreRevisionAction={restorePageRevision}
+      />
     </div>
   );
 }

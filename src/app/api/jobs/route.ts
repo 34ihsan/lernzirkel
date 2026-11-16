@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { requireAdminSession } from '@/lib/auth-server';
 
 export async function GET() {
   try {
@@ -14,6 +15,12 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  try {
+    await requireAdminSession();
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const { title, type, description, requirements, location, isActive } = body;

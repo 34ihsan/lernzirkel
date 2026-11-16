@@ -84,12 +84,25 @@ export const getCachedCourses = async () => {
   return getCachedCoursesInternal();
 };
 
+// Kurs kartlarındaki link `design.slug` (örn. "c1") kullanıyor, gerçek `id` (UUID) değil —
+// bu yüzden önce id ile, bulunamazsa design.slug ile aranıyor. Sadece id ile arayan önceki
+// hali, slug tabanlı linklerin her zaman "sayfa bulunamadı" vermesine sebep oluyordu.
+async function findCourseBySlugOrId(slugOrId: string) {
+  try {
+    const byId = await prisma.course.findUnique({ where: { id: slugOrId } });
+    if (byId) return byId;
+  } catch {
+    // slugOrId bir UUID değilse Prisma hata fırlatabilir, slug aramasına geç
+  }
+  return prisma.course.findFirst({
+    where: { design: { path: ['slug'], equals: slugOrId } },
+  });
+}
+
 const getCachedCourseByIdInternal = unstable_cache(
   async (id: string) => {
     try {
-      return await prisma.course.findUnique({
-        where: { id },
-      });
+      return await findCourseBySlugOrId(id);
     } catch (err) {
       return null;
     }
@@ -100,7 +113,7 @@ const getCachedCourseByIdInternal = unstable_cache(
 
 export const getCachedCourseById = async (id: string) => {
   if (isDev) {
-    return await prisma.course.findUnique({ where: { id } });
+    return findCourseBySlugOrId(id);
   }
   return getCachedCourseByIdInternal(id);
 };

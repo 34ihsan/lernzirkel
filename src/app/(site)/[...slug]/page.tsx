@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { notFound, redirect } from "next/navigation";
+import { notFound, redirect, permanentRedirect } from "next/navigation";
 import SectionRenderer from "@/components/cms/SectionRenderer";
 import Breadcrumbs, { BreadcrumbItem } from "@/components/common/Breadcrumbs";
 
@@ -50,6 +50,12 @@ export default async function DynamicCmsPage({ params }: { params: Promise<{ slu
   }
 
   if (!page || !page.isPublished) {
+    // Sayfa bulunamadı — belki de slug'ı admin panelinden değiştirilmiş bir sayfaydı.
+    // publishPage() slug değişince otomatik bir Redirect kaydı oluşturur, burada kontrol ediyoruz.
+    const found = await prisma.redirect.findUnique({ where: { fromPath: `/${slugString}` } });
+    if (found) {
+      permanentRedirect(found.toPath);
+    }
     notFound();
   }
 
@@ -120,6 +126,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: page.title,
     description: page.description || undefined,
     url: `https://www.lernzirkel-ludwigshafen.de/${page.slug}`,
+    image: page.ogImage || undefined,
+    noIndex: page.noIndex,
   });
 }
 

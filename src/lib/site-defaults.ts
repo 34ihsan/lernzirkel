@@ -190,21 +190,27 @@ export const defaultHeaderConfig: HeaderConfig = {
     showDivider: false
   },
   navLinks: [
-    { 
-      label: "Deutsch & Grundbildung", 
+    {
+      label: "Deutsch & Grundbildung",
       url: "/deutsch-grundbildung",
       children: [
         {
-          label: "Allgemeine Integrationskurse",
-          url: "/kurse",
+          label: "Integrationskurse",
+          url: "/deutsch-grundbildung/integrationskurse",
           description: "BAMF-gefördert für Alltag und Beruf (A1-B1)",
           icon: "GraduationCap"
         },
         {
-          label: "Alphabetisierung & Grundbildung",
-          url: "/deutsch-grundbildung",
-          description: "Schritt für Schritt Deutsch lesen und schreiben lernen",
+          label: "Landesgeförderte Sprachkurse",
+          url: "/deutsch-grundbildung/sprachkurse",
+          description: "Allgemeine Deutschkurse mit staatlicher Förderung",
           icon: "Languages"
+        },
+        {
+          label: "Privat- & Firmenkurse",
+          url: "/deutsch-grundbildung/privatkurse",
+          description: "Individuelle Deutschkurse für Privatpersonen und Unternehmen",
+          icon: "Building2"
         },
         {
           label: "ESF+ Alpha Förderprogramm",
@@ -222,28 +228,28 @@ export const defaultHeaderConfig: HeaderConfig = {
         }
       ]
     },
-    { 
-      label: "Kinder & Jugendliche", 
+    {
+      label: "Kinder & Jugendliche",
       url: "/kinder-jugendliche",
       children: [
         {
           label: "Kostenlose Lernförderung (BuT)",
-          url: "/kostenlose-lernfoerderung_b",
+          url: "/kurse/nachhilfe/kostenlose-lernfoerderung",
           description: "Kostenfreie Nachhilfe über Bildung & Teilhabe",
           badge: "Kostenlos",
           icon: "Sparkles"
         },
         {
-          label: "Abitur- & Prüfungsvorbereitung",
-          url: "/abiturvorbereitung",
-          description: "Gezielte Prüfungsvorbereitung für Realschule & Gymnasium",
-          icon: "FileCheck"
-        },
-        {
           label: "Blockunterricht & Ferienkurse",
-          url: "/blockunterricht",
+          url: "/kurse/nachhilfe/blockunterricht",
           description: "Intensivkurse in den Schulferien zur Notenverbesserung",
           icon: "Calendar"
+        },
+        {
+          label: "Abitur- & Prüfungsvorbereitung",
+          url: "/kinder-jugendliche/abiturvorbereitung",
+          description: "Gezielte Prüfungsvorbereitung für Realschule & Gymnasium",
+          icon: "FileCheck"
         },
         {
           label: "Jugendbetreuung & Mentoring",
@@ -253,13 +259,17 @@ export const defaultHeaderConfig: HeaderConfig = {
         }
       ]
     },
-    { 
-      label: "Beratung", 
+    {
+      label: "Kurse",
+      url: "/kurse"
+    },
+    {
+      label: "Beratung",
       url: "/beratung",
       children: [
         {
           label: "Migrationsfachdienst (MFD)",
-          url: "/beratung",
+          url: "/beratung/mfd",
           description: "Kostenfreie und vertrauliche Beratung für Zugewanderte",
           badge: "Kostenfrei",
           icon: "LifeBuoy"
@@ -269,17 +279,11 @@ export const defaultHeaderConfig: HeaderConfig = {
           url: "/aol-yoes",
           description: "Abitur- und Studienberatung für internationale Abschlüsse",
           icon: "Compass"
-        },
-        {
-          label: "Bildungswege in Ludwigshafen",
-          url: "/bildungswege-in-ludwigshafen-_b",
-          description: "Orientierung und Beratung im lokalen Bildungssystem",
-          icon: "MapPin"
         }
       ]
     },
-    { 
-      label: "Projekte", 
+    {
+      label: "Projekte",
       url: "/projekte",
       children: [
         {
@@ -309,6 +313,12 @@ export const defaultHeaderConfig: HeaderConfig = {
           icon: "Shield"
         },
         {
+          label: "DSEE: Ehrenamt stärken",
+          url: "/projekte/dsee",
+          description: "Kooperation mit der Deutschen Stiftung für Engagement und Ehrenamt",
+          icon: "Handshake"
+        },
+        {
           label: "Wettbewerbe",
           url: "/projekte/wettbewerbe",
           description: "Schülerwettbewerbe, Aktionen und jährliche Bildungsmesse",
@@ -332,15 +342,7 @@ export const defaultHeaderConfig: HeaderConfig = {
       ]
     },
     {
-      label: "Aktuelles",
-      url: "/aktuelles"
-    },
-    {
-      label: "Blog & Wissen",
-      url: "/blog"
-    },
-    { 
-      label: "Über uns", 
+      label: "Über uns",
       url: "/ueber-uns",
       children: [
         {
@@ -394,7 +396,10 @@ export const defaultHeaderConfig: HeaderConfig = {
         }
       ]
     },
-    { label: "ESF+ Alpha", url: "/esfplusalpha", isHighlight: true }
+    {
+      label: "Blog & Wissen",
+      url: "/blog"
+    }
   ],
   ctaButton: {
     enabled: true,
@@ -420,8 +425,8 @@ export const defaultHeaderConfig: HeaderConfig = {
     navText: "#333333",
     navHoverText: "#0F4761",
     navActiveText: "#0F4761",
-    navFontSize: 13,
-    navFontWeight: 'medium',
+    navFontSize: 16,
+    navFontWeight: 'semibold',
     isSticky: true,
     navLayout: 'space-between',
     navGap: 16,
@@ -457,16 +462,16 @@ export const defaultFooterConfig: FooterConfig = {
     title: "Schnellzugriff",
     links: [
       { label: "Deutsch & Grundbildung", url: "/deutsch-grundbildung" },
-      { label: "Integrationskurse", url: "/kurse" },
+      { label: "Integrationskurse", url: "/deutsch-grundbildung/integrationskurse" },
       { label: "telc-Prüfungen buchen", url: "https://pruefungscenter.de", isExternal: true },
       { label: "Nachhilfe & Förderung", url: "/kinder-jugendliche" },
-      { label: "Migrationsfachdienst", url: "/beratung" },
+      { label: "Migrationsfachdienst", url: "/beratung/mfd" },
       { label: "Projekte & Engagement", url: "/projekte" },
       { label: "ESF+ Alpha", url: "/esfplusalpha" },
+      { label: "Alle Kurse durchsuchen", url: "/kurse" },
       { label: "Bildergalerie", url: "/ueber-uns/galerie" },
-      { label: "Aktuelles", url: "/aktuelles" },
-      { label: "Blog & Wissen", url: "/blog" },
-      { label: "Karriere", url: "/karriere" }
+      { label: "Karriere", url: "/karriere" },
+      { label: "Blog & Wissen", url: "/blog" }
     ]
   },
   badges: {

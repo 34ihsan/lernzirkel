@@ -1,5 +1,5 @@
 require('dotenv').config();
-import prisma from './src/lib/prisma';
+import prisma from '../src/lib/prisma';
 
 async function main() {
   const announcements = await prisma.announcement.findMany({

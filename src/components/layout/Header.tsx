@@ -379,9 +379,10 @@ export default function Header({
         >
           <nav 
             className="flex items-center justify-center lg:flex-wrap xl:flex-nowrap overflow-visible no-scrollbar w-full" 
-            style={{ 
+            style={{
               color: navTextColor,
-              fontSize: `clamp(11px, 1vw, ${parseFloat(navFontSize?.toString() || '14')}px)`,
+              fontFamily: 'var(--font-heading)',
+              fontSize: `clamp(13px, 1.15vw, ${parseFloat(navFontSize?.toString() || '16')}px)`,
               fontWeight: navFontWeight,
               gap: `clamp(4px, 0.8vw, ${parseFloat(header.design?.navGap?.toString() || '16')}px)`,
               rowGap: '4px' // Add a small row gap in case it wraps to next line

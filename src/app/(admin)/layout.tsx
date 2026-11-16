@@ -2,10 +2,14 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
 import Link from "next/link";
-import { 
-  LayoutDashboard, PaintBucket, FileText, Settings, Users, 
-  Image as ImageIcon, Newspaper, Megaphone, Inbox, TrendingUp, Bot, Activity 
+import { headers } from "next/headers";
+import {
+  LayoutDashboard, PaintBucket, FileText, Settings, Users,
+  Image as ImageIcon, Newspaper, Megaphone, TrendingUp, Bot, Activity,
+  ClipboardCheck, LogOut
 } from "lucide-react";
+import { getAdminSession } from "@/lib/auth-server";
+import { logoutAdmin } from "@/actions/auth";
 
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-sans' });
@@ -15,11 +19,27 @@ export const metadata: Metadata = {
   description: "Lernzirkel CMS Admin Dashboard",
 };
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headerList = await headers();
+  const pathname = headerList.get("x-pathname") || "";
+
+  // Giriş sayfasında sidebar/topbar shell'ini göstermiyoruz.
+  if (pathname === "/admin/login") {
+    return (
+      <html lang="de" suppressHydrationWarning>
+        <body suppressHydrationWarning className={`${inter.variable} antialiased bg-gray-900 text-gray-900`}>
+          {children}
+        </body>
+      </html>
+    );
+  }
+
+  const session = await getAdminSession();
+
   return (
     <html lang="de" suppressHydrationWarning>
       <body suppressHydrationWarning className={`${inter.variable} antialiased bg-gray-50 text-gray-900`}>
@@ -96,9 +116,9 @@ export default function AdminLayout({
 
                 <li className="pt-4 pb-2 px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Büyüme & Onay (Growth)</li>
                 <li>
-                  <Link href="/admin/applications" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium text-amber-300 hover:text-amber-200">
-                    <Inbox size={18} />
-                    <span>Başvurular & Onay</span>
+                  <Link href="/admin/registrations" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium text-amber-300 hover:text-amber-200">
+                    <ClipboardCheck size={18} />
+                    <span>Kayıtlar & Onay</span>
                   </Link>
                 </li>
 
@@ -150,8 +170,19 @@ export default function AdminLayout({
             <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
               <h2 className="text-lg font-medium">Yönetim Paneli</h2>
               <div className="flex items-center space-x-4">
-                <div className="text-sm font-medium text-gray-600">Admin</div>
-                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">A</div>
+                <div className="text-sm font-medium text-gray-600">{session?.name || "Admin"}</div>
+                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">
+                  {(session?.name || "A").charAt(0).toUpperCase()}
+                </div>
+                <form action={logoutAdmin}>
+                  <button
+                    type="submit"
+                    className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition"
+                    title="Çıkış yap"
+                  >
+                    <LogOut size={18} />
+                  </button>
+                </form>
               </div>
             </header>
             

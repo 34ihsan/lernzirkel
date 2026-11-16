@@ -1,20 +1,34 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import ImageUploadInput from "@/components/admin/ImageUploadInput";
 import RichTextEditor from "@/components/admin/RichTextEditor";
-import { 
-  Plus, GripVertical, Trash2, Settings, ChevronDown, ChevronUp, 
-  Save, X, Eye, EyeOff, Copy, ExternalLink, Sliders, Type, 
-  LayoutGrid, Image as ImageIcon, HelpCircle, BarChart3, 
-  Code, Megaphone, Check, CheckCircle2, SplitSquareVertical, 
-  Maximize2, Monitor, Palette, Star, Send, User, Award, Play, 
-  Building, Download, Sparkles, Search, Filter, Layers, Clock
+import {
+  Plus, GripVertical, Trash2, Settings, ChevronDown, ChevronUp,
+  Save, X, Eye, EyeOff, Copy, ExternalLink, Sliders, Type,
+  LayoutGrid, Image as ImageIcon, HelpCircle, BarChart3,
+  Code, Megaphone, Check, CheckCircle2, SplitSquareVertical,
+  Maximize2, Monitor, Palette, Star, Send, User, Award, Play,
+  Building, Download, Sparkles, Search, Filter, Layers, Clock,
+  History, AlertTriangle, UploadCloud
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import SectionRenderer from "@/components/cms/SectionRenderer";
 import { AVAILABLE_ICONS } from "@/components/common/DynamicIcon";
 import { Reorder, useDragControls } from "framer-motion";
+import { generatePageSeo } from "@/actions/ai-seo";
+import type { PagePayload } from "@/actions/pages";
+
+function relativeTime(value?: string | Date | null): string | null {
+  if (!value) return null;
+  const date = new Date(value);
+  const diffMin = Math.floor((Date.now() - date.getTime()) / 60000);
+  if (diffMin < 1) return 'az önce';
+  if (diffMin < 60) return `${diffMin} dakika önce`;
+  const diffHour = Math.floor(diffMin / 60);
+  if (diffHour < 24) return `${diffHour} saat önce`;
+  return `${Math.floor(diffHour / 24)} gün önce`;
+}
 
 function SortableItemWrapper({ item, children }: { item: any, children: (controls: any) => React.ReactNode }) {
   const controls = useDragControls();
@@ -44,6 +58,11 @@ interface PageProps {
   order?: number;
   parent?: { id: string; title: string; slug: string } | null;
   children?: { id: string; title: string; slug: string; order: number }[];
+  ogImage?: string | null;
+  noIndex?: boolean;
+  publishAt?: Date | string | null;
+  lastEditedByName?: string | null;
+  lastEditedAt?: Date | string | null;
 }
 
 interface ParentOption {
@@ -53,14 +72,45 @@ interface ParentOption {
   parentId?: string | null;
 }
 
-export default function PageBuilder({ 
-  page, 
-  initialSections, 
-  availableParents = [] 
-}: { 
-  page: PageProps; 
-  initialSections: any[]; 
+export interface DraftData {
+  title: string;
+  slug: string;
+  description: string;
+  parentId: string | null;
+  order: number;
+  isPublished: boolean;
+  sections: Section[];
+  ogImage?: string | null;
+  noIndex?: boolean;
+  publishAt?: string | null;
+}
+
+type ActionResult<T = object> = { success: boolean; error?: string } & Partial<T>;
+
+export default function PageBuilder({
+  page,
+  initialSections,
+  availableParents = [],
+  draftData = null,
+  draftSavedAt = null,
+  initialVersion = 0,
+  saveDraftAction,
+  discardDraftAction,
+  publishAction,
+  getRevisionsAction,
+  restoreRevisionAction,
+}: {
+  page: PageProps;
+  initialSections: any[];
   availableParents?: ParentOption[];
+  draftData?: DraftData | null;
+  draftSavedAt?: string | null;
+  initialVersion?: number;
+  saveDraftAction: (pageId: string, data: PagePayload) => Promise<ActionResult<{ savedAt?: string }>>;
+  discardDraftAction: (pageId: string) => Promise<ActionResult>;
+  publishAction: (pageId: string, data: PagePayload, expectedVersion: number) => Promise<ActionResult<{ newVersion?: number; conflict?: boolean; latestVersion?: number }>>;
+  getRevisionsAction: (pageId: string) => Promise<{ id: string; createdAt: Date | string; data: any }[]>;
+  restoreRevisionAction: (revisionId: string) => Promise<ActionResult<{ data?: any }>>;
 }) {
   const router = useRouter();
 
@@ -71,6 +121,14 @@ export default function PageBuilder({
   const [isPublished, setIsPublished] = useState(page.isPublished);
   const [parentId, setParentId] = useState<string | null>(page.parentId || null);
   const [order, setOrder] = useState<number>(page.order ?? 0);
+
+  // Tier 2: SEO paneli genişletmesi + zamanlanmış yayın
+  const [ogImage, setOgImage] = useState<string>(page.ogImage || "");
+  const [noIndex, setNoIndex] = useState<boolean>(!!page.noIndex);
+  const [scheduleMode, setScheduleMode] = useState<'now' | 'scheduled'>(page.publishAt ? 'scheduled' : 'now');
+  const [publishAt, setPublishAt] = useState<string>(
+    page.publishAt ? new Date(page.publishAt).toISOString().slice(0, 16) : ""
+  );
 
   // Sections state
   const [sections, setSections] = useState<Section[]>(
@@ -89,8 +147,196 @@ export default function PageBuilder({
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [sectionSearch, setSectionSearch] = useState('');
   const [sectionCategory, setSectionCategory] = useState<'all' | 'form' | 'promo' | 'content' | 'social' | 'media'>('all');
-  const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [isGeneratingSeo, setIsGeneratingSeo] = useState(false);
+  const [seoSuggestion, setSeoSuggestion] = useState<{ metaTitle: string } | null>(null);
+  const [seoError, setSeoError] = useState<string | null>(null);
+
+  // --- Tier 1: taslak / yayın ayrımı, çakışma koruması, revizyon geçmişi ---
+  const versionRef = useRef(initialVersion);
+  const [isDirty, setIsDirty] = useState(false);
+  const hasMountedRef = useRef(false);
+  const [isSavingDraft, setIsSavingDraft] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [draftSavedConfirmAt, setDraftSavedConfirmAt] = useState<string | null>(null);
+  const [lastAutosavedAt, setLastAutosavedAt] = useState<string | null>(null);
+  const [showDraftBanner, setShowDraftBanner] = useState(!!draftData);
+  const [conflict, setConflict] = useState<{ latestVersion: number } | null>(null);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [revisions, setRevisions] = useState<{ id: string; createdAt: Date | string; data: any }[]>([]);
+  const [isLoadingRevisions, setIsLoadingRevisions] = useState(false);
+  const [restoreNotice, setRestoreNotice] = useState<string | null>(null);
+
+  // Her değişiklikte isDirty=true işaretle (ilk mount'ta değil).
+  useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+    setIsDirty(true);
+  }, [title, slug, description, isPublished, parentId, order, sections, ogImage, noIndex, scheduleMode, publishAt]);
+
+  // Kaydedilmemiş değişiklik varken sekmeyi kapatma/yenileme konusunda uyar.
+  useEffect(() => {
+    const handler = (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, [isDirty]);
+
+  const buildPayload = useCallback((): PagePayload => ({
+    title,
+    slug,
+    description,
+    parentId,
+    order,
+    isPublished,
+    sections: sections.map(s => ({ type: s.type, content: s.content, design: s.design, order: s.order, isHidden: !!s.isHidden })),
+    ogImage: ogImage || null,
+    noIndex,
+    publishAt: scheduleMode === 'scheduled' && publishAt ? new Date(publishAt).toISOString() : null,
+  }), [title, slug, description, parentId, order, isPublished, sections, ogImage, noIndex, scheduleMode, publishAt]);
+
+  const saveDraftNow = useCallback(async (silent: boolean) => {
+    if (isSavingDraft) return;
+    setIsSavingDraft(true);
+    try {
+      const res = await saveDraftAction(page.id, buildPayload());
+      if (res.success) {
+        setIsDirty(false);
+        const now = res.savedAt || new Date().toISOString();
+        setLastAutosavedAt(now);
+        if (!silent) {
+          setDraftSavedConfirmAt(now);
+          setTimeout(() => setDraftSavedConfirmAt(null), 3000);
+        }
+      } else if (!silent) {
+        alert(res.error || "Taslak kaydedilemedi.");
+      }
+    } catch (e: any) {
+      if (!silent) alert(`Sunucu ile iletişim hatası: ${e?.message || e}`);
+    } finally {
+      setIsSavingDraft(false);
+    }
+  }, [buildPayload, isSavingDraft, page.id, saveDraftAction]);
+
+  // Otomatik kayıt: her 45 saniyede bir, kaydedilmemiş değişiklik varsa sessizce taslağa yaz.
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isDirty && !isSavingDraft && !isPublishing) {
+        saveDraftNow(true);
+      }
+    }, 45000);
+    return () => clearInterval(interval);
+  }, [isDirty, isSavingDraft, isPublishing, saveDraftNow]);
+
+  const applySnapshotToState = (snapshot: any, markDirty: boolean) => {
+    if (snapshot.title !== undefined) setTitle(snapshot.title);
+    if (snapshot.slug !== undefined) setSlug(snapshot.slug);
+    if (snapshot.description !== undefined) setDescription(snapshot.description || "");
+    if (snapshot.isPublished !== undefined) setIsPublished(snapshot.isPublished);
+    if (snapshot.parentId !== undefined) setParentId(snapshot.parentId || null);
+    if (snapshot.order !== undefined) setOrder(snapshot.order ?? 0);
+    if (snapshot.ogImage !== undefined) setOgImage(snapshot.ogImage || "");
+    if (snapshot.noIndex !== undefined) setNoIndex(!!snapshot.noIndex);
+    if (snapshot.publishAt !== undefined) {
+      setScheduleMode(snapshot.publishAt ? 'scheduled' : 'now');
+      setPublishAt(snapshot.publishAt ? new Date(snapshot.publishAt).toISOString().slice(0, 16) : "");
+    }
+    if (Array.isArray(snapshot.sections)) {
+      setSections(snapshot.sections.map((s: any, idx: number) => ({
+        id: s.id || `sec_restored_${idx}_${Math.random().toString(36).slice(2, 8)}`,
+        type: s.type,
+        content: s.content || {},
+        design: s.design || {},
+        order: idx,
+        isHidden: !!(s.design as any)?.isHidden,
+      })));
+    }
+    if (markDirty) setIsDirty(true);
+  };
+
+  const loadDraftIntoEditor = () => {
+    if (!draftData) return;
+    applySnapshotToState(draftData, true);
+    setShowDraftBanner(false);
+  };
+
+  const discardDraftNow = async () => {
+    setShowDraftBanner(false);
+    try {
+      await discardDraftAction(page.id);
+    } catch {
+      // Kritik değil — banner zaten kapandı, bir sonraki autosave yine çalışır.
+    }
+  };
+
+  const openHistory = async () => {
+    setIsHistoryOpen(true);
+    setIsLoadingRevisions(true);
+    try {
+      const res = await getRevisionsAction(page.id);
+      setRevisions(res || []);
+    } finally {
+      setIsLoadingRevisions(false);
+    }
+  };
+
+  const restoreRevision = async (revisionId: string) => {
+    try {
+      const res = await restoreRevisionAction(revisionId);
+      if (!res.success) {
+        alert(res.error || "Revizyon yüklenemedi.");
+        return;
+      }
+      if (!res.data) {
+        alert("Revizyon verisi boş.");
+        return;
+      }
+      applySnapshotToState(res.data, true);
+      setIsHistoryOpen(false);
+      setRestoreNotice("Eski sürüm editöre yüklendi — incelemek ve yayınlamak için Yayınla'ya basın.");
+      setTimeout(() => setRestoreNotice(null), 6000);
+    } catch (e: any) {
+      alert(`Sunucu ile iletişim hatası: ${e?.message || e}`);
+    }
+  };
+
+  const doPublish = async (versionOverride?: number) => {
+    setIsPublishing(true);
+    try {
+      const expectedVersion = versionOverride ?? versionRef.current;
+      const res = await publishAction(page.id, buildPayload(), expectedVersion);
+      if (res.success) {
+        versionRef.current = res.newVersion ?? expectedVersion + 1;
+        setIsDirty(false);
+        setConflict(null);
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+        router.refresh();
+      } else if (res.conflict) {
+        setConflict({ latestVersion: res.latestVersion ?? expectedVersion });
+      } else {
+        alert(res.error || "Sayfa yayınlanamadı.");
+      }
+    } catch (e: any) {
+      alert(`Sunucu ile iletişim hatası: ${e?.message || e}`);
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
+  const overwritePublish = () => {
+    if (!conflict) return;
+    const latest = conflict.latestVersion;
+    versionRef.current = latest;
+    setConflict(null);
+    doPublish(latest);
+  };
 
   // Helper for subtabs
   const getSubTab = (id: string) => activeSubTab[id] || 'content';
@@ -213,37 +459,23 @@ export default function PageBuilder({
     }));
   };
 
-  // Save changes
-  const savePage = async () => {
-    setIsSaving(true);
-    setSaveSuccess(false);
+  const generateSeo = async () => {
+    setIsGeneratingSeo(true);
+    setSeoError(null);
+    setSeoSuggestion(null);
     try {
-      const res = await fetch(`/api/admin/pages/${page.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title,
-          slug,
-          description,
-          isPublished,
-          parentId,
-          order,
-          sections
-        })
-      });
-      if (res.ok) {
-        setSaveSuccess(true);
-        setTimeout(() => setSaveSuccess(false), 3000);
-        router.refresh();
+      const parentTitle = availableParents.find(p => p.id === parentId)?.title || null;
+      const res = await generatePageSeo({ title, slug, parentTitle, sections });
+      if (res.success) {
+        setDescription(res.metaDescription);
+        setSeoSuggestion({ metaTitle: res.metaTitle });
       } else {
-        const errorData = await res.json().catch(() => ({}));
-        alert(errorData?.details ? `Hata: ${errorData.details}` : (errorData?.error || "Kaydetme sırasında bir hata oluştu."));
+        setSeoError(res.error);
       }
     } catch (e: any) {
-      console.error(e);
-      alert(`Sunucu ile iletişim hatası: ${e?.message || e}`);
+      setSeoError(e?.message || "AI isteği başarısız oldu.");
     } finally {
-      setIsSaving(false);
+      setIsGeneratingSeo(false);
     }
   };
 
@@ -264,6 +496,20 @@ export default function PageBuilder({
                 {isPublished ? 'Yayında' : 'Taslak'}
               </span>
             </div>
+            <p className="text-[11px] text-gray-400 mt-1">
+              {isDirty ? (
+                <span className="text-amber-600 font-medium">Kaydedilmemiş değişiklikler var</span>
+              ) : lastAutosavedAt ? (
+                <span>Son taslak kaydı: {new Date(lastAutosavedAt).toLocaleTimeString('de-DE')}</span>
+              ) : draftSavedAt ? (
+                <span>Son taslak kaydı: {new Date(draftSavedAt).toLocaleTimeString('de-DE')}</span>
+              ) : (
+                <span>Değişiklik yok</span>
+              )}
+              {page.lastEditedByName && (
+                <span className="ml-2 text-gray-400">· Son yayınlayan: {page.lastEditedByName}{relativeTime(page.lastEditedAt) ? `, ${relativeTime(page.lastEditedAt)}` : ''}</span>
+              )}
+            </p>
           </div>
         </div>
 
@@ -307,15 +553,130 @@ export default function PageBuilder({
           </a>
 
           <button
-            onClick={savePage}
-            disabled={isSaving}
+            onClick={openHistory}
+            className="p-2 border rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
+            title="Revizyon Geçmişi"
+          >
+            <History size={16} />
+          </button>
+
+          <button
+            onClick={() => saveDraftNow(false)}
+            disabled={isSavingDraft || isPublishing}
+            className="border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 px-4 py-2 rounded-lg flex items-center space-x-2 text-sm font-medium shadow-sm transition-colors disabled:opacity-50"
+          >
+            <UploadCloud size={16} />
+            <span>{isSavingDraft ? 'Kaydediliyor...' : draftSavedConfirmAt ? 'Taslak kaydedildi ✓' : 'Taslak Olarak Kaydet'}</span>
+          </button>
+
+          <button
+            onClick={() => doPublish()}
+            disabled={isPublishing}
             className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-lg flex items-center space-x-2 font-medium shadow-sm transition-colors disabled:opacity-50"
           >
             <Save size={18} />
-            <span>{isSaving ? 'Kaydediliyor...' : saveSuccess ? 'Kaydedildi ✓' : 'Kaydet'}</span>
+            <span>{isPublishing ? 'Yayınlanıyor...' : saveSuccess ? 'Yayınlandı ✓' : 'Yayınla'}</span>
           </button>
         </div>
       </div>
+
+      {/* Taslak bulundu banner'ı */}
+      {showDraftBanner && draftData && (
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2 text-sm text-blue-800">
+            <UploadCloud size={16} />
+            <span>
+              {draftSavedAt ? new Date(draftSavedAt).toLocaleString('de-DE') : 'Daha önce'} tarihinde kaydedilmiş bir taslağınız var.
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={loadDraftIntoEditor} className="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg transition-colors">
+              Taslağı Yükle
+            </button>
+            <button onClick={discardDraftNow} className="text-xs font-semibold text-blue-700 hover:text-blue-900 bg-white border border-blue-200 px-3 py-1.5 rounded-lg transition-colors">
+              Taslağı Sil
+            </button>
+          </div>
+        </div>
+      )}
+
+      {restoreNotice && (
+        <div className="bg-purple-50 border border-purple-200 rounded-xl p-3 text-sm text-purple-800 flex items-center gap-2">
+          <History size={16} />
+          <span>{restoreNotice}</span>
+        </div>
+      )}
+
+      {/* Yayınlama çakışması modalı */}
+      {conflict && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-4">
+            <div className="flex items-center gap-2 text-amber-700">
+              <AlertTriangle size={22} />
+              <h3 className="font-bold text-lg">Çakışma Tespit Edildi</h3>
+            </div>
+            <p className="text-sm text-gray-600">
+              Bu sayfa siz düzenlerken başka biri tarafından yayınlandı. Ne yapmak istersiniz?
+            </p>
+            <div className="flex flex-col gap-2 pt-2">
+              <button
+                onClick={overwritePublish}
+                className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+              >
+                Benim Değişikliklerimle Üzerine Yaz
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className="border border-gray-300 text-gray-700 hover:bg-gray-50 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+              >
+                Sayfayı Yeniden Yükle (Değişikliklerim Kaybolur)
+              </button>
+              <button
+                onClick={() => setConflict(null)}
+                className="text-xs text-gray-400 hover:text-gray-600 pt-1"
+              >
+                Vazgeç
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Revizyon Geçmişi Paneli */}
+      {isHistoryOpen && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-end">
+          <div className="bg-white h-full w-full max-w-md shadow-xl p-5 space-y-4 overflow-y-auto">
+            <div className="flex items-center justify-between border-b pb-3">
+              <h3 className="font-bold text-lg flex items-center gap-2"><History size={18} /> Revizyon Geçmişi</h3>
+              <button onClick={() => setIsHistoryOpen(false)} className="text-gray-400 hover:text-gray-700">
+                <X size={20} />
+              </button>
+            </div>
+            {isLoadingRevisions ? (
+              <p className="text-sm text-gray-500">Yükleniyor...</p>
+            ) : revisions.length === 0 ? (
+              <p className="text-sm text-gray-500">Bu sayfa için henüz bir revizyon kaydı yok (ilk &quot;Yayınla&quot; işleminden sonra oluşur).</p>
+            ) : (
+              <div className="space-y-2">
+                {revisions.map((rev) => (
+                  <div key={rev.id} className="border rounded-lg p-3 flex items-center justify-between gap-2">
+                    <div className="text-sm">
+                      <div className="font-medium text-gray-800">{new Date(rev.createdAt).toLocaleString('de-DE')}</div>
+                      <div className="text-xs text-gray-500">{(rev.data?.sections?.length ?? 0)} bölüm · {rev.data?.title}</div>
+                    </div>
+                    <button
+                      onClick={() => restoreRevision(rev.id)}
+                      className="text-xs font-semibold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors"
+                    >
+                      Editöre Yükle
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Page Meta Details Box */}
       <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
@@ -394,7 +755,25 @@ export default function PageBuilder({
           </div>
 
           <div className="md:col-span-3">
-            <label className="block text-xs font-semibold text-gray-600 mb-1">Açıklama (SEO / Meta)</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-xs font-semibold text-gray-600">Açıklama (SEO / Meta)</label>
+              <button
+                type="button"
+                onClick={generateSeo}
+                disabled={isGeneratingSeo || sections.length === 0}
+                title={sections.length === 0 ? "Önce en az bir bölüm ekleyin" : "Sayfa içeriğine göre AI ile SEO açıklaması oluştur"}
+                className="text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 disabled:opacity-50 disabled:cursor-not-allowed px-2.5 py-1 rounded-md flex items-center gap-1.5 transition-colors"
+              >
+                {isGeneratingSeo ? (
+                  <>
+                    <span className="w-3 h-3 border-2 border-purple-700 border-t-transparent rounded-full animate-spin" />
+                    Oluşturuluyor...
+                  </>
+                ) : (
+                  <>✨ AI ile Oluştur</>
+                )}
+              </button>
+            </div>
             <input
               type="text"
               value={description}
@@ -402,6 +781,26 @@ export default function PageBuilder({
               className="w-full border rounded-lg p-2 text-sm"
               placeholder="Sayfanın arama motorlarında görünecek kısa açıklaması"
             />
+            <p className={`text-[11px] mt-0.5 ${description.length > 160 ? 'text-red-600 font-semibold' : description.length < 120 && description.length > 0 ? 'text-amber-600' : 'text-gray-400'}`}>
+              {description.length} / 160 karakter {description.length > 0 && description.length < 120 && '(biraz kısa — 120-160 ideal)'}
+            </p>
+            {seoError && (
+              <p className="text-xs text-red-600 mt-1">{seoError}</p>
+            )}
+            {seoSuggestion && (
+              <div className="mt-1.5 text-xs bg-purple-50 border border-purple-200 rounded-lg px-2.5 py-1.5 flex items-center justify-between gap-2">
+                <span className="text-purple-800">
+                  <strong>Önerilen başlık</strong> ({seoSuggestion.metaTitle.length}/60): {seoSuggestion.metaTitle}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => { setTitle(seoSuggestion.metaTitle); setSeoSuggestion(null); }}
+                  className="shrink-0 font-semibold text-purple-700 hover:text-purple-900 underline"
+                >
+                  Başlığa Uygula
+                </button>
+              </div>
+            )}
           </div>
 
           <div>
@@ -411,14 +810,86 @@ export default function PageBuilder({
                 <input
                   type="checkbox"
                   checked={isPublished}
+                  disabled={scheduleMode === 'scheduled'}
                   onChange={(e) => setIsPublished(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600 peer-disabled:opacity-50"></div>
                 <span className="ml-2 text-sm font-medium text-gray-700">
-                  {isPublished ? 'Yayında' : 'Taslak (Gizli)'}
+                  {scheduleMode === 'scheduled' ? 'Zamanlandı' : isPublished ? 'Yayında' : 'Taslak (Gizli)'}
                 </span>
               </label>
+            </div>
+
+            {/* Zamanlanmış yayın */}
+            <div className="mt-2 flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => setScheduleMode('now')}
+                className={`px-2 py-1 rounded-md text-[11px] font-semibold transition-colors ${scheduleMode === 'now' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              >
+                Şimdi
+              </button>
+              <button
+                type="button"
+                onClick={() => setScheduleMode('scheduled')}
+                className={`px-2 py-1 rounded-md text-[11px] font-semibold transition-colors ${scheduleMode === 'scheduled' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              >
+                Zamanla
+              </button>
+            </div>
+            {scheduleMode === 'scheduled' && (
+              <div className="mt-1.5 space-y-1">
+                <input
+                  type="datetime-local"
+                  value={publishAt}
+                  onChange={(e) => setPublishAt(e.target.value)}
+                  className="w-full border rounded-lg p-1.5 text-xs"
+                />
+                {publishAt && (
+                  <p className="text-[11px] text-blue-700 font-medium">
+                    ⏰ {new Date(publishAt).toLocaleString('de-DE')} tarihinde otomatik yayınlanacak
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* SEO Paneli Genişletmesi: OG Görsel, Noindex, SERP Önizleme */}
+        <div className="mt-5 pt-4 border-t border-gray-100">
+          <h4 className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">Gelişmiş SEO</h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1">Sosyal Paylaşım Görseli (OG Image)</label>
+                <ImageUploadInput value={ogImage} onChange={setOgImage} />
+              </div>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={noIndex}
+                  onChange={(e) => setNoIndex(e.target.checked)}
+                  className="rounded border-gray-300"
+                />
+                <span className="text-xs text-gray-700">Bu sayfayı arama motorlarından gizle (noindex)</span>
+              </label>
+            </div>
+
+            {/* Google SERP Önizlemesi */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 mb-1">Google Önizlemesi</label>
+              <div className="border border-gray-200 rounded-lg p-3 bg-white">
+                <div className="text-[13px] text-[#1a0dab] font-medium truncate" style={{ maxWidth: '100%' }}>
+                  {title || 'Sayfa Başlığı'}
+                </div>
+                <div className="text-xs text-[#006621] truncate">
+                  www.lernzirkel-ludwigshafen.de{pageUrl}
+                </div>
+                <div className="text-xs text-gray-600 mt-0.5 line-clamp-2">
+                  {description || 'Bu sayfa için henüz bir açıklama girilmedi.'}
+                </div>
+              </div>
             </div>
           </div>
         </div>

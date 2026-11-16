@@ -32,6 +32,8 @@ export const modelConfig: Record<string, { label: string; fields: { name: string
       { name: "targetAudience", label: "Hedef Kitle", type: "text" },
       { name: "requirements", label: "Gereksinimler", type: "text" },
       { name: "costsInfo", label: "Ücret Bilgisi", type: "text" },
+      { name: "capacity", label: "Kapasite (Boş bırakılırsa sınırsız)", type: "text" },
+      { name: "allowWaitlist", label: "Kapasite dolunca bekleme listesine izin ver", type: "boolean" },
       { name: "features", label: "Öne Çıkan Özellikler (Virgülle ayırın)", type: "text", isDesign: true },
       { name: "linkUrl", label: "Kayıt / Başvuru Linki (Opsiyonel)", type: "text", isDesign: true },
       { name: "linkText", label: "Buton Metni", type: "text", isDesign: true },

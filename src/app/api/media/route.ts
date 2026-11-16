@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server';
 import { readdir, stat } from 'fs/promises';
 import { join } from 'path';
+import { requireAdminSession } from '@/lib/auth-server';
 
 export async function GET() {
+  try {
+    await requireAdminSession();
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const uploadDir = join(process.cwd(), 'public', 'uploads');
     

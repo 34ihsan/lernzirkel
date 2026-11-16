@@ -18,7 +18,7 @@ interface SystemHealthProps {
     };
     counts: {
       auditLogs: number;
-      totalLeads: number;
+      totalRegistrations: number;
       totalEvents: number;
       totalCourses: number;
       totalPages: number;

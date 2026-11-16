@@ -1,7 +1,14 @@
 import { NextResponse } from "next/server";
 import { syncSystemPages } from "@/actions/admin";
+import { requireAdminSession } from "@/lib/auth-server";
 
 export async function POST() {
+  try {
+    await requireAdminSession();
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     await syncSystemPages();
     return NextResponse.json({ success: true, message: "Sistem sayfaları başarıyla eşitlendi." });
@@ -12,6 +19,12 @@ export async function POST() {
 }
 
 export async function GET() {
+  try {
+    await requireAdminSession();
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     await syncSystemPages();
     return NextResponse.json({ success: true, message: "Sistem sayfaları başarıyla eşitlendi." });

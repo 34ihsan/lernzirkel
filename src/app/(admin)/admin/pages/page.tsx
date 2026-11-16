@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import { syncSystemPages } from "@/actions/admin";
+import { duplicatePage, bulkSetPublished, bulkDeletePages } from "@/actions/pages";
 import PageTreeManager from "@/components/admin/PageTreeManager";
 
 async function deletePage(id: string) {
@@ -58,6 +59,8 @@ export default async function PagesManager() {
     sectionsCount: p.sections.length,
     createdAt: p.createdAt.toISOString(),
     updatedAt: p.updatedAt.toISOString(),
+    lastEditedByName: p.lastEditedByName,
+    lastEditedAt: p.lastEditedAt ? p.lastEditedAt.toISOString() : null,
     parent: p.parent,
     children: p.children.map(c => ({
       id: c.id,
@@ -296,6 +299,9 @@ export default async function PagesManager() {
           pages={serializedPages}
           systemSlugs={systemSlugs}
           onDeletePageAction={deletePage}
+          onDuplicatePageAction={duplicatePage}
+          onBulkSetPublishedAction={bulkSetPublished}
+          onBulkDeletePagesAction={bulkDeletePages}
         />
       </div>
     </div>

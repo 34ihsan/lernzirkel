@@ -13,16 +13,19 @@ interface ParentPageItem {
 
 interface Props {
   parentPages: ParentPageItem[];
+  allPages: ParentPageItem[];
   initialParentId?: string;
   onSubmitAction: (formData: FormData) => Promise<void>;
 }
 
-export default function NewPageForm({ parentPages, initialParentId, onSubmitAction }: Props) {
+export default function NewPageForm({ parentPages, allPages, initialParentId, onSubmitAction }: Props) {
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
   const [parentId, setParentId] = useState<string>(initialParentId || '');
   const [order, setOrder] = useState<number>(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [mode, setMode] = useState<'blank' | 'copy'>('blank');
+  const [copyFromPageId, setCopyFromPageId] = useState<string>('');
 
   // Find currently selected parent
   const selectedParent = parentPages.find(p => p.id === parentId);
@@ -88,7 +91,50 @@ export default function NewPageForm({ parentPages, initialParentId, onSubmitActi
       </div>
 
       <form action={onSubmitAction} onSubmit={handleSubmit} className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-200 space-y-6">
-        
+
+        {/* Başlangıç noktası: boş sayfa mı, mevcut bir sayfanın kopyası mı */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <button
+            type="button"
+            onClick={() => setMode('blank')}
+            className={`text-left p-3.5 rounded-xl border-2 transition-all ${mode === 'blank' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}
+          >
+            <div className="font-semibold text-sm text-gray-900">Boş Sayfa</div>
+            <div className="text-xs text-gray-500 mt-0.5">Sıfırdan başlayın, bölümleri editörde ekleyin.</div>
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode('copy')}
+            className={`text-left p-3.5 rounded-xl border-2 transition-all ${mode === 'copy' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}
+          >
+            <div className="font-semibold text-sm text-gray-900">Mevcut Bir Sayfayı Kopyala</div>
+            <div className="text-xs text-gray-500 mt-0.5">Benzer bir sayfanın tüm bölümleriyle başlayın.</div>
+          </button>
+        </div>
+
+        {mode === 'copy' && (
+          <div className="bg-purple-50/60 border border-purple-200/80 rounded-xl p-4 sm:p-5 space-y-2">
+            <label className="block text-xs font-bold uppercase tracking-wider text-purple-900">
+              Kopyalanacak Sayfa
+            </label>
+            <select
+              name="copyFromPageId"
+              value={copyFromPageId}
+              onChange={(e) => setCopyFromPageId(e.target.value)}
+              required={mode === 'copy'}
+              className="w-full border-purple-200 rounded-lg shadow-xs focus:ring-purple-500 focus:border-purple-500 p-2.5 text-sm bg-white font-medium"
+            >
+              <option value="">(Seçiniz)</option>
+              {allPages.map(p => (
+                <option key={p.id} value={p.id}>{p.title} (/{p.slug})</option>
+              ))}
+            </select>
+            <p className="text-xs text-purple-700/80">
+              Seçilen sayfanın tüm bölümleri (içerik ve tasarım) bu yeni sayfaya kopyalanır. Yeni sayfa taslak olarak başlar.
+            </p>
+          </div>
+        )}
+
         {/* Parent Page Selector */}
         <div className="bg-blue-50/60 border border-blue-200/80 rounded-xl p-4 sm:p-5 space-y-2">
           <div className="flex items-center justify-between">
@@ -223,7 +269,7 @@ export default function NewPageForm({ parentPages, initialParentId, onSubmitActi
             disabled={isSubmitting}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-semibold text-sm shadow-sm transition-colors disabled:opacity-50 flex items-center gap-2"
           >
-            <span>{isSubmitting ? 'Sayfa Oluşturuluyor...' : 'Sayfayı Oluştur ve Tasarıma Başla'}</span>
+            <span>{isSubmitting ? 'Sayfa Oluşturuluyor...' : mode === 'copy' ? 'Kopyala ve Sayfayı Oluştur' : 'Sayfayı Oluştur ve Tasarıma Başla'}</span>
           </button>
         </div>
       </form>

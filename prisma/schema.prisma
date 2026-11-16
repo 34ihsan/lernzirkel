@@ -55,6 +55,8 @@ model Course {
   startDate      DateTime?
   endDate        DateTime?
   isActive       Boolean        @default(true)
+  capacity       Int?           // null = sınırsız
+  allowWaitlist  Boolean        @default(true)
   design         Json?
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
@@ -136,8 +138,10 @@ model TeamMember {
   phone        String?
   photoUrl     String?
   adminRole    String?     // "ADMIN" | "EDITOR" | "VIEWER" | null
+  passwordHash String?     // PBKDF2 hash ("iterations.saltHex.hashHex"); null = admin girişi kapalı
   permissions  Json?       // { pages: bool, news: bool, courses: bool, team: bool, gallery: bool, projects: bool, design: bool }
   projects     Project[]
+  assignedRegistrations Registration[] @relation("RegistrationAssignee")
 }
 
 model GalleryImage {
@@ -201,6 +205,7 @@ model Page {
   slug        String    @unique
   description String?
   isPublished Boolean   @default(true)
+  publishAt   DateTime? // dolu ve gelecekteyse, cron tetiklenene kadar taslak kalır
   parentId    String?
   parent      Page?     @relation("PageHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
   children    Page[]    @relation("PageHierarchy")
@@ -210,8 +215,30 @@ model Page {
   updatedAt   DateTime  @updatedAt
   translations PageTranslation[]
 
+  // Tier 1: taslak/yayın ayrımı ve çakışma koruması
+  contentVersion Int       @default(0) // bumped ONLY on publish; optimistic-lock conflict detection (updatedAt reused olamaz, draft autosave'de de otomatik artar)
+  draftData      Json?     // { title, slug, description, parentId, order, isPublished, sections: [...] } — yayınlanmamış çalışma kopyası
+  draftSavedAt   DateTime?
+
+  // Tier 2: son yayınlayan bilgisi (düz string — TeamMember silinse/adı değişse de geçmiş kaydı bozulmaz)
+  lastEditedById   String?
+  lastEditedByName String?
+  lastEditedAt     DateTime?
+
+  // Tier 2: SEO paneli genişletmesi
+  ogImage String?
+  noIndex Boolean @default(false)
+
   @@index([parentId, order])
   @@index([isPublished])
+}
+
+// Tier 2: slug değiştiğinde otomatik oluşturulan yönlendirme kaydı
+model Redirect {
+  id        String   @id @default(uuid())
+  fromPath  String   @unique
+  toPath    String
+  createdAt DateTime @default(now())
 }
 
 model PageTranslation {
@@ -290,45 +317,24 @@ model Announcement {
 // -----------------------------------------
 
 model Registration {
-  id        String   @id @default(uuid())
-  courseId  String
-  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  name      String
-  email     String
-  phone     String?
-  message   String?
-  language  String   @default("de")
-  status    String   @default("PENDING") // PENDING, APPROVED, REJECTED
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+  id              String    @id @default(uuid())
+  courseId        String
+  course          Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  name            String
+  email           String
+  phone           String?
+  message         String?
+  language        String    @default("de")
+  status          String    @default("PENDING") // PENDING, APPROVED, CONTACTED, REJECTED
+  isWaitlisted    Boolean   @default(false)
+  assignedToId    String?
+  assignedTo      TeamMember? @relation("RegistrationAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
+  lastContactedAt DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
-model LeadApplication {
-  id             String    @id @default(uuid())
-  name           String
-  email          String
-  phone          String?
-  serviceType    String    // BAMF_INTEGRATION, NACHHILFE_BUT, TELC_PRUEFUNG, OTHER
-  benefitType    String?   // BUERGERGELD, WOHNGELD, KINDERZUSCHLAG, ASYLBLG, NONE, UNKNOWN
-  city           String?
-  estimatedGrant String?   // e.g. "100% Kostenlos (BAMF / BuT)"
-  message        String?
-  fileUrl        String?   // Yüklenen belge dosya yolu (PDF, JPG, PNG)
-  fileName       String?   // Orijinal dosya adı
-  fileSize       Int?      // Boyut (bytes)
-  consentGiven   Boolean   @default(true) // DSGVO Açık Rıza
-  consentText    String?   // Verilen onay metni
-  expiresAt      DateTime? // Yasal imha tarihi (Retention expiration)
-  isPurged       Boolean   @default(false) // Veri imha edildi mi?
-  purgedAt       DateTime? // İmha edilme zamanı
-  language       String    @default("de")
-  status         String    @default("PENDING") // PENDING (Onay Bekliyor), APPROVED (Onaylandı), CONTACTED (İletişime Geçildi), REJECTED (Reddedildi)
-  adminNote      String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-
-  @@index([status, serviceType])
-  @@index([createdAt(sort: Desc)])
+  @@index([courseId, status])
+  @@index([assignedToId])
 }
 
 model EventLog {
@@ -385,6 +391,7 @@ model Article {
   tags        String?
   author      String?
   isPublished Boolean  @default(true)
+  publishAt   DateTime? // dolu ve gelecekteyse, cron tetiklenene kadar taslak kalır
   publishedAt DateTime @default(now())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -401,4 +408,19 @@ model ArticleTranslation {
   content     String  @db.Text
 
   @@unique([articleId, language])
+}
+
+// -----------------------------------------
+// GENERIC CONTENT REVISION HISTORY (Faz A)
+// -----------------------------------------
+
+model ContentRevision {
+  id        String   @id @default(uuid())
+  modelName String   // e.g. "Page", "News", "Course", "Project", "Article"
+  recordId  String
+  data      Json     // record snapshot before the overwrite
+  label     String?  // optional free-text note
+  createdAt DateTime @default(now())
+
+  @@index([modelName, recordId, createdAt(sort: Desc)])
 }

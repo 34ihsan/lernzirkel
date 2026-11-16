@@ -1,17 +1,19 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
-import { Users, FileText, Newspaper, Image as ImageIcon, Inbox, TrendingUp, Bot, Activity } from "lucide-react";
+import { Users, FileText, Newspaper, Image as ImageIcon, TrendingUp, Bot, Activity, ClipboardCheck } from "lucide-react";
+import QuickApprovalInbox, { InboxItem } from "@/components/admin/QuickApprovalInbox";
 
 export default async function AdminDashboard() {
   const [
-    coursesCount, 
-    projectsCount, 
-    newsCount, 
-    teamCount, 
-    galleryCount, 
+    coursesCount,
+    projectsCount,
+    newsCount,
+    teamCount,
+    galleryCount,
     pagesCount,
-    pendingLeadsCount,
-    totalEventsCount
+    pendingRegistrationsCount,
+    totalEventsCount,
+    recentPendingRegistrations,
   ] = await Promise.all([
     prisma.course.count(),
     prisma.project.count(),
@@ -19,17 +21,30 @@ export default async function AdminDashboard() {
     prisma.teamMember.count(),
     prisma.galleryImage.count(),
     prisma.page.count().catch(() => 0),
-    prisma.leadApplication.count({ where: { status: "PENDING" } }).catch(() => 0),
+    prisma.registration.count({ where: { status: "PENDING" } }).catch(() => 0),
     prisma.eventLog.count().catch(() => 0),
+    prisma.registration.findMany({
+      where: { status: "PENDING" },
+      orderBy: { createdAt: "desc" },
+      take: 8,
+      select: { id: true, name: true, createdAt: true, course: { select: { title: true } } },
+    }).catch(() => []),
   ]);
 
+  const inboxItems: InboxItem[] = recentPendingRegistrations.map((r) => ({
+    id: r.id,
+    name: r.name,
+    subtitle: r.course?.title ?? "Kurs",
+    createdAt: r.createdAt,
+  }));
+
   const stats = [
-    { 
-      name: "Onay Bekleyen Başvurular", 
-      count: pendingLeadsCount, 
-      icon: Inbox, 
-      color: pendingLeadsCount > 0 ? "bg-amber-600 animate-pulse" : "bg-emerald-600", 
-      href: "/admin/applications",
+    {
+      name: "Yeni Kurs Kayıtları (Anmeldungen)",
+      count: pendingRegistrationsCount,
+      icon: ClipboardCheck,
+      color: pendingRegistrationsCount > 0 ? "bg-amber-600 animate-pulse" : "bg-emerald-600",
+      href: "/admin/registrations",
       highlight: true
     },
     { name: "Pazarlama Sinyalleri", count: totalEventsCount, icon: TrendingUp, color: "bg-teal-600", href: "/admin/marketing" },
@@ -46,7 +61,9 @@ export default async function AdminDashboard() {
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-gray-900">Hoş Geldiniz, Admin</h1>
       <p className="text-gray-500">Sitenizin genel durumu ve içerik istatistikleri aşağıda yer almaktadır.</p>
-      
+
+      <QuickApprovalInbox items={inboxItems} />
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {stats.map((stat) => (
           <Link href={stat.href} key={stat.name} className="block group">

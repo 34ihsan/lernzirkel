@@ -1,10 +1,11 @@
 import { modelConfig } from "@/lib/admin-config";
-import { saveModelRecord } from "@/actions/admin";
+import { saveModelRecord, getContentRevisions } from "@/actions/admin";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import EditFormWithPreview from "@/components/admin/EditFormWithPreview";
+import RevisionHistory from "@/components/admin/RevisionHistory";
 
 export default async function EditModelPage({ params }: { params: Promise<{ model: string; id: string }> }) {
   const { model, id } = await params;
@@ -23,6 +24,8 @@ export default async function EditModelPage({ params }: { params: Promise<{ mode
   } catch(e) {}
 
   if (!record) return notFound();
+
+  const revisions = await getContentRevisions(model, id);
 
   // Convert translations array to dictionary map for the form
   if (record.translations && Array.isArray(record.translations)) {
@@ -90,10 +93,12 @@ export default async function EditModelPage({ params }: { params: Promise<{ mode
         <h1 className="text-2xl font-bold text-gray-900">{config.label} Düzenle</h1>
       </div>
 
-      <EditFormWithPreview 
-        model={model} 
-        fields={config.fields} 
-        initialData={record} 
+      <RevisionHistory revisions={revisions} />
+
+      <EditFormWithPreview
+        model={model}
+        fields={config.fields}
+        initialData={record}
         action={handleSave}
         submitLabel="Güncelle"
       />
