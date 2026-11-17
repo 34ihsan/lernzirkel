@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Search, ExternalLink, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import RichTextEditor from '@/components/admin/RichTextEditor';
 
 export default function AdminArticlesPage() {
   const [articles, setArticles] = useState([]);
@@ -107,7 +108,12 @@ export default function AdminArticlesPage() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    if (!content || content.trim() === '' || content.trim() === '<p></p>') {
+      alert('Lütfen makale içeriğini girin.');
+      return;
+    }
+
     const data = {
       title, slug, excerpt, content, category, coverImage, author, isPublished
     };
@@ -237,9 +243,13 @@ export default function AdminArticlesPage() {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Inhalt (HTML / Rich Text)</label>
-                  <p className="text-xs text-gray-500 mb-2">Hier können Sie den kompletten Text Ihres Artikels eintragen. HTML-Tags wie &lt;b&gt; oder &lt;br/&gt; können verwendet werden.</p>
-                  <textarea required value={content} onChange={(e) => setContent(e.target.value)} rows={15} className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 font-mono text-sm" />
+                  <RichTextEditor
+                    label="Inhalt"
+                    value={content}
+                    onChange={setContent}
+                    rows={15}
+                  />
+                  <p className="text-xs text-gray-500 mt-2">Araç çubuğundaki butonları kullanarak biçimlendirin (başlık, kalın, liste, alıntı vb.) — paragraflar otomatik olarak doğru şekilde kaydedilir.</p>
                 </div>
               </div>
               

@@ -32,6 +32,7 @@ export default async function AnnouncementsPage() {
             <p className="mt-1 text-sm text-gray-500">Sağ üstteki butona tıklayarak ilk duyurunuzu oluşturabilirsiniz.</p>
           </div>
         ) : (
+          <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
@@ -98,6 +99,7 @@ export default async function AnnouncementsPage() {
               })}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>

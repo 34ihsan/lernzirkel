@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
 import Link from "next/link";
@@ -6,7 +6,7 @@ import { headers } from "next/headers";
 import {
   LayoutDashboard, PaintBucket, FileText, Settings, Users,
   Image as ImageIcon, Newspaper, Megaphone, TrendingUp, Bot, Activity,
-  ClipboardCheck, LogOut
+  ClipboardCheck, LogOut, ClipboardList, QrCode, ShieldAlert
 } from "lucide-react";
 import { getAdminSession } from "@/lib/auth-server";
 import { logoutAdmin } from "@/actions/auth";
@@ -17,6 +17,11 @@ const inter = Inter({ subsets: ["latin"], variable: '--font-sans' });
 export const metadata: Metadata = {
   title: "Admin Dashboard | Lernzirkel CMS",
   description: "Lernzirkel CMS Admin Dashboard",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default async function AdminLayout({
@@ -121,6 +126,12 @@ export default async function AdminLayout({
                     <span>Kayıtlar & Onay</span>
                   </Link>
                 </li>
+                <li>
+                  <Link href="/admin/surveys" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium text-amber-300 hover:text-amber-200">
+                    <ClipboardList size={18} />
+                    <span>Kurs Anketleri</span>
+                  </Link>
+                </li>
 
                 <li className="pt-4 pb-2 px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Tasarım & Ayarlar</li>
                 <li>
@@ -144,6 +155,12 @@ export default async function AdminLayout({
                   </Link>
                 </li>
                 <li>
+                  <Link href="/admin/campaigns" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
+                    <QrCode size={18} />
+                    <span>Kampanya Linkleri & QR</span>
+                  </Link>
+                </li>
+                <li>
                   <Link href="/admin/ai-settings" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
                     <Bot size={18} />
                     <span>Yapay Zeka (AI)</span>
@@ -153,6 +170,12 @@ export default async function AdminLayout({
                   <Link href="/admin/system-health" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
                     <Activity size={18} />
                     <span>Sistem Sağlığı & DevOps</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/admin/security" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
+                    <ShieldAlert size={18} />
+                    <span>Güvenlik</span>
                   </Link>
                 </li>
               </ul>

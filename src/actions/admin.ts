@@ -291,6 +291,7 @@ export interface AnnouncementData {
   icon?: string;
   animation?: string;
   animationSpeed?: string;
+  showCountdown?: boolean;
   duration?: number;
   isInline?: boolean;
   linkUrl?: string | null;
@@ -318,6 +319,7 @@ function parseAnnouncementData(data: AnnouncementData) {
     icon: data.icon ?? "none",
     animation: data.animation ?? "none",
     animationSpeed: data.animationSpeed ?? "normal",
+    showCountdown: data.showCountdown ?? false,
     duration: data.duration ?? 7,
     isInline: data.isInline ?? true,
     linkUrl: data.linkUrl || null,

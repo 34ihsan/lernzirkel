@@ -26,6 +26,7 @@ interface AnnouncementFormData {
   icon: string;
   animation: string;
   animationSpeed: string;
+  showCountdown: boolean;
   duration: number;
   isInline: boolean;
   linkUrl: string | null;
@@ -49,13 +50,13 @@ export default function AnnouncementForm({
     title: initialData?.title || "",
     message: initialData?.message || "",
     isActive: initialData?.isActive ?? true,
-    isCloseable: true, // Always true as requested
+    isCloseable: initialData?.isCloseable ?? true,
     startDate: initialData?.startDate || null,
     endDate: initialData?.endDate || null,
-    targetScope: "ALL", // Always all pages
-    targetPageSlugs: [],
+    targetScope: initialData?.targetScope || "ALL",
+    targetPageSlugs: initialData?.targetPageSlugs || [],
     type: initialData?.type === "popup" ? "popup" : "sticky-bar",
-    position: "top", // Always top if sticky-bar
+    position: initialData?.position || "top",
     backgroundColor: initialData?.backgroundColor || "#1a6d92",
     textColor: initialData?.textColor || "#ffffff",
     borderColor: initialData?.borderColor || "transparent",
@@ -63,10 +64,11 @@ export default function AnnouncementForm({
     fontWeight: initialData?.fontWeight || "normal",
     padding: initialData?.padding || "12px 16px",
     icon: initialData?.icon || "megaphone",
-    animation: "none",
-    animationSpeed: "normal",
+    animation: initialData?.animation || "none",
+    animationSpeed: initialData?.animationSpeed || "normal",
+    showCountdown: initialData?.showCountdown ?? false,
     duration: initialData?.duration ?? 3, // Repurposed for popup delay
-    isInline: true,
+    isInline: initialData?.isInline ?? true,
     linkUrl: initialData?.linkUrl || "",
     linkText: initialData?.linkText || "Tıklayın",
   });
@@ -234,6 +236,19 @@ export default function AnnouncementForm({
               </div>
             </div>
 
+            <label className={`flex items-center gap-2 text-sm ${!formData.endDate ? 'opacity-50' : ''}`}>
+              <input
+                type="checkbox"
+                checked={formData.showCountdown}
+                disabled={!formData.endDate}
+                onChange={(e) => setFormData({ ...formData, showCountdown: e.target.checked })}
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-gray-700">
+                Bitiş tarihine kadar geri sayım göster (Örn: &ldquo;2g 14s 36dk kaldı&rdquo;) — Bitiş Tarihi gerektirir
+              </span>
+            </label>
+
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Arkaplan Rengi</label>
@@ -294,6 +309,7 @@ export default function AnnouncementForm({
                     <option value="marquee">Kayan Yazı</option>
                     <option value="shimmer">Sihirli Parıltı</option>
                     <option value="pulse">Dikkat Çekici (Pulse)</option>
+                    <option value="bounce">Zıplayan İkon (Bounce)</option>
                   </select>
                 </div>
                 <div>
@@ -301,7 +317,7 @@ export default function AnnouncementForm({
                   <select
                     value={formData.animationSpeed || "normal"}
                     onChange={(e) => setFormData({ ...formData, animationSpeed: e.target.value })}
-                    disabled={formData.animation === "none"}
+                    disabled={formData.animation === "none" || formData.animation === "bounce"}
                     className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50"
                   >
                     <option value="slow">Yavaş</option>

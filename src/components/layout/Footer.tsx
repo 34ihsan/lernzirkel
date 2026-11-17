@@ -55,7 +55,7 @@ export default async function Footer({
   const copyrightText = (footer.copyright || defaultFooterConfig.copyright || '').replace('{year}', currentYear.toString());
 
   return (
-    <footer 
+    <footer
       className="text-sm pt-16 pb-8"
       style={{ 
         backgroundColor: footer.design?.backgroundColor || '#111111',
@@ -335,19 +335,19 @@ export default async function Footer({
                 return effectiveDepartments.map((dept, idx) => (
                   <div key={dept.id || idx} className="bg-gray-800/50 p-4 rounded-lg border border-gray-700/50 flex flex-col justify-between">
                     <div>
-                      <h5 className="font-bold text-white mb-2.5 border-b border-gray-700/70 pb-2 flex items-center justify-between text-sm">
-                        <span>{dept.name}</span>
+                      <h5 className="font-bold text-white mb-2.5 border-b border-gray-700/70 pb-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5 text-sm">
+                        <span className="min-w-0 break-words">{dept.name}</span>
                         {dept.hours && dept.hours.length > 0 && (
-                          <LiveStatusBadge hours={dept.hours} />
+                          <span className="shrink-0"><LiveStatusBadge hours={dept.hours} /></span>
                         )}
                       </h5>
                       <ul className="space-y-1.5 text-gray-300 text-xs sm:text-sm">
                         {dept.hours?.map((h, hIdx) => {
                           if (h.isClosed || (!h.openTime && !h.closeTime)) return null;
                           return (
-                            <li key={hIdx} className="flex justify-between items-center text-xs">
-                              <span className="font-medium text-gray-400">{h.day}:</span> 
-                              <span className="font-semibold text-gray-200">{h.openTime} - {h.closeTime} Uhr</span>
+                            <li key={hIdx} className="flex flex-wrap justify-between items-center gap-x-2 text-xs">
+                              <span className="font-medium text-gray-400 shrink-0">{h.day}:</span>
+                              <span className="font-semibold text-gray-200 shrink-0">{h.openTime} - {h.closeTime} Uhr</span>
                             </li>
                           );
                         })}
@@ -355,7 +355,7 @@ export default async function Footer({
                     </div>
 
                     {dept.note && (
-                      <div className="mt-3 pt-2 border-t border-gray-700/50 text-[11px] text-accent font-medium italic">
+                      <div className="mt-3 pt-2 border-t border-gray-700/50 text-xs text-white  font-medium bold">
                         {dept.note}
                       </div>
                     )}

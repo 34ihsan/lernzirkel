@@ -51,6 +51,7 @@ export interface CourseItem {
   badge?: string;
   badgeColor?: string;
   isPopular?: boolean;
+  capacityBadge?: { text: string; colorClass: string } | null;
 }
 
 interface Props {
@@ -67,6 +68,19 @@ export default function AdvancedCourseExplorer({ initialCourses = [] }: Props) {
       if (costsLower.includes('bamf')) fundingType = 'bamf';
       else if (costsLower.includes('but') || costsLower.includes('kostenlos')) fundingType = 'but';
       else if (costsLower.includes('esf')) fundingType = 'esf';
+
+      let capacityBadge: CourseItem['capacityBadge'] = null;
+      if (db.capacity != null) {
+        const taken = db._count?.registrations ?? 0;
+        const remaining = Math.max(db.capacity - taken, 0);
+        if (remaining <= 0) {
+          capacityBadge = db.allowWaitlist
+            ? { text: 'Warteliste', colorClass: 'bg-amber-100 text-amber-800 border-amber-200' }
+            : { text: 'Ausgebucht', colorClass: 'bg-gray-200 text-gray-600 border-gray-300' };
+        } else if (remaining <= 5) {
+          capacityBadge = { text: `Nur noch ${remaining} Plätze`, colorClass: 'bg-orange-100 text-orange-800 border-orange-200' };
+        }
+      }
 
       return {
         id: db.id,
@@ -93,7 +107,8 @@ export default function AdvancedCourseExplorer({ initialCourses = [] }: Props) {
             : undefined,
         badge: 'Aktuelles Angebot',
         badgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
-        isPopular: false
+        isPopular: false,
+        capacityBadge
       };
     });
   }, [initialCourses]);
@@ -483,6 +498,11 @@ export default function AdvancedCourseExplorer({ initialCourses = [] }: Props) {
                         {course.badge}
                       </span>
                     )}
+                    {course.capacityBadge && (
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border animate-pulse ${course.capacityBadge.colorClass}`}>
+                        {course.capacityBadge.text}
+                      </span>
+                    )}
                   </div>
 
                   {/* Title */}
@@ -576,6 +596,11 @@ export default function AdvancedCourseExplorer({ initialCourses = [] }: Props) {
                   {course.badge && (
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${course.badgeColor || 'bg-gray-100 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700'}`}>
                       {course.badge}
+                    </span>
+                  )}
+                  {course.capacityBadge && (
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border animate-pulse ${course.capacityBadge.colorClass}`}>
+                      {course.capacityBadge.text}
                     </span>
                   )}
                   {course.level && course.level.map((lvl, idx) => (

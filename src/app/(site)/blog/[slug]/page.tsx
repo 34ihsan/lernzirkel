@@ -84,7 +84,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
           
           <div className="absolute inset-0 flex items-center">
             <div className="container mx-auto px-4 max-w-4xl text-center">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-white dark:bg-gray-900/20 backdrop-blur text-white text-sm font-bold uppercase tracking-wider mb-6">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-white/20 backdrop-blur text-white text-sm font-bold uppercase tracking-wider mb-6 border border-white/30">
                 {article.category}
               </span>
               <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-6 max-w-3xl mx-auto drop-shadow-lg">
@@ -114,6 +114,13 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
               <ArrowLeft size={16} className="mr-2" /> Zurück zur Übersicht
             </Link>
             
+            {article.author && (
+              <div className="flex items-center text-sm font-semibold text-gray-500 dark:text-gray-400 mb-6">
+                <User size={16} className="mr-2 opacity-80" />
+                Von {article.author}
+              </div>
+            )}
+
             {/* Lead/Excerpt */}
             {article.excerpt && (
               <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed mb-10 font-medium">

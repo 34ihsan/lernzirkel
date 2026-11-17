@@ -23,6 +23,8 @@ export type AnnouncementType = {
   icon: string;
   animation: string;
   animationSpeed?: string;
+  showCountdown?: boolean;
+  endDate?: string | Date | null;
   duration?: number;
   isInline?: boolean;
   linkUrl?: string | null;
@@ -31,10 +33,45 @@ export type AnnouncementType = {
   updatedAt?: string | Date;
 };
 
-export default function AnnouncementBanner({ 
-  announcements 
-}: { 
-  announcements: AnnouncementType[] 
+function CountdownBadge({ endDate }: { endDate: string }) {
+  const [timeLeft, setTimeLeft] = useState<string | null>(null);
+
+  useEffect(() => {
+    const target = new Date(endDate).getTime();
+
+    const tick = () => {
+      const diff = target - Date.now();
+      if (diff <= 0) {
+        setTimeLeft(null);
+        return;
+      }
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const minutes = Math.floor((diff % 3600000) / 60000);
+      const seconds = Math.floor((diff % 60000) / 1000);
+      if (days > 0) setTimeLeft(`${days}g ${hours}s ${minutes}dk kaldı`);
+      else if (hours > 0) setTimeLeft(`${hours}s ${minutes}dk kaldı`);
+      else setTimeLeft(`${minutes}dk ${seconds}sn kaldı`);
+    };
+
+    tick();
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, [endDate]);
+
+  if (!timeLeft) return null;
+
+  return (
+    <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-black/15 tabular-nums whitespace-nowrap">
+      ⏳ {timeLeft}
+    </span>
+  );
+}
+
+export default function AnnouncementBanner({
+  announcements
+}: {
+  announcements: AnnouncementType[]
 }) {
   const pathname = usePathname();
   const { language } = useLanguage();
@@ -163,11 +200,71 @@ export default function AnnouncementBanner({
   // Hydration hatasını önlemek için mount olana kadar render etmiyoruz
   if (!mounted || activeAnnouncements.length === 0) return null;
 
-  const renderIcon = (icon: string, size = 18) => {
-    if (icon === 'info') return <Info size={size} className={size === 18 ? "shrink-0 mt-0.5" : ""} />;
-    if (icon === 'warning') return <AlertTriangle size={size} className={size === 18 ? "shrink-0 mt-0.5" : ""} />;
-    if (icon === 'megaphone') return <Megaphone size={size} className={size === 18 ? "shrink-0 mt-0.5" : ""} />;
-    return null;
+  const renderIcon = (icon: string, size = 18, bounce = false) => {
+    const iconEl =
+      icon === 'info' ? <Info size={size} className={size === 18 ? "shrink-0 mt-0.5" : ""} /> :
+      icon === 'warning' ? <AlertTriangle size={size} className={size === 18 ? "shrink-0 mt-0.5" : ""} /> :
+      icon === 'megaphone' ? <Megaphone size={size} className={size === 18 ? "shrink-0 mt-0.5" : ""} /> :
+      null;
+    if (!iconEl) return null;
+    return bounce ? <span className="inline-flex animate-bounce">{iconEl}</span> : iconEl;
+  };
+
+  const renderCountdown = (ann: AnnouncementType) => {
+    if (!ann.showCountdown || !ann.endDate) return null;
+    return <CountdownBadge endDate={String(ann.endDate)} />;
+  };
+
+  // Kayan yazı (marquee) ile kapatma/CTA butonlarını ayrı tutuyoruz:
+  // böylece butonlar animasyonla birlikte ekrandan kayıp gitmiyor ve
+  // mobilde dar ekranlarda metin kırpılmak yerine satır kırabiliyor.
+  const getTrackStyle = (ann: AnnouncementType) => {
+    if (ann.animation === 'marquee') {
+      return { animationDuration: getCommonStyle(ann).animationDuration };
+    }
+    return {};
+  };
+
+  const getTrackClass = (ann: AnnouncementType) => {
+    if (ann.animation === 'marquee') {
+      return 'flex items-center gap-2 whitespace-nowrap animate-marquee group-hover:[animation-play-state:paused]';
+    }
+    if (ann.isInline !== false) {
+      return 'flex items-center gap-2 flex-wrap sm:flex-nowrap justify-center sm:whitespace-nowrap text-center sm:text-left';
+    }
+    return 'flex flex-col sm:flex-row items-center gap-2 justify-start sm:whitespace-normal text-center sm:text-left';
+  };
+
+  // Marquee animasyonunda buton metni uzun olduğunda mobilde ekranın büyük
+  // kısmını kaplamaması için CTA/kapat butonlarını ayrı bir satıra alıyoruz;
+  // ticker mobilde tam genişliği kullanıyor (daha rahat okunur, "çok hızlı"
+  // hissi azalır). Yalnızca sm: ve üstünde butonu sağa sabitleyip (absolute)
+  // ticker ile aynı satıra alıyoruz, çünkü orada yeterince yer var.
+  const getRowClass = (ann: AnnouncementType) =>
+    ann.animation === 'marquee'
+      ? 'flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 sm:relative'
+      : 'flex items-center justify-between gap-2';
+
+  const getTickerWrapClass = (ann: AnnouncementType) =>
+    ann.animation === 'marquee'
+      ? 'w-full overflow-hidden sm:pr-28'
+      : 'flex-1 min-w-0 overflow-hidden';
+
+  const renderStickyControls = (ann: AnnouncementType) => {
+    const isMarquee = ann.animation === 'marquee';
+    return (
+      <div
+        className={`flex items-center justify-center gap-2 ${isMarquee ? 'sm:absolute sm:right-0 sm:top-1/2 sm:-translate-y-1/2 sm:pl-3' : 'shrink-0'}`}
+        style={isMarquee ? { background: `linear-gradient(to right, transparent, ${ann.backgroundColor} 20%, ${ann.backgroundColor})` } : undefined}
+      >
+        {renderLink(ann)}
+        {ann.isCloseable && (
+          <button onClick={() => handleDismiss(ann.id)} className="p-1 opacity-70 hover:opacity-100 transition-opacity z-20 shrink-0" aria-label="Kapat">
+            <X size={16} />
+          </button>
+        )}
+      </div>
+    );
   };
 
   const renderLink = (ann: AnnouncementType) => {
@@ -239,13 +336,14 @@ export default function AnnouncementBanner({
           >
             {currentBanner.icon !== 'none' && (
               <div className="flex items-center shrink-0">
-                {renderIcon(currentBanner.icon)}
+                {renderIcon(currentBanner.icon, 18, currentBanner.animation === 'bounce')}
               </div>
             )}
-            <div 
-              dangerouslySetInnerHTML={{ __html: getTranslatedText(currentBanner, 'message') || "" }} 
+            <div
+              dangerouslySetInnerHTML={{ __html: getTranslatedText(currentBanner, 'message') || "" }}
               className={`${currentBanner.isInline !== false ? '[&>*]:inline [&>*]:m-0 shrink-0' : 'flex-1 max-w-4xl'}`}
             />
+            {renderCountdown(currentBanner)}
             {renderLink(currentBanner)}
             {currentBanner.isCloseable && (
               <button 
@@ -269,23 +367,18 @@ export default function AnnouncementBanner({
               ...getCommonStyle(currentStickyTop),
               borderBottom: /^#[0-9A-Fa-f]{6}$/.test(currentStickyTop.borderColor) ? `1px solid ${currentStickyTop.borderColor}` : 'none',
             }}
-            className={`w-full flex justify-center items-center overflow-hidden relative group animate-in fade-in slide-in-from-top-4 duration-500 ${currentStickyTop.animation === 'pulse' ? 'animate-pulse' : ''} ${currentStickyTop.animation === 'shimmer' ? 'animate-shimmer' : ''}`}
+            className={`w-full flex items-center overflow-hidden relative group animate-in fade-in slide-in-from-top-4 duration-500 ${currentStickyTop.animation === 'pulse' ? 'animate-pulse' : ''} ${currentStickyTop.animation === 'shimmer' ? 'animate-shimmer' : ''}`}
           >
-            <div 
-              style={currentStickyTop.animation === 'marquee' ? { animationDuration: getCommonStyle(currentStickyTop).animationDuration } : {}}
-              className={`container mx-auto flex ${currentStickyTop.isInline !== false ? 'flex-row items-center justify-center whitespace-nowrap' : 'flex-col md:flex-row items-center justify-between md:text-left text-center'} gap-3 px-4 py-1 ${currentStickyTop.animation === 'marquee' ? 'animate-marquee group-hover:[animation-play-state:paused]' : ''}`}
-            >
-              <div className={`flex ${currentStickyTop.isInline !== false ? 'flex-row items-center justify-center shrink-0' : 'flex-col md:flex-row items-center justify-start overflow-hidden w-full max-w-4xl'} space-x-3`}>
-                {currentStickyTop.icon !== 'none' && <div className="shrink-0">{renderIcon(currentStickyTop.icon)}</div>}
-                <div dangerouslySetInnerHTML={{ __html: getTranslatedText(currentStickyTop, 'message') || "" }} className={`${currentStickyTop.isInline !== false ? '[&>*]:inline [&>*]:m-0 shrink-0' : 'md:whitespace-normal'}`} />
-              </div>
-              <div className={`flex items-center shrink-0 ${currentStickyTop.isInline !== false ? 'ml-0' : 'mt-2 md:mt-0'}`}>
-                {renderLink(currentStickyTop)}
-                {currentStickyTop.isCloseable && (
-                  <button onClick={() => handleDismiss(currentStickyTop.id)} className="p-1 ml-4 opacity-70 hover:opacity-100 transition-opacity z-20 shrink-0" aria-label="Kapat">
-                    <X size={16} />
-                  </button>
-                )}
+            <div className="container mx-auto px-4 py-1.5 w-full">
+              <div className={getRowClass(currentStickyTop)}>
+                <div className={getTickerWrapClass(currentStickyTop)}>
+                  <div style={getTrackStyle(currentStickyTop)} className={getTrackClass(currentStickyTop)}>
+                    {currentStickyTop.icon !== 'none' && <div className="shrink-0">{renderIcon(currentStickyTop.icon, 18, currentStickyTop.animation === 'bounce')}</div>}
+                    <div dangerouslySetInnerHTML={{ __html: getTranslatedText(currentStickyTop, 'message') || "" }} className="[&>*]:inline [&>*]:m-0" />
+                    {renderCountdown(currentStickyTop)}
+                  </div>
+                </div>
+                {renderStickyControls(currentStickyTop)}
               </div>
             </div>
           </div>
@@ -301,23 +394,18 @@ export default function AnnouncementBanner({
               ...getCommonStyle(currentStickyBottom),
               borderTop: /^#[0-9A-Fa-f]{6}$/.test(currentStickyBottom.borderColor) ? `1px solid ${currentStickyBottom.borderColor}` : 'none',
             }}
-            className={`w-full flex justify-center items-center overflow-hidden relative group animate-in fade-in slide-in-from-bottom-4 duration-500 ${currentStickyBottom.animation === 'pulse' ? 'animate-pulse' : ''} ${currentStickyBottom.animation === 'shimmer' ? 'animate-shimmer' : ''}`}
+            className={`w-full flex items-center overflow-hidden relative group animate-in fade-in slide-in-from-bottom-4 duration-500 ${currentStickyBottom.animation === 'pulse' ? 'animate-pulse' : ''} ${currentStickyBottom.animation === 'shimmer' ? 'animate-shimmer' : ''}`}
           >
-            <div 
-              style={currentStickyBottom.animation === 'marquee' ? { animationDuration: getCommonStyle(currentStickyBottom).animationDuration } : {}}
-              className={`container mx-auto flex ${currentStickyBottom.isInline !== false ? 'flex-row items-center justify-center whitespace-nowrap' : 'flex-col md:flex-row items-center justify-between md:text-left text-center'} gap-3 px-4 py-1 ${currentStickyBottom.animation === 'marquee' ? 'animate-marquee group-hover:[animation-play-state:paused]' : ''}`}
-            >
-              <div className={`flex ${currentStickyBottom.isInline !== false ? 'flex-row items-center justify-center shrink-0' : 'flex-col md:flex-row items-center justify-start overflow-hidden w-full max-w-4xl'} space-x-3`}>
-                {currentStickyBottom.icon !== 'none' && <div className="shrink-0">{renderIcon(currentStickyBottom.icon)}</div>}
-                <div dangerouslySetInnerHTML={{ __html: getTranslatedText(currentStickyBottom, 'message') || "" }} className={`${currentStickyBottom.isInline !== false ? '[&>*]:inline [&>*]:m-0 shrink-0' : 'md:whitespace-normal'}`} />
-              </div>
-              <div className={`flex items-center shrink-0 ${currentStickyBottom.isInline !== false ? 'ml-0' : 'mt-2 md:mt-0'}`}>
-                {renderLink(currentStickyBottom)}
-                {currentStickyBottom.isCloseable && (
-                  <button onClick={() => handleDismiss(currentStickyBottom.id)} className="p-1 ml-4 opacity-70 hover:opacity-100 transition-opacity z-20 shrink-0" aria-label="Kapat">
-                    <X size={16} />
-                  </button>
-                )}
+            <div className="container mx-auto px-4 py-1.5 w-full">
+              <div className={getRowClass(currentStickyBottom)}>
+                <div className={getTickerWrapClass(currentStickyBottom)}>
+                  <div style={getTrackStyle(currentStickyBottom)} className={getTrackClass(currentStickyBottom)}>
+                    {currentStickyBottom.icon !== 'none' && <div className="shrink-0">{renderIcon(currentStickyBottom.icon, 18, currentStickyBottom.animation === 'bounce')}</div>}
+                    <div dangerouslySetInnerHTML={{ __html: getTranslatedText(currentStickyBottom, 'message') || "" }} className="[&>*]:inline [&>*]:m-0" />
+                    {renderCountdown(currentStickyBottom)}
+                  </div>
+                </div>
+                {renderStickyControls(currentStickyBottom)}
               </div>
             </div>
           </div>
@@ -340,11 +428,12 @@ export default function AnnouncementBanner({
             className={`flex flex-col space-y-2 w-full ${ann.animation === 'marquee' ? 'animate-marquee group-hover:[animation-play-state:paused]' : ''}`}
           >
             <div className="flex flex-row items-start space-x-3 w-full">
-              {ann.icon !== 'none' && <div className="shrink-0 mt-0.5">{renderIcon(ann.icon)}</div>}
+              {ann.icon !== 'none' && <div className="shrink-0 mt-0.5">{renderIcon(ann.icon, 18, ann.animation === 'bounce')}</div>}
               <div dangerouslySetInnerHTML={{ __html: getTranslatedText(ann, 'message') || "" }} className="flex-1 text-sm leading-relaxed [&>p]:inline [&>p]:m-0" />
             </div>
-            {ann.linkUrl && (
-              <div className="pl-8 pb-1">
+            {(ann.linkUrl || (ann.showCountdown && ann.endDate)) && (
+              <div className="pl-8 pb-1 flex items-center gap-2">
+                {renderCountdown(ann)}
                 {renderLink(ann)}
               </div>
             )}
@@ -391,16 +480,18 @@ export default function AnnouncementBanner({
               >
                 {ann.icon !== 'none' && (
                   <div className="p-3 bg-black/5 rounded-full shrink-0">
-                    {renderIcon(ann.icon, 32)}
+                    {renderIcon(ann.icon, 32, ann.animation === 'bounce')}
                   </div>
                 )}
-                
+
                 {ann.title && (
                   <h3 className="text-xl font-bold">{getTranslatedText(ann, 'title')}</h3>
                 )}
-                
+
                 <div dangerouslySetInnerHTML={{ __html: getTranslatedText(ann, 'message') || "" }} className="text-base leading-relaxed [&>p]:inline [&>p]:m-0" />
-                
+
+                {renderCountdown(ann)}
+
                 {ann.linkUrl && (
                   <div className="pt-2">
                     {renderLink(ann)}

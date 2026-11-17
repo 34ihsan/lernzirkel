@@ -106,8 +106,8 @@ export const THEME_PRESETS: ThemePreset[] = [
       border: '#e2e8f0'
     },
     typography: {
-      bodyFont: 'Inter',
-      headingFont: 'Outfit',
+      bodyFont: 'Roboto',
+      headingFont: 'Poppins',
       baseSize: 16,
       headingWeight: 'bold',
       letterSpacing: 'normal',

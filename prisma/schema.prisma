@@ -62,6 +62,8 @@ model Course {
   updatedAt      DateTime       @updatedAt
   registrations  Registration[]
   translations   CourseTranslation[]
+  surveyInvites    SurveyInvite[]
+  surveyResponses  SurveyResponse[]
 
   @@index([isActive, category])
 }
@@ -142,6 +144,10 @@ model TeamMember {
   permissions  Json?       // { pages: bool, news: bool, courses: bool, team: bool, gallery: bool, projects: bool, design: bool }
   projects     Project[]
   assignedRegistrations Registration[] @relation("RegistrationAssignee")
+  // Anket sonuçlarını kendi adına (anonim/aggregate) görmesi için eğitmene verilen
+  // ayrı, parola gerektirmeyen "magic link" token'ı — admin paneli oturumuyla ilgisi yok.
+  teacherReportToken      String?   @unique
+  teacherReportTokenAt    DateTime?
 }
 
 model GalleryImage {
@@ -303,6 +309,7 @@ model Announcement {
   icon            String    @default("none")
   animation       String    @default("none")
   animationSpeed  String    @default("normal")
+  showCountdown   Boolean   @default(false)
   duration        Int       @default(7)
   isInline        Boolean   @default(true)
   linkUrl         String?
@@ -327,14 +334,109 @@ model Registration {
   language        String    @default("de")
   status          String    @default("PENDING") // PENDING, APPROVED, CONTACTED, REJECTED
   isWaitlisted    Boolean   @default(false)
+  source          String?   // Kampanya linki slug'ı (bkz. CampaignLink) — hangi afiş/kanaldan geldiği
   assignedToId    String?
   assignedTo      TeamMember? @relation("RegistrationAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
   lastContactedAt DateTime?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+  surveyInvite    SurveyInvite?
 
   @@index([courseId, status])
   @@index([assignedToId])
+  @@index([source])
+}
+
+// Saha/afiş/sosyal medya kampanyaları için izlenebilir kısa linkler. /go/[slug] üzerinden
+// hedef URL'e yönlendirir, tıklamayı sayar ve bir çerez bırakarak kayıt formuna kadar
+// kaynağı taşır (Registration.source). QR kodu admin panelinde bu linkten üretilir.
+model CampaignLink {
+  id             String    @id @default(uuid())
+  slug           String    @unique
+  label          String    // Admin için okunabilir isim, örn. "Okul Afişi - Ekim 2026"
+  targetUrl      String    // Yönlendirilecek hedef, örn. /kurse/xxxx veya /kontakt
+  platform       String    @default("other") // instagram, facebook, whatsapp, tiktok, other
+  description    String?   // "Link in Bio" sayfasında kart altında gösterilen kısa açıklama
+  showOnBioPage  Boolean   @default(false)
+  clicks         Int       @default(0)
+  isActive       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([isActive])
+}
+
+// -----------------------------------------
+// KURS SONU ANKETİ (ANONİM MEMNUNİYET ANKETİ)
+// -----------------------------------------
+
+// Admin tarafından düzenlenebilen soru bankası. "section" anket formundaki iki bölümü
+// belirler: kursiyerin eğitmeni mi yoksa kursun kendisini mi değerlendirdiği.
+model SurveyQuestion {
+  id           String   @id @default(uuid())
+  section      String   // "LEHRER" | "KURS"
+  type         String   // "RATING_5" | "NPS_0_10" | "TEXT" | "YES_NO"
+  prompt       String   // varsayılan dil (de)
+  translations Json?    // { tr: "...", en: "...", ar: "..." }
+  isRequired   Boolean  @default(true)
+  order        Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([section, order])
+}
+
+// Her kursiyer-kurs çifti için tek kullanımlık davet/token. Kimin doldurup doldurmadığı
+// (status/completedAt) burada görünür kalır — hatırlatma göndermek ve yanıt oranını
+// hesaplamak için gerekli. AMA bu tablo SurveyResponse ile ASLA ilişkilendirilmez: bir
+// kursiyerin anketi tamamladığını görmek, o kursiyerin hangi cevapları verdiğini göstermez.
+model SurveyInvite {
+  id              String       @id @default(uuid())
+  token           String       @unique
+  courseId        String
+  course          Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  registrationId  String       @unique
+  registration    Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  teacherSnapshot String?
+  language        String       @default("de")
+  status          String       @default("PENDING") // PENDING, SENT, FAILED, OPENED, COMPLETED, EXPIRED
+  sentAt          DateTime?
+  openedAt        DateTime?
+  completedAt     DateTime?
+  remindersSent   Int          @default(0)
+  lastReminderAt  DateTime?
+  expiresAt       DateTime
+  createdAt       DateTime     @default(now())
+
+  // Resend webhook ile gerçek teslimat takibi (Resend'in "gönderildi" demesi ≠ posta
+  // kutusuna ulaştı). resendEmailId her (yeniden) gönderimde güncellenir — sadece EN SON
+  // e-postanın teslimat durumunu tutarız, geçmiş gönderim denemelerini değil.
+  resendEmailId    String?
+  deliveryStatus   String?   // DELIVERED, BOUNCED, COMPLAINED, DELAYED
+  deliveryStatusAt DateTime?
+
+  @@index([courseId, status])
+  @@index([resendEmailId])
+}
+
+// Anonim anket cevabı. Kasıtlı olarak registrationId/email/IP YOK — hiçbir alan bir
+// kursiyere geri izlenemez. Soru metni de snapshot'lanır ki soru bankası sonradan
+// değişse/silinse bile geçmiş cevaplar okunabilir kalsın.
+model SurveyResponse {
+  id                  String   @id @default(uuid())
+  courseId            String
+  course              Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseTitleSnapshot String
+  categorySnapshot    String?
+  teacherSnapshot     String?
+  language            String
+  answers             Json     // [{ questionId, section, type, prompt, value }]
+  flagged             Boolean  @default(false) // açık uçlu cevapta uyarı kelimesi tespit edildi (admin triage)
+  submittedAt         DateTime @default(now())
+
+  @@index([courseId])
+  @@index([submittedAt])
 }
 
 model EventLog {

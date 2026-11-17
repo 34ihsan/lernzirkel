@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { eventName, url, metadata, locale } = body;
+    const { eventName, url, metadata, locale, eventId } = body;
 
     if (!eventName) {
       return NextResponse.json({ error: "eventName is required" }, { status: 400 });
@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
           {
             event_name: eventName,
             event_time: Math.floor(Date.now() / 1000),
+            event_id: eventId ? String(eventId).slice(0, 100) : undefined,
             action_source: "website",
             event_source_url: url || "https://lernzirkel-lu.de",
             custom_data: metadata || {},

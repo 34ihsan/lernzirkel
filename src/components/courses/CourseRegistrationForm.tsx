@@ -25,6 +25,7 @@ export default function CourseRegistrationForm({
   const [result, setResult] = useState<{ success: boolean; waitlisted?: boolean; error?: string } | null>(null);
   const [pendingFormData, setPendingFormData] = useState<FormData | null>(null);
   const turnstileTokenRef = useRef<string>('');
+  const [formStartTime] = useState<string>(() => Date.now().toString());
 
   const noSpotsLeft = availability.isFull && !availability.allowWaitlist;
 
@@ -39,6 +40,7 @@ export default function CourseRegistrationForm({
     const formData = pendingFormData;
     formData.append('courseId', courseId);
     formData.append('turnstileToken', turnstileTokenRef.current);
+    formData.append('formStartTime', formStartTime);
     setPendingFormData(null);
 
     startTransition(async () => {
@@ -65,6 +67,12 @@ export default function CourseRegistrationForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
+      {/* HONEYPOT - Kullanıcıdan gizli, botlar genellikle doldurur */}
+      <div className="hidden" aria-hidden="true">
+        <label htmlFor="website_url_reg">Website URL (Nicht ausfüllen!)</label>
+        <input type="text" id="website_url_reg" name="website_url" tabIndex={-1} autoComplete="off" />
+      </div>
+
       {availability.capacity != null && (
         <div
           className={`text-xs font-bold px-3 py-2 rounded-lg ${

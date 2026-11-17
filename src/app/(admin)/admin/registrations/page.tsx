@@ -37,6 +37,7 @@ export default async function RegistrationsPage() {
     assignedToId: r.assignedToId,
     assignedToName: r.assignedTo?.name ?? null,
     lastContactedAt: r.lastContactedAt,
+    source: r.source,
   }));
 
   return <RegistrationsClient initialRegistrations={registrations} teamMembers={teamMembers} />;

@@ -138,12 +138,38 @@ export default function MarketingClient({ initialConfig, metrics }: MarketingCli
             </div>
           )}
 
+          {/* GTM Container Section */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 text-sky-900 font-bold text-sm border-b border-gray-100 pb-2">
+              <Key size={16} />
+              <span>Google Tag Manager (Önerilen — Tüm Etiketleri Tek Yerden Yönetin)</span>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1">
+                GTM Container ID
+              </label>
+              <input
+                type="text"
+                placeholder="Örn: GTM-XXXXXXX"
+                value={config.gtmContainerId || ""}
+                onChange={(e) => setConfig({ ...config, gtmContainerId: e.target.value })}
+                className="w-full sm:w-80 px-3.5 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none"
+              />
+              <p className="text-[11px] text-gray-500 mt-1.5 max-w-xl">
+                Bu alan doldurulursa, ziyaretçi çerez bannerından "Pazarlama" iznini onayladığında yalnızca GTM yüklenir; Meta Pixel / GA4 / Google Ads etiketlerini çift sayım olmaması için GTM arayüzünün kendi içinden yönetmeniz gerekir. Boş bırakılırsa aşağıdaki ayrı alanlar kullanılır.
+              </p>
+            </div>
+          </div>
+
           {/* Meta CAPI Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-sky-900 font-bold text-sm border-b border-gray-100 pb-2">
               <Key size={16} />
-              <span>Meta Ads (Instagram & Facebook) — Server-Side CAPI</span>
+              <span>Meta Ads (Instagram & Facebook) — Tarayıcı Pikseli + Server-Side CAPI</span>
             </div>
+            <p className="text-[11px] text-gray-500 -mt-2">
+              Meta Pixel ID girilip GTM alanı boş bırakılırsa, ziyaretçi rıza verdiğinde tarayıcıda gerçek Meta Pixel (fbq) de çalışır — yalnızca CAPI token eşleştirme kalitesini artırır, zorunlu değildir.
+            </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -180,6 +206,9 @@ export default function MarketingClient({ initialConfig, metrics }: MarketingCli
               <Key size={16} />
               <span>Google Analytics 4 & Google Ads Measurement Protocol</span>
             </div>
+            <p className="text-[11px] text-gray-500 -mt-2">
+              GA4 ID girilip GTM alanı boş bırakılırsa gtag.js tarayıcıda da çalışır (standart GA4 trafik raporları için gereklidir). Google Ads ID + Label birlikte girilirse, anahtar dönüşüm anlarında (WhatsApp/telefon/0€ Hesaplayıcı) otomatik dönüşüm sinyali gönderilir.
+            </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>

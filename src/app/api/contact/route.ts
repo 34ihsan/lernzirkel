@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { verifyTurnstileToken } from '@/lib/turnstile';
+import { logSecurityEvent } from '@/lib/security-log';
 
 // Simple in-memory rate limiting (Note: in serverless environments like Vercel this is instance-scoped,
 // but works as a basic layer of protection).
@@ -19,6 +20,7 @@ export async function POST(req: Request) {
     if (limitInfo) {
       if (currentTime - limitInfo.lastTime < RATE_LIMIT_WINDOW) {
         if (limitInfo.count >= MAX_REQUESTS) {
+          await logSecurityEvent("security_rate_limited", { route: "/api/contact", ip });
           return NextResponse.json({ error: 'Zu viele Anfragen. Bitte warten Sie einen Moment.' }, { status: 429 });
         }
         limitInfo.count++;
@@ -43,7 +45,7 @@ export async function POST(req: Request) {
 
     // Honeypot Check (if bots fill out this hidden field, silently reject)
     if (website_url) {
-      console.warn(`Honeypot triggered from IP: ${ip}`);
+      await logSecurityEvent("security_honeypot_triggered", { route: "/api/contact", ip });
       return NextResponse.json({ success: true, message: 'Nachricht gesendet.' });
     }
 
@@ -51,7 +53,7 @@ export async function POST(req: Request) {
     if (formStartTime) {
       const timeDiff = currentTime - parseInt(formStartTime, 10);
       if (timeDiff < 3000) { // less than 3 seconds
-        console.warn(`Form filled too quickly from IP: ${ip}. Time: ${timeDiff}ms`);
+        await logSecurityEvent("security_too_fast_submission", { route: "/api/contact", ip, metadata: { timeDiffMs: timeDiff } });
         return NextResponse.json({ success: true, message: 'Nachricht gesendet.' });
       }
     }
@@ -60,6 +62,7 @@ export async function POST(req: Request) {
     const turnstileToken = formData.get('turnstileToken') as string | null;
     const captchaValid = await verifyTurnstileToken(turnstileToken, ip);
     if (!captchaValid) {
+      await logSecurityEvent("security_captcha_failed", { route: "/api/contact", ip });
       return NextResponse.json({ error: 'CAPTCHA-Überprüfung fehlgeschlagen. Bitte versuchen Sie es erneut.' }, { status: 400 });
     }
 

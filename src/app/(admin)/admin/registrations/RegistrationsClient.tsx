@@ -5,6 +5,7 @@ import {
   Trash2, Search, Mail, PhoneCall,
   Calendar, ArrowUpCircle, Hourglass, AlertCircle,
   Clock, CheckCircle2, LayoutGrid, List as ListIcon,
+  Link as LinkIcon,
 } from "lucide-react";
 import { updateRegistrationStatus, promoteFromWaitlist, deleteRegistration, assignRegistration } from "@/actions/register";
 import RegistrationKanbanBoard from "@/components/admin/RegistrationKanbanBoard";
@@ -31,6 +32,7 @@ export interface RegistrationItem {
   assignedToId?: string | null;
   assignedToName?: string | null;
   lastContactedAt?: Date | null;
+  source?: string | null;
 }
 
 export default function RegistrationsClient({
@@ -273,6 +275,11 @@ export default function RegistrationsClient({
                     <span className="flex items-center gap-1"><Calendar size={12} />{new Date(r.createdAt).toLocaleDateString("de-DE")}</span>
                     <span className="flex items-center gap-1"><Mail size={12} />{r.email}</span>
                     {r.phone && <span className="flex items-center gap-1"><PhoneCall size={12} />{r.phone}</span>}
+                    {r.source && (
+                      <span className="flex items-center gap-1 text-sky-700 font-semibold bg-sky-50 px-1.5 py-0.5 rounded">
+                        <LinkIcon size={11} />{r.source}
+                      </span>
+                    )}
                   </div>
                 </div>
 

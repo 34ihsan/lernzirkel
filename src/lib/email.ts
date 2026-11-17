@@ -39,7 +39,8 @@ export async function sendEmail({
       return { success: false, error: errorText };
     }
 
-    return { success: true };
+    const data = await res.json();
+    return { success: true, id: data?.id as string | undefined };
   } catch (error) {
     console.error("[EMAIL] Send failed:", error);
     return { success: false, error: String(error) };

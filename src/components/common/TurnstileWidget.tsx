@@ -8,7 +8,7 @@ declare global {
     turnstile?: {
       render: (
         container: HTMLElement,
-        options: { sitekey: string; callback: (token: string) => void; "expired-callback"?: () => void }
+        options: { sitekey: string; callback: (token: string) => void; "expired-callback"?: () => void; size?: string }
       ) => string;
       reset: (widgetId?: string) => void;
     };
@@ -26,6 +26,7 @@ export default function TurnstileWidget({ onToken }: { onToken: (token: string) 
     widgetIdRef.current = window.turnstile.render(containerRef.current, {
       sitekey: SITE_KEY,
       callback: onToken,
+      size: "flexible",
     });
   }, [onToken]);
 
@@ -44,7 +45,7 @@ export default function TurnstileWidget({ onToken }: { onToken: (token: string) 
         strategy="afterInteractive"
         onReady={renderWidget}
       />
-      <div ref={containerRef} />
+      <div ref={containerRef} className="w-full overflow-hidden" />
     </>
   );
 }

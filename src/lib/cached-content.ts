@@ -58,13 +58,23 @@ export const getCachedProjectBySlug = async (slug: string) => {
 // ---------------------------
 // 2. COURSES
 // ---------------------------
+// Kontenjan rozetleri için: reddedilmemiş ve bekleme listesinde olmayan kayıt sayısı
+const coursesWithRegistrationCount = {
+  where: { isActive: true },
+  orderBy: { createdAt: 'desc' as const },
+  include: {
+    _count: {
+      select: {
+        registrations: { where: { status: { not: 'REJECTED' }, isWaitlisted: false } },
+      },
+    },
+  },
+};
+
 const getCachedCoursesInternal = unstable_cache(
   async () => {
     try {
-      return await prisma.course.findMany({
-        where: { isActive: true },
-        orderBy: { createdAt: 'desc' },
-      });
+      return await prisma.course.findMany(coursesWithRegistrationCount);
     } catch (err) {
       console.error('Failed to load cached courses:', err);
       return [];
@@ -76,10 +86,7 @@ const getCachedCoursesInternal = unstable_cache(
 
 export const getCachedCourses = async () => {
   if (isDev) {
-    return await prisma.course.findMany({
-      where: { isActive: true },
-      orderBy: { createdAt: 'desc' },
-    });
+    return await prisma.course.findMany(coursesWithRegistrationCount);
   }
   return getCachedCoursesInternal();
 };

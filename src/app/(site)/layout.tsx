@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Roboto, Poppins } from "next/font/google";
 import "../globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -18,20 +18,28 @@ import SmoothScrollProvider from "@/components/common/SmoothScrollProvider";
 
 import A11yPanel from "@/components/ui/A11yPanel";
 import CookieBanner from "@/components/common/CookieBanner";
+import ConsentGatedScripts from "@/components/common/ConsentGatedScripts";
 
-const fontInter = Inter({ 
-  subsets: ["latin", "latin-ext"], 
+const fontPoppins = Poppins({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "700"],
   variable: '--font-sans',
   display: 'swap',
 });
 
-const fontOutfit = Outfit({ 
-  subsets: ["latin", "latin-ext"], 
+const fontRoboto = Roboto({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600", "700", "800"],
   variable: '--font-heading',
   display: 'swap',
 });
 
 export const metadata: Metadata = constructMetadata();
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
 
 export default async function RootLayout({
   children,
@@ -91,8 +99,8 @@ export default async function RootLayout({
   const surface = colors.surface || "#ffffff";
   const border = colors.border || "#e2e8f0";
 
-  const bodyFont = typography.bodyFont || "Inter";
-  const headingFont = typography.headingFont || "Outfit";
+  const bodyFont = typography.bodyFont || "Poppins";
+  const headingFont = typography.headingFont || "Roboto";
 
   // Admin'in Tasarım Editöründe seçtiği font (örn. Roboto/Poppins) next/font ile statik
   // olarak önceden yüklenemez (next/font build-time'da sabit font ister) — bu yüzden
@@ -144,7 +152,7 @@ export default async function RootLayout({
   const btnTransform = buttons.transform === 'uppercase' ? 'uppercase' : 'none';
 
   return (
-    <html lang="de" suppressHydrationWarning>
+    <html lang="de" className={`${fontRoboto.variable} ${fontPoppins.variable}`} suppressHydrationWarning>
       <head>
         <link rel="manifest" href="/manifest.json" />
         {googleFontsQuery && (
@@ -193,7 +201,7 @@ export default async function RootLayout({
         )}
         <JsonLd data={generateOrganizationSchema()} />
       </head>
-      <body className={`${fontInter.variable} ${fontOutfit.variable} antialiased flex flex-col min-h-screen bg-background text-foreground transition-colors duration-300`} suppressHydrationWarning>
+      <body className="antialiased flex flex-col min-h-screen bg-background text-foreground transition-colors duration-300" suppressHydrationWarning>
         <SmoothScrollProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <LanguageProvider>
@@ -211,6 +219,14 @@ export default async function RootLayout({
             </LanguageProvider>
           </ThemeProvider>
         </SmoothScrollProvider>
+        <ConsentGatedScripts
+          trackingEnabled={Boolean((settings?.marketingConfig as any)?.trackingEnabled)}
+          gtmContainerId={(settings?.marketingConfig as any)?.gtmContainerId || undefined}
+          metaPixelId={(settings?.marketingConfig as any)?.metaPixelId || undefined}
+          gaMeasurementId={(settings?.marketingConfig as any)?.gaMeasurementId || undefined}
+          googleAdsConversionId={(settings?.marketingConfig as any)?.googleAdsConversionId || undefined}
+          googleAdsConversionLabel={(settings?.marketingConfig as any)?.googleAdsConversionLabel || undefined}
+        />
       </body>
     </html>
   );

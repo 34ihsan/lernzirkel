@@ -4,6 +4,9 @@ import prisma from '@/lib/prisma';
 import { sendEmail } from '@/lib/email';
 import { revalidatePath } from 'next/cache';
 import { verifyTurnstileToken } from '@/lib/turnstile';
+import { cookies, headers } from 'next/headers';
+import { rateLimit } from '@/lib/rate-limit';
+import { logSecurityEvent } from '@/lib/security-log';
 
 // Bir kursun dolu olup olmadığını hesaplar (REJECTED hariç tüm kayıtlar sayılır)
 export async function getCourseAvailability(courseId: string) {
@@ -76,8 +79,34 @@ export async function getRegistrationStats() {
 // Bekleme listesindeki bir kaydı aktif kontenjana alır (kapasite kontrolü yapmadan, admin bilinçli karar verir)
 export async function promoteFromWaitlist(id: string) {
   try {
-    await prisma.registration.update({ where: { id }, data: { isWaitlisted: false } });
+    const registration = await prisma.registration.update({
+      where: { id },
+      data: { isWaitlisted: false },
+      include: { course: true },
+    });
     revalidatePath('/admin/registrations');
+
+    const lang = registration.language === 'tr' ? 'tr' : 'de';
+    const subject = lang === 'tr'
+      ? `Yer açıldı: ${registration.course.title}`
+      : `Ein Platz ist frei geworden: ${registration.course.title}`;
+    const body = lang === 'tr'
+      ? `Bekleme listesinde olduğunuz <strong>${registration.course.title}</strong> kursunda bir yer açıldı ve kaydınız kontenjana alındı. Kısa süre içinde sizinle iletişime geçeceğiz.`
+      : `Für den Kurs <strong>${registration.course.title}</strong>, für den Sie auf der Warteliste standen, ist ein Platz frei geworden — Ihre Anmeldung wurde in den aktiven Kontingent aufgenommen. Wir melden uns in Kürze bei Ihnen.`;
+    const greeting = lang === 'tr' ? 'Merhaba' : 'Hallo';
+
+    sendEmail({
+      to: registration.email,
+      subject,
+      html: `
+        <h2>${greeting} ${registration.name},</h2>
+        <p>${body}</p>
+        <br/>
+        <p>Mit freundlichen Grüßen / Saygılarımızla,</p>
+        <p>Ihr Lernzirkel-Team</p>
+      `,
+    }).catch((err) => console.error('Waitlist promotion email failed:', err));
+
     return { success: true };
   } catch (error) {
     console.error('Error promoting from waitlist:', error);
@@ -98,6 +127,33 @@ export async function deleteRegistration(id: string) {
 
 export async function registerForCourse(formData: FormData) {
   try {
+    const ip = (await headers()).get('x-forwarded-for') ?? 'unknown-ip';
+
+    // Honeypot: gerçek kullanıcılar bu alanı görmez/doldurmaz, botlar genelde doldurur.
+    // Botu "başarılı" zannettirip hiçbir kayıt oluşturmadan sessizce reddediyoruz.
+    const website_url = formData.get('website_url') as string | null;
+    if (website_url) {
+      await logSecurityEvent('security_honeypot_triggered', { route: '/kurse (Anmeldung)', ip });
+      return { success: true, waitlisted: false };
+    }
+
+    // Formu doldurma süresi: botlar genelde formu anında gönderir.
+    const formStartTime = formData.get('formStartTime') as string | null;
+    if (formStartTime) {
+      const timeDiff = Date.now() - parseInt(formStartTime, 10);
+      if (timeDiff >= 0 && timeDiff < 3000) {
+        await logSecurityEvent('security_too_fast_submission', { route: '/kurse (Anmeldung)', ip, metadata: { timeDiffMs: timeDiff } });
+        return { success: true, waitlisted: false };
+      }
+    }
+
+    // IP başına hız sınırı: aynı IP'den kısa sürede çok fazla kayıt denemesi.
+    const limited = await rateLimit(`course-register:${ip}`, 5, 600);
+    if (!limited.success) {
+      await logSecurityEvent('security_rate_limited', { route: '/kurse (Anmeldung)', ip });
+      return { success: false, error: 'Zu viele Anmeldeversuche. Bitte versuchen Sie es in einigen Minuten erneut.' };
+    }
+
     const courseId = formData.get('courseId') as string;
     const name = formData.get('name') as string;
     const email = formData.get('email') as string;
@@ -110,8 +166,9 @@ export async function registerForCourse(formData: FormData) {
     }
 
     const turnstileToken = formData.get('turnstileToken') as string | null;
-    const captchaValid = await verifyTurnstileToken(turnstileToken);
+    const captchaValid = await verifyTurnstileToken(turnstileToken, ip);
     if (!captchaValid) {
+      await logSecurityEvent('security_captcha_failed', { route: '/kurse (Anmeldung)', ip });
       return { success: false, error: 'CAPTCHA-Überprüfung fehlgeschlagen. Bitte versuchen Sie es erneut.' };
     }
 
@@ -127,6 +184,9 @@ export async function registerForCourse(formData: FormData) {
       return { success: false, error: 'Dieser Kurs ist leider ausgebucht und bietet keine Warteliste an.' };
     }
 
+    const cookieStore = await cookies();
+    const source = cookieStore.get('lz_ref')?.value || null;
+
     const registration = await prisma.registration.create({
       data: {
         courseId,
@@ -137,6 +197,7 @@ export async function registerForCourse(formData: FormData) {
         language,
         status: 'PENDING',
         isWaitlisted: willBeWaitlisted,
+        source,
       },
     });
 

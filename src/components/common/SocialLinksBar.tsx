@@ -200,7 +200,7 @@ export default function SocialLinksBar({
             rel="noopener noreferrer"
             title={item.name}
             aria-label={item.name}
-            className="p-1 rounded-md text-white/80 hover:text-white hover:bg-white dark:bg-gray-900/10 transition-all transform hover:scale-110"
+            className="p-1 rounded-md text-white/80 hover:text-white hover:bg-white/15 transition-all transform hover:scale-110"
           >
             {item.icon}
           </a>

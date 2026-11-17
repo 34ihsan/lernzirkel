@@ -5,6 +5,7 @@ import { revalidatePath, updateTag } from "next/cache";
 
 export interface MarketingConfig {
   trackingEnabled: boolean;
+  gtmContainerId?: string;
   metaPixelId?: string;
   metaCapiToken?: string;
   gaMeasurementId?: string;
@@ -22,6 +23,7 @@ export async function getMarketingSettings(): Promise<MarketingConfig> {
   const config = (settings?.marketingConfig as any) || {};
   return {
     trackingEnabled: Boolean(config.trackingEnabled),
+    gtmContainerId: config.gtmContainerId || "",
     metaPixelId: config.metaPixelId || "",
     metaCapiToken: config.metaCapiToken || "",
     gaMeasurementId: config.gaMeasurementId || "",

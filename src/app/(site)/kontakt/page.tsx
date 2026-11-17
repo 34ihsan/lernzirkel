@@ -121,9 +121,9 @@ export default async function KontaktPage() {
               <ul className="space-y-4 text-sm text-gray-600 dark:text-gray-400">
                 {departments.map((dept, idx) => (
                   <li key={dept.id || idx} className="border-b border-gray-50 pb-3 last:border-b-0 last:pb-0">
-                    <div className="flex justify-between items-start gap-4">
-                      <span className="font-semibold text-gray-800 dark:text-gray-200">{dept.name}</span>
-                      <div className="text-right text-xs sm:text-sm space-y-0.5">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 sm:gap-4">
+                      <span className="font-semibold text-gray-800 dark:text-gray-200 sm:flex-1 sm:min-w-0 break-words">{dept.name}</span>
+                      <div className="text-left sm:text-right text-xs sm:text-sm space-y-0.5 sm:shrink-0">
                         {dept.hours?.map((h, hIdx) => {
                           if (h.isClosed || (!h.openTime && !h.closeTime)) return null;
                           return (

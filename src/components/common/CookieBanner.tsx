@@ -108,18 +108,21 @@ export default function CookieBanner() {
   const handleAcceptAll = () => {
     localStorage.setItem('cookie-consent', 'all');
     localStorage.setItem('cookie-preferences', JSON.stringify({ necessary: true, analytics: true, marketing: true, functional: true }));
+    window.dispatchEvent(new Event('cookie-consent-updated'));
     setIsVisible(false);
   };
 
   const handleSavePreferences = () => {
     localStorage.setItem('cookie-consent', 'custom');
     localStorage.setItem('cookie-preferences', JSON.stringify(preferences));
+    window.dispatchEvent(new Event('cookie-consent-updated'));
     setIsVisible(false);
   };
 
   const handleDeclineAll = () => {
     localStorage.setItem('cookie-consent', 'necessary-only');
     localStorage.setItem('cookie-preferences', JSON.stringify({ necessary: true, analytics: false, marketing: false, functional: false }));
+    window.dispatchEvent(new Event('cookie-consent-updated'));
     setIsVisible(false);
   };
 

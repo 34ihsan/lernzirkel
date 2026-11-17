@@ -173,7 +173,7 @@ export default function Header({
   const showDividers = header.topBar?.showDividers ?? true;
 
   return (
-    <header 
+    <header
       className={`w-full z-50 transition-all duration-300 ${
         header.design?.isSticky
           ? isScrolled 
@@ -250,8 +250,8 @@ export default function Header({
               )}
             </div>
 
-            <div 
-              className="flex items-center"
+            <div
+              className="flex items-center flex-wrap justify-end gap-y-1 min-w-0"
               style={{ gap: `${Math.max(10, itemGap - 4)}px` }}
             >
               {/* Live Opening Status Indicator */}
