@@ -3,6 +3,14 @@ import { PrismaClient } from '@prisma/client'
 
 const prismaClientSingleton = () => {
   const connectionString = process.env.DATABASE_URL
+  // `next build` imports every route module (including force-dynamic ones) to collect
+  // their metadata, without ever calling them — DATABASE_URL is a runtime-only secret and
+  // deliberately absent then. Use a placeholder so the import succeeds; no query runs
+  // during the build phase, so this connection string is never actually dialed.
+  if (!connectionString && process.env.NEXT_PHASE === 'phase-production-build') {
+    const adapter = new PrismaPg('postgresql://build:build@localhost:5432/build')
+    return new PrismaClient({ adapter })
+  }
   if (!connectionString) {
     throw new Error('DATABASE_URL environment variable is not set')
   }
