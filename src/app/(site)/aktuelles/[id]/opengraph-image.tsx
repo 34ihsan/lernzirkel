@@ -2,6 +2,7 @@ import { ImageResponse } from 'next/og';
 import prisma from '@/lib/prisma';
 
 export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 export const alt = 'Lernzirkel Aktuelles';
 export const size = {
   width: 1200,
