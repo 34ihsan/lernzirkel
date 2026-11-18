@@ -41,9 +41,16 @@ services:
     build:
       context: .
       target: runner
+      # CMS'den beslenen sayfalar (örn. /projekte) build sırasında gerçek veriyle statik
+      # üretiliyor (next build SSG) — bu yüzden builder'ın data ağından Postgres'e erişmesi
+      # gerekiyor. DATABASE_URL yalnızca builder aşamasının katman geçmişinde kalır (bu imaj
+      # hiçbir registry'ye push edilmiyor); runner aşamasına kopyalanmaz, çalışma zamanında
+      # ayrıca env_file ile verilir.
+      network: data
       args:
         NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:?NEXT_PUBLIC_SITE_URL gerekli}
         NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${NEXT_PUBLIC_TURNSTILE_SITE_KEY:-}
+        DATABASE_URL: ${DATABASE_URL:?DATABASE_URL gerekli}
     image: lernzirkel-app:${APP_TAG:-local}
     env_file:
       - .env.production

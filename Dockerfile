@@ -21,6 +21,13 @@ ARG NEXT_PUBLIC_TURNSTILE_SITE_KEY
 ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL \
     NEXT_PUBLIC_TURNSTILE_SITE_KEY=$NEXT_PUBLIC_TURNSTILE_SITE_KEY
 
+# CMS sayfaları (örn. /projekte) next build sırasında gerçek veriyle statik üretiliyor,
+# bu yüzden derleme anında de gerçek DATABASE_URL gerekiyor (docker-compose.yml: build.network
+# "data" ile Postgres'e erişim sağlanıyor). Sadece bu builder katmanında kalır; runner
+# aşamasına ARG/ENV olarak taşınmaz, çalışma zamanında env_file ile ayrıca verilir.
+ARG DATABASE_URL
+ENV DATABASE_URL=$DATABASE_URL
+
 RUN npm run build
 
 # ── Araçlar: şema senkronizasyonu ve admin oluşturma (tam node_modules + prisma CLI) ─
