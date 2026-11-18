@@ -342,10 +342,11 @@ export default function Header({
                 alt={header.logo.text || "Lernzirkel Logo"} 
                 width={160} 
                 height={48} 
-                className="h-10 sm:h-11 md:h-12 w-auto object-contain shrink-0"
-                style={{ 
+                className="max-h-10 sm:max-h-11 md:max-h-12 w-auto object-contain shrink-0"
+                style={{
                   maxWidth: header.logo.width && header.logo.width > 60 ? `${Math.min(260, header.logo.width)}px` : '180px',
-                  maxHeight: '48px'
+                  maxHeight: '48px',
+                  height: 'auto'
                 }}
                 priority
               />

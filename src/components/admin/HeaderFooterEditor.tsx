@@ -3023,9 +3023,10 @@ export default function HeaderFooterEditor({ initialHeader, initialFooter }: Pro
                               <Image 
                                 src={partner.logoUrl} 
                                 alt={partner.name || "Logo"} 
-                                width={72} 
-                                height={44} 
-                                className="object-contain max-h-12 w-auto" 
+                                width={72}
+                                height={44}
+                                className="object-contain max-h-12 w-auto"
+                                style={{ height: 'auto' }}
                               />
                             ) : (
                               <ImageIcon className="w-6 h-6 text-gray-300" />
@@ -3624,8 +3625,8 @@ export default function HeaderFooterEditor({ initialHeader, initialFooter }: Pro
                         <Image 
                           src={footer.about.logoUrl} 
                           alt={footer.about.title || "Footer Logo"} 
-                          width={footer.about.logoWidth || 160} 
-                          height={footer.about.logoHeight || 52} 
+                          width={footer.about.logoWidth || 160}
+                          height={52}
                           className="object-contain max-h-16 w-auto"
                           style={{ 
                             maxWidth: footer.about.logoWidth ? `${footer.about.logoWidth}px` : '160px',

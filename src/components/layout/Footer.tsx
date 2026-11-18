@@ -142,8 +142,8 @@ export default async function Footer({
                   <Image 
                     src={footer.about.logoUrl} 
                     alt={footer.about.title || "Lernzirkel Logo"} 
-                    width={footer.about.logoWidth || 160} 
-                    height={footer.about.logoHeight || 52} 
+                    width={footer.about.logoWidth || 160}
+                    height={52}
                     className="object-contain max-h-16 w-auto"
                     style={{ 
                       maxWidth: footer.about.logoWidth ? `${footer.about.logoWidth}px` : '160px',

@@ -25,8 +25,8 @@ export default function TrustBanner({
                 alt={p.name}
                 width={p.width || 120}
                 height={p.height || 40}
-                className="object-contain h-10 w-auto"
-                style={{ maxWidth: `${p.width || 120}px`, maxHeight: `${p.height || 40}px` }}
+                className="object-contain max-h-10 w-auto"
+                style={{ maxWidth: `${p.width || 120}px`, maxHeight: `${p.height || 40}px`, height: 'auto' }}
               />
             ) : (
               <div className="h-10 px-4 bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 font-semibold text-xs rounded-md whitespace-nowrap">
