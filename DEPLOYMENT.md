@@ -38,7 +38,7 @@ PostgreSQL ve kalıcı disk üzerinde dosya yüklemeleri.
 
 1. Contabo VPS'i sipariş edin (Almanya lokasyonu önerilir — DSGVO + gecikme).
    Ubuntu 22.04/24.04 LTS, en az 4GB RAM.
-2. DNS: `lernzirkel-online.de` ve `www` A kaydını VPS IP'sine yönlendirin.
+2. DNS: `lernzirkel-ludwigshafen.de` ve `www` A kaydını VPS IP'sine yönlendirin.
 3. Sunucuya SSH ile bağlanıp:
    ```bash
    git clone <repo-url> /tmp/lernzirkel-setup
@@ -47,7 +47,7 @@ PostgreSQL ve kalıcı disk üzerinde dosya yüklemeleri.
    Script size Postgres şifresi soracak ve script sonunda DATABASE_URL'i verecek.
 4. SSL sertifikası:
    ```bash
-   sudo certbot --nginx -d lernzirkel-online.de -d www.lernzirkel-online.de
+   sudo certbot --nginx -d lernzirkel-ludwigshafen.de -d www.lernzirkel-ludwigshafen.de
    ```
 5. `deploy` kullanıcısına geçip uygulamayı klonlayın ve ortam değişkenlerini doldurun:
    ```bash
@@ -61,7 +61,7 @@ PostgreSQL ve kalıcı disk üzerinde dosya yüklemeleri.
 6. Admin kullanıcısını oluşturun (bunu bizzat siz çalıştırmalısınız — kimlik bilgisi
    oluşturma işlemini otomasyon dışı bıraktık):
    ```bash
-   npx tsx scripts/setAdminPassword.ts admin@lernzirkel-online.de "<guclu-sifre>" "Admin"
+   npx tsx scripts/setAdminPassword.ts admin@lernzirkel-ludwigshafen.de "<guclu-sifre>" "Admin"
    ```
 7. Cron'ları kurun:
    ```bash

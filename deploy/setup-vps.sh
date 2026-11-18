@@ -7,7 +7,7 @@
 # Kullanım: sudo bash deploy/setup-vps.sh
 set -euo pipefail
 
-DOMAIN="lernzirkel-online.de"
+DOMAIN="lernzirkel-ludwigshafen.de"
 APP_USER="deploy"
 APP_DIR="/var/www/lernzirkel"
 NODE_MAJOR=20
@@ -79,7 +79,7 @@ mkdir -p "$APP_DIR" /var/log/lernzirkel
 chown -R "$APP_USER:$APP_USER" "$APP_DIR" /var/log/lernzirkel
 
 echo "==> Nginx site config"
-sed "s/lernzirkel-online.de/${DOMAIN}/g" "$(dirname "$0")/nginx.conf.example" > /etc/nginx/sites-available/"$DOMAIN"
+sed "s/lernzirkel-ludwigshafen.de/${DOMAIN}/g" "$(dirname "$0")/nginx.conf.example" > /etc/nginx/sites-available/"$DOMAIN"
 ln -sf /etc/nginx/sites-available/"$DOMAIN" /etc/nginx/sites-enabled/"$DOMAIN"
 rm -f /etc/nginx/sites-enabled/default
 nginx -t && systemctl reload nginx

@@ -17,8 +17,8 @@ const nextConfig: NextConfig = {
     // gibi kötüye kullanılmasına izin veriyordu. Admin panelinden içeriğe yeni bir
     // dış görsel host'u eklendiğinde, o host buraya da eklenmeli.
     remotePatterns: [
-      { protocol: 'https', hostname: 'lernzirkel-online.de' },
-      { protocol: 'https', hostname: '*.lernzirkel-online.de' },
+      { protocol: 'https', hostname: 'lernzirkel-ludwigshafen.de' },
+      { protocol: 'https', hostname: '*.lernzirkel-ludwigshafen.de' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
     ],
   },

@@ -1,4 +1,4 @@
-# /etc/nginx/sites-available/lernzirkel-online.de
+# /etc/nginx/sites-available/lernzirkel-ludwigshafen.de
 # Kurulum: deploy/setup-vps.sh bu dosyayı oraya kopyalayıp domain'i otomatik yerleştirir.
 # certbot --nginx komutu çalıştırıldıktan sonra bu dosyanın SSL bloğu certbot tarafından
 # otomatik güncellenir (443 server bloğu + redirect eklenir) — ilk kurulumda sadece 80 vardır.
@@ -11,7 +11,7 @@ upstream lernzirkel_app {
 server {
     listen 80;
     listen [::]:80;
-    server_name lernzirkel-online.de www.lernzirkel-online.de;
+    server_name lernzirkel-ludwigshafen.de www.lernzirkel-ludwigshafen.de;
 
     client_max_body_size 15M; # /api/upload 10MB limitinin biraz üstü
 
