@@ -1,4 +1,6 @@
 import prisma from '@/lib/prisma';
+
+export const dynamic = 'force-dynamic';
 import { getCachedCourses } from '@/lib/cached-content';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 import AdvancedCourseExplorer from '@/components/courses/AdvancedCourseExplorer';

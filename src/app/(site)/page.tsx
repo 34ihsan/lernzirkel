@@ -1,5 +1,7 @@
 import { Calendar, Newspaper } from 'lucide-react';
 import prisma from '@/lib/prisma';
+
+export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 import Link from 'next/link';
 import { constructMetadata } from '@/lib/seo';

@@ -1,4 +1,6 @@
 import prisma from '@/lib/prisma';
+
+export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 import Link from 'next/link';

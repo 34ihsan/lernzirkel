@@ -2,6 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { LifeBuoy, Clock, MapPin, CheckCircle2, Globe, ArrowRight, Languages } from 'lucide-react';
 import prisma from '@/lib/prisma';
+
+export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 
 export const metadata = {

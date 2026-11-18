@@ -1,4 +1,6 @@
 import prisma from '@/lib/prisma';
+
+export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 import Link from 'next/link';
 import { LifeBuoy, Clock, MapPin, CheckCircle2 } from 'lucide-react';

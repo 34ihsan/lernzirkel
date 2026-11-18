@@ -1,5 +1,7 @@
 import React from 'react';
 import prisma from '@/lib/prisma';
+
+export const dynamic = 'force-dynamic';
 import { DEFAULT_DESIGN_CONFIG, DesignConfig } from '@/lib/design-defaults';
 import { FooterConfig, defaultFooterConfig } from '@/lib/site-defaults';
 import SmartContactForm from '@/components/forms/SmartContactForm';
