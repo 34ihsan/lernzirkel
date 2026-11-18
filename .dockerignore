@@ -1,0 +1,32 @@
+# Docker build bağlamına GİRMEMESİ gerekenler (COPY . . ile imaj katmanına sızar)
+
+# Sırlar: ortam dosyaları imaja asla girmez (.env.example hariç)
+.env
+.env.*
+!.env.example
+
+# Bağımlılıklar ve derleme çıktıları (imaj içinde yeniden üretilir)
+node_modules
+.next
+out
+coverage
+*.log
+*.tsbuildinfo
+
+# Sürüm kontrolü ve editör
+.git
+.github
+.vscode
+.idea
+.windsurf
+.DS_Store
+
+# Altyapı ve dokümantasyon: uygulama imajında gerekmez
+deploy
+docs
+docker-compose*.yml
+Dockerfile*
+AGENTS.md
+CLAUDE.md
+_debug-scripts
+scratch

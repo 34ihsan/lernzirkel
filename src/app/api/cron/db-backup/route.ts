@@ -3,8 +3,8 @@ import prisma from '@/lib/prisma';
 import { verifyCronSecret } from '@/lib/cron-auth';
 
 // Bu endpoint seçili içerik tablolarının JSON anlık görüntüsünü döner (hızlı/insan-okunabilir
-// bir yedek). VPS üzerindeki asıl veritabanı yedeği deploy/backup.sh'teki pg_dump ile alınır —
-// bu route ona ek, birincil yedekleme mekanizması değildir.
+// bir yedek). VPS üzerindeki asıl veritabanı yedeği platform seviyesinde restic ile alınır
+// (bkz. DEPLOYMENT.md) — bu route ona ek, birincil yedekleme mekanizması değildir.
 
 export async function GET(req: Request) {
   try {
