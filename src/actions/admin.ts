@@ -370,8 +370,11 @@ async function autoTranslate(text: string, from: string, to: string) {
 
 async function generateTranslations(data: AnnouncementData) {
   const translations: any = {};
-  const targetLangs = ["de", "tr", "en", "ar"];
-  
+  // "de" kasıtlı olarak yok: Almanca zaten temel/kaynak dil, kendi kendine çeviri
+  // denemek MyMemory'nin "PLEASE SELECT TWO DISTINCT LANGUAGES" hatasını döndürür ve
+  // bu hata metni sessizce gerçek çeviriymiş gibi kaydedilirdi (2026-11-25'te bulundu).
+  const targetLangs = ["tr", "en", "ar"];
+
   for (const lang of targetLangs) {
     translations[lang] = {
       title: await autoTranslate(data.title, 'autodetect', lang),

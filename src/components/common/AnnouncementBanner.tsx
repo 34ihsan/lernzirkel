@@ -283,7 +283,9 @@ export default function AnnouncementBanner({
   };
 
   const getTranslatedText = (ann: AnnouncementType, key: 'title' | 'message' | 'linkText') => {
-    if (ann.translations && typeof ann.translations === 'object') {
+    // Almanca her zaman temel/kaynak alan — "de" için bir translations girdisi varsa bile
+    // (örn. eski/bozuk bir otomatik çeviri kaydı) hiç bakılmaz, hep orijinal alan kullanılır.
+    if (language !== 'de' && ann.translations && typeof ann.translations === 'object') {
       const translation = ann.translations[language];
       if (translation && translation[key]) {
         return translation[key];
