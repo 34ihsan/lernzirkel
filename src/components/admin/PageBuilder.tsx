@@ -2457,7 +2457,7 @@ export default function PageBuilder({
                 { type: 'TEAM_GRID', category: 'social', label: 'Eğitmenler & Kadro', desc: 'Öğretmenler, danışmanlar ve yönetim ekibi tanıtım kartları.', icon: User, tag: 'Ekip' },
                 { type: 'PRICING', category: 'promo', label: 'Kurs Paketleri & Fiyatlandırma', desc: 'Dönemsel fiyat tabloları, özellik maddeleri ve kayıt butonu.', icon: Award, tag: 'Katalog' },
                 { type: 'VIDEO_SHOWCASE', category: 'media', label: 'Tanıtım Videosu & Vitrin', desc: 'YouTube/Vimeo video gömme ve yan panelde avantaj maddeleri.', icon: Play, tag: 'Video' },
-                { type: 'LOGO_CLOUD', category: 'social', label: 'Partner & Akreditasyonlar', desc: 'BAMF, ESF+, sınav merkezleri ve çözüm ortakları logoları.', icon: Building, tag: 'Resmi' },
+                { type: 'LOGO_CLOUD', category: 'social', label: 'Partner & Akreditasyonlar', desc: 'İstediğiniz sayıda kurum/partner logosu ekleyip düzenleyebilirsiniz.', icon: Building, tag: 'Resmi' },
                 { type: 'DOWNLOADS', category: 'media', label: 'İndirilebilir Belgeler (PDF)', desc: 'Ders programları, broşür ve başvuru formları listesi.', icon: Download, tag: 'Evraklar' },
                 { type: 'HTML', category: 'media', label: 'Özel Kod / Embed (Harita vb.)', desc: 'Google Harita, özel widget veya dış iframe ekleme.', icon: Code, tag: 'Gelişmiş' },
               ]
@@ -2592,11 +2592,10 @@ function getDefaultContent(type: string) {
       return {
         eyebrow: "Başarı Hikayeleri",
         title: "Öğrencilerimiz ve Velilerimiz Ne Diyor?",
-        subtitle: "Lernzirkel ile hedeflerine ulaşan yüzlerce başarılı öğrencimizin samimi değerlendirmeleri.",
+        subtitle: "Lernzirkel ile hedeflerine ulaşan başarılı öğrencilerimizin samimi değerlendirmeleri.",
         items: [
-          { name: "Emre K.", role: "B1 Telc Mezunu", comment: "Lernzirkel sayesinde 6 ayda B1 sertifikamı aldım. Eğitmenlerin sabrı ve pedagojik yaklaşımı harikaydı!", rating: 5, avatarUrl: "", badge: "Sınav Başarısı" },
-          { name: "Fatma Y.", role: "Gymnasium Öğrencisi Velisi", comment: "Oğlumun matematik notları 4'ten 2'ye yükseldi. Düzenli takip ve veli bilgilendirmeleri çok profesyonelce.", rating: 5, avatarUrl: "", badge: "Veli Yorumu" },
-          { name: "Alexander S.", role: "Mesleki Almanca Kursiyeri", comment: "İş hayatımda ihtiyacım olan Almancayı burada kazandım. Herkese gönül rahatlığıyla tavsiye ederim.", rating: 5, avatarUrl: "", badge: "Kariyer" }
+          { name: "Ad Soyad", role: "Kurs / Unvan bilgisi", comment: "Buraya gerçek bir öğrenci veya veli yorumu ekleyin.", rating: 5, avatarUrl: "", badge: "" },
+          { name: "Ad Soyad", role: "Kurs / Unvan bilgisi", comment: "Buraya gerçek bir öğrenci veya veli yorumu ekleyin.", rating: 5, avatarUrl: "", badge: "" }
         ]
       };
     case 'TIMELINE':
@@ -2617,9 +2616,8 @@ function getDefaultContent(type: string) {
         title: "Alanında Uzman Eğitmenlerimiz",
         subtitle: "Pedagojik formasyona sahip, deneyimli öğretmenlerimizle başarı tesadüf değildir.",
         items: [
-          { name: "Dr. Thomas Müller", role: "Almanca Bölüm Başkanı", bio: "15 yılı aşkın DaF/DaZ eğitim tecrübesi ve Telc sınav denetçisi.", badge: "DaF Uzmanı", email: "t.mueller@lernzirkel-online.de", imageUrl: "" },
-          { name: "Elif Demir", role: "Matematik & Fen Danışmanı", bio: "Abitur ve Realschule sınav hazırlığında yüzlerce öğrenciye derece yaptırdı.", badge: "STEM", email: "e.demir@lernzirkel-online.de", imageUrl: "" },
-          { name: "Michael Weber", role: "Entegrasyon Danışmanı", bio: "BAMF süreçleri, resmi kayıtlar ve kariyer yönlendirme uzmanı.", badge: "Danışman", email: "m.weber@lernzirkel-online.de", imageUrl: "" }
+          { name: "Ekip Üyesi 1", role: "Görevi / Uzmanlık Alanı", bio: "Kısa biyografi ve uzmanlık alanını buraya yazın.", badge: "", email: "", imageUrl: "" },
+          { name: "Ekip Üyesi 2", role: "Görevi / Uzmanlık Alanı", bio: "Kısa biyografi ve uzmanlık alanını buraya yazın.", badge: "", email: "", imageUrl: "" }
         ]
       };
     case 'PRICING':
@@ -2681,14 +2679,11 @@ function getDefaultContent(type: string) {
     case 'LOGO_CLOUD':
       return {
         eyebrow: "İş Birliklerimiz & Akreditasyonlar",
-        title: "Güvenilir Resmi Ortaklarımız",
-        subtitle: "Resmi kurumlar, sınav merkezleri ve eğitim ortaklarımızla kalite garantisi.",
+        title: "Partnerlerimiz",
+        subtitle: "Birlikte çalıştığımız kurumlar ve ortaklarımız.",
         items: [
-          { name: "BAMF - Bundesamt für Migration und Flüchtlinge", logoUrl: "", linkUrl: "https://www.bamf.de" },
-          { name: "Telc Language Tests", logoUrl: "", linkUrl: "https://www.telc.net" },
-          { name: "Europäischer Sozialfonds (ESF+)", logoUrl: "", linkUrl: "https://www.esf.de" },
-          { name: "Goethe-Institut Partner", logoUrl: "", linkUrl: "https://www.goethe.de" },
-          { name: "IHK Akrediteli", logoUrl: "", linkUrl: "https://www.ihk.de" }
+          { name: "Ortak Kurum 1", logoUrl: "", linkUrl: "" },
+          { name: "Ortak Kurum 2", logoUrl: "", linkUrl: "" }
         ]
       };
     case 'DOWNLOADS':
@@ -2764,10 +2759,8 @@ function getDefaultContent(type: string) {
         title: "Rakamlarla Biz",
         subtitle: "Yıllardır büyüyen başarımız",
         items: [
-          { number: "20+", label: "Yıllık Tecrübe", icon: "Clock" },
-          { number: "5000+", label: "Mezun Öğrenci", icon: "GraduationCap" },
-          { number: "35+", label: "Uzman Eğitmen", icon: "Users" },
-          { number: "%98", label: "Sınav Başarısı", icon: "Award" }
+          { number: "0", label: "Buraya açıklama ekleyin", icon: "Award" },
+          { number: "0", label: "Buraya açıklama ekleyin", icon: "Users" }
         ]
       };
     case 'FAQ':
