@@ -128,6 +128,13 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     'a11y.easyLanguage': 'Leichte Sprache',
     'a11y.easyLangDesc': 'Aktiviert vereinfachte Texte für bessere Verständlichkeit.',
 
+    // Countdown
+    'countdown.days': 'T',
+    'countdown.hours': 'Std',
+    'countdown.minutes': 'Min',
+    'countdown.seconds': 'Sek',
+    'countdown.left': 'verbleibend',
+
     // Cookie Banner
     'cookie.title': 'Wir verwenden Cookies',
     'cookie.message': 'Wir nutzen Cookies und ähnliche Technologien, um die ordnungsgemäße Funktion unserer Website zu gewährleisten, Inhalte zu personalisieren und unseren Datenverkehr zu analysieren. Weitere Informationen finden Sie in unserer',
@@ -194,6 +201,13 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     'a11y.language': 'Dil Seçeneği',
     'a11y.easyLanguage': 'Sade Dil',
     'a11y.easyLangDesc': 'Daha iyi anlaşılabilirlik için basitleştirilmiş metinleri etkinleştirir.',
+
+    // Countdown
+    'countdown.days': 'g',
+    'countdown.hours': 's',
+    'countdown.minutes': 'dk',
+    'countdown.seconds': 'sn',
+    'countdown.left': 'kaldı',
 
     // Cookie Banner
     'cookie.title': 'Çerezleri kullanıyoruz',
@@ -262,6 +276,13 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     'a11y.easyLanguage': 'Easy Language',
     'a11y.easyLangDesc': 'Enables simplified texts for better understanding.',
 
+    // Countdown
+    'countdown.days': 'd',
+    'countdown.hours': 'h',
+    'countdown.minutes': 'm',
+    'countdown.seconds': 's',
+    'countdown.left': 'left',
+
     // Cookie Banner
     'cookie.title': 'We use cookies',
     'cookie.message': 'We use cookies and similar technologies to ensure our website functions properly, personalize content, and analyze our traffic. For more information, please see our',
@@ -328,6 +349,13 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     'a11y.language': 'اللغة',
     'a11y.easyLanguage': 'لغة مبسطة',
     'a11y.easyLangDesc': 'تفعيل نصوص مبسطة لتسهيل الفهم.',
+
+    // Countdown
+    'countdown.days': 'يوم',
+    'countdown.hours': 'س',
+    'countdown.minutes': 'د',
+    'countdown.seconds': 'ث',
+    'countdown.left': 'متبقٍ',
 
     // Cookie Banner
     'cookie.title': 'نحن نستخدم ملفات تعريف الارتباط',
@@ -396,6 +424,13 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     'a11y.easyLanguage': 'Простой язык',
     'a11y.easyLangDesc': 'Включает упрощённые тексты для лучшего понимания.',
 
+    // Countdown
+    'countdown.days': 'д',
+    'countdown.hours': 'ч',
+    'countdown.minutes': 'мин',
+    'countdown.seconds': 'сек',
+    'countdown.left': 'осталось',
+
     // Cookie Banner
     'cookie.title': 'Мы используем файлы cookie',
     'cookie.message': 'Мы используем файлы cookie и аналогичные технологии для обеспечения корректной работы сайта, персонализации контента и анализа трафика. Подробнее см. в нашей',
@@ -463,6 +498,13 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     'a11y.easyLanguage': 'Проста мова',
     'a11y.easyLangDesc': 'Вмикає спрощені тексти для кращого розуміння.',
 
+    // Countdown
+    'countdown.days': 'д',
+    'countdown.hours': 'год',
+    'countdown.minutes': 'хв',
+    'countdown.seconds': 'сек',
+    'countdown.left': 'залишилось',
+
     // Cookie Banner
     'cookie.title': 'Ми використовуємо файли cookie',
     'cookie.message': 'Ми використовуємо файли cookie та подібні технології, щоб забезпечити коректну роботу сайту, персоналізувати контент і аналізувати трафік. Докладніше див. у нашій',
@@ -529,6 +571,13 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     'a11y.language': 'زبان',
     'a11y.easyLanguage': 'زبان ساده',
     'a11y.easyLangDesc': 'متن‌های ساده‌شده را برای درک بهتر فعال می‌کند.',
+
+    // Countdown
+    'countdown.days': 'روز',
+    'countdown.hours': 'س',
+    'countdown.minutes': 'د',
+    'countdown.seconds': 'ث',
+    'countdown.left': 'باقی‌مانده',
 
     // Cookie Banner
     'cookie.title': 'ما از کوکی استفاده می‌کنیم',

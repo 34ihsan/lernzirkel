@@ -35,6 +35,7 @@ export type AnnouncementType = {
 
 function CountdownBadge({ endDate }: { endDate: string }) {
   const [timeLeft, setTimeLeft] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const target = new Date(endDate).getTime();
@@ -49,15 +50,20 @@ function CountdownBadge({ endDate }: { endDate: string }) {
       const hours = Math.floor((diff % 86400000) / 3600000);
       const minutes = Math.floor((diff % 3600000) / 60000);
       const seconds = Math.floor((diff % 60000) / 1000);
-      if (days > 0) setTimeLeft(`${days}g ${hours}s ${minutes}dk kaldı`);
-      else if (hours > 0) setTimeLeft(`${hours}s ${minutes}dk kaldı`);
-      else setTimeLeft(`${minutes}dk ${seconds}sn kaldı`);
+      const d = t('countdown.days', 'd');
+      const h = t('countdown.hours', 'h');
+      const m = t('countdown.minutes', 'm');
+      const s = t('countdown.seconds', 's');
+      const left = t('countdown.left', 'left');
+      if (days > 0) setTimeLeft(`${days}${d} ${hours}${h} ${minutes}${m} ${left}`);
+      else if (hours > 0) setTimeLeft(`${hours}${h} ${minutes}${m} ${left}`);
+      else setTimeLeft(`${minutes}${m} ${seconds}${s} ${left}`);
     };
 
     tick();
     const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
-  }, [endDate]);
+  }, [endDate, t]);
 
   if (!timeLeft) return null;
 
