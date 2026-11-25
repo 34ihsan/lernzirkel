@@ -10,7 +10,14 @@ import {
   HelpCircle, ChevronRight, Building, CheckCircle
 } from "lucide-react";
 import DynamicIcon from "@/components/common/DynamicIcon";
+import EmailObfuscator from "@/components/common/EmailObfuscator";
 import { useLanguage } from "@/context/LanguageContext";
+
+function splitEmail(email: string): [string, string] {
+  const at = email.indexOf('@');
+  if (at === -1) return [email, ''];
+  return [email.slice(0, at), email.slice(at + 1)];
+}
 
 function overlayStyle(value: any, fallback: number): React.CSSProperties {
   let pct = fallback;
@@ -860,9 +867,10 @@ function InteractiveFormSection({ content, design, sectionStyle, bgColor, textCo
                   </div>
                   <div>
                     <div className="text-xs text-blue-200">E-Posta</div>
-                    <a href={`mailto:${content.email || 'info@lernzirkel-online.de'}`} className="text-sm font-semibold hover:underline">
-                      {content.email || "info@lernzirkel-online.de"}
-                    </a>
+                    {(() => {
+                      const [user, domain] = splitEmail(content.email || 'info@lernzirkel-online.de');
+                      return <EmailObfuscator user={user} domain={domain} showIcon={false} className="text-sm font-semibold hover:underline" />;
+                    })()}
                   </div>
                 </div>
 
@@ -1093,15 +1101,16 @@ function TeamGridSection({ content, design, sectionStyle, bgColor, textColor, pa
                   </p>
                 )}
 
-                {member.email && (
-                  <a 
-                    href={`mailto:${member.email}`}
-                    className="mt-auto pt-3 border-t border-gray-100 dark:border-gray-800 text-xs text-gray-600 dark:text-gray-400 hover:text-blue-600 flex items-center gap-1.5 font-medium transition-colors"
-                  >
-                    <Mail size={13} />
-                    <span className="truncate">{member.email}</span>
-                  </a>
-                )}
+                {member.email && (() => {
+                  const [user, domain] = splitEmail(member.email);
+                  return (
+                    <EmailObfuscator
+                      user={user}
+                      domain={domain}
+                      className="mt-auto pt-3 border-t border-gray-100 dark:border-gray-800 text-xs text-gray-600 dark:text-gray-400 hover:text-blue-600 font-medium transition-colors truncate"
+                    />
+                  );
+                })()}
               </div>
             </div>
           ))}

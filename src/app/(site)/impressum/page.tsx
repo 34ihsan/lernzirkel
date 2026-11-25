@@ -1,6 +1,7 @@
 import LegalPage from "@/components/common/LegalPage";
 import { LEGAL } from "@/lib/legal-data";
 import { constructMetadata } from "@/lib/seo";
+import EmailObfuscator from "@/components/common/EmailObfuscator";
 
 export const metadata = constructMetadata({
   title: "Impressum",
@@ -50,7 +51,7 @@ export default function ImpressumPage() {
               <br />
               <strong>Telefax:</strong> {LEGAL.fax}
               <br />
-              <strong>E-Mail:</strong> <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>
+              <strong>E-Mail:</strong> <EmailObfuscator user={LEGAL.emailUser} domain={LEGAL.emailDomain} showIcon={false} />
               <br />
               <strong>Web:</strong> {LEGAL.web}
             </p>

@@ -4,6 +4,7 @@ import React from 'react';
 import LegalPage from "@/components/common/LegalPage";
 import { LEGAL } from "@/lib/legal-data";
 import { useLanguage } from "@/context/LanguageContext";
+import EmailObfuscator from "@/components/common/EmailObfuscator";
 
 export default function CookiesContent() {
   const { language } = useLanguage();
@@ -106,7 +107,7 @@ export default function CookiesContent() {
             <p>
               Bei Fragen wenden Sie sich an: <br /><br />
               <strong>{LEGAL.name}</strong><br />
-              E-Mail: <a href={`mailto:${LEGAL.email}`} className="text-primary hover:underline">{LEGAL.email}</a><br /><br />
+              E-Mail: <EmailObfuscator user={LEGAL.emailUser} domain={LEGAL.emailDomain} showIcon={false} className="text-primary hover:underline" /><br /><br />
               Weitere Informationen finden Sie in unserer <a href="/datenschutz" className="text-primary hover:underline">Datenschutzerklärung</a>.
             </p>
           ),
@@ -210,7 +211,7 @@ export default function CookiesContent() {
             <p>
               Sorularınız için bizimle iletişime geçebilirsiniz: <br /><br />
               <strong>{LEGAL.name}</strong><br />
-              E-Posta: <a href={`mailto:${LEGAL.email}`} className="text-primary hover:underline">{LEGAL.email}</a><br /><br />
+              E-Posta: <EmailObfuscator user={LEGAL.emailUser} domain={LEGAL.emailDomain} showIcon={false} className="text-primary hover:underline" /><br /><br />
               Daha fazla bilgi için <a href="/datenschutz" className="text-primary hover:underline">Gizlilik Politikamızı</a> inceleyebilirsiniz.
             </p>
           ),
@@ -262,7 +263,7 @@ export default function CookiesContent() {
           title: "Contact",
           content: (
             <p>
-              Email: <a href={`mailto:${LEGAL.email}`} className="text-primary hover:underline">{LEGAL.email}</a>
+              Email: <EmailObfuscator user={LEGAL.emailUser} domain={LEGAL.emailDomain} showIcon={false} className="text-primary hover:underline" />
             </p>
           ),
         }
@@ -281,7 +282,7 @@ export default function CookiesContent() {
           id: "contact",
           title: "اتصل بنا",
           content: (
-            <p>البريد الإلكتروني: <a href={`mailto:${LEGAL.email}`} className="text-primary hover:underline">{LEGAL.email}</a></p>
+            <p>البريد الإلكتروني: <EmailObfuscator user={LEGAL.emailUser} domain={LEGAL.emailDomain} showIcon={false} className="text-primary hover:underline" /></p>
           ),
         }
       ]

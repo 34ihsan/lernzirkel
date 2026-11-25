@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { LifeBuoy, Clock, MapPin, CheckCircle2, Globe, ArrowRight, Languages } from 'lucide-react';
 import { getCachedPageBySlug } from '@/lib/cached-content';
+import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
@@ -107,7 +108,7 @@ function StaticMFDPage() {
 
                   <div>
                     <p className="text-gray-700 dark:text-gray-300 font-semibold mb-1">E-Mail:</p>
-                    <a href="mailto:beratung.mfd@lernzirkel-online.de" className="text-[var(--primary)] hover:underline break-all">beratung.mfd@lernzirkel-online.de</a>
+                    <EmailObfuscator user="beratung.mfd" domain="lernzirkel-online.de" showIcon={false} className="text-[var(--primary)] hover:underline break-all" />
                   </div>
 
                   <div>

@@ -1,6 +1,7 @@
 import LegalPage from "@/components/common/LegalPage";
 import { LEGAL } from "@/lib/legal-data";
 import { constructMetadata } from "@/lib/seo";
+import EmailObfuscator from "@/components/common/EmailObfuscator";
 
 export const metadata = constructMetadata({
   title: "Allgemeine Geschäftsbedingungen (AGB)",
@@ -82,7 +83,7 @@ export default function AgbPage() {
                 Verbraucher haben bei Fernabsatzverträgen ein gesetzliches Widerrufsrecht von 14
                 Tagen ohne Angabe von Gründen. Die Frist beginnt mit Vertragsschluss. Zur Ausübung
                 genügt eine eindeutige Erklärung (z. B. per E-Mail an{" "}
-                <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>).
+                <EmailObfuscator user={LEGAL.emailUser} domain={LEGAL.emailDomain} showIcon={false} />).
               </p>
               <p>
                 Beginnt der Kurs auf Ihren ausdrücklichen Wunsch vor Ablauf der Widerrufsfrist, haben

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowLeft, CheckCircle2, GraduationCap, AlertCircle, ExternalLink } from 'lucide-react';
+import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 export default function TelcPruefungenPage() {
   return (
@@ -62,10 +63,12 @@ export default function TelcPruefungenPage() {
             <div className="text-center">
               <h4 className="text-xl font-bold text-primary mb-4">Haben Sie Fragen zu den Prüfungen?</h4>
               <p className="mb-6">Schreiben Sie uns gerne eine E-Mail.</p>
-              {/* Note: Obfuscated Email to prevent bots as requested in general requirements */}
-              <a href="mailto:exams@lernzirkel-online.de" className="inline-block px-6 py-3 bg-gray-100 dark:bg-gray-800/50 text-gray-800 dark:text-gray-200 font-bold rounded-lg hover:bg-gray-200 transition-colors">
-                exams@lernzirkel-online.de
-              </a>
+              <EmailObfuscator
+                user="exams"
+                domain="lernzirkel-online.de"
+                showIcon={false}
+                className="px-6 py-3 bg-gray-100 dark:bg-gray-800/50 text-gray-800 dark:text-gray-200 font-bold rounded-lg hover:bg-gray-200 transition-colors"
+              />
             </div>
 
           </div>

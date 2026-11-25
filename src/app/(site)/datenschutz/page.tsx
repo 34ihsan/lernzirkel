@@ -1,6 +1,7 @@
 import LegalPage from "@/components/common/LegalPage";
 import { LEGAL } from "@/lib/legal-data";
 import { constructMetadata } from "@/lib/seo";
+import EmailObfuscator from "@/components/common/EmailObfuscator";
 
 export const metadata = constructMetadata({
   title: "Datenschutzerklärung",
@@ -23,7 +24,7 @@ export default function DatenschutzPage() {
             <p>
               Verantwortlich im Sinne der DSGVO ist: <strong>{LEGAL.name}</strong>, {LEGAL.street},{" "}
               {LEGAL.city}, Telefon {LEGAL.phone}, E-Mail{" "}
-              <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>. Vertreten durch den
+              <EmailObfuscator user={LEGAL.emailUser} domain={LEGAL.emailDomain} showIcon={false} />. Vertreten durch den
               Vorstandsvorsitzenden {LEGAL.chair}.
             </p>
           ),
@@ -189,7 +190,7 @@ export default function DatenschutzPage() {
               </ul>
               <p>
                 Zur Ausübung Ihrer Rechte genügt eine E-Mail an{" "}
-                <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>.
+                <EmailObfuscator user={LEGAL.emailUser} domain={LEGAL.emailDomain} showIcon={false} />.
               </p>
             </>
           ),
