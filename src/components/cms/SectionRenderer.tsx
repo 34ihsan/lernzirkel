@@ -12,6 +12,17 @@ import {
 import DynamicIcon from "@/components/common/DynamicIcon";
 import { useLanguage } from "@/context/LanguageContext";
 
+function overlayStyle(value: any, fallback: number): React.CSSProperties {
+  let pct = fallback;
+  if (typeof value === 'number') pct = value;
+  else if (typeof value === 'string') {
+    const m = value.match(/(\d+)/);
+    if (m) pct = parseInt(m[1], 10);
+  }
+  pct = Math.max(0, Math.min(100, pct));
+  return { backgroundColor: `rgba(0,0,0,${pct / 100})` };
+}
+
 export default function SectionRenderer({ section }: { section: any }) {
   const { type, content = {}, design = {}, isHidden } = section;
   
@@ -60,22 +71,21 @@ export default function SectionRenderer({ section }: { section: any }) {
   switch (type) {
     case 'HERO': {
       const minH = design?.minHeight || 'min-h-[550px]';
-      const overlay = design?.overlayOpacity || 'bg-black/50';
       const textAlign = design?.textAlign || 'text-center';
       const alignClass = textAlign === 'text-left' ? 'items-start text-left' : textAlign === 'text-right' ? 'items-end text-right' : 'items-center text-center';
 
       return (
-        <section 
+        <section
           className={`relative w-full ${minH} flex items-center justify-center ${!isCustomBg ? bgColor : ''} ${!isCustomText ? textColor : ''} ${padding} overflow-hidden`}
           style={sectionStyle}
         >
           {content.imageUrl && (
-            <div 
-              className={`absolute inset-0 bg-cover bg-center ${content.imageOverlayClass || 'mix-blend-overlay'}`}
+            <div
+              className="absolute inset-0 bg-cover bg-center"
               style={{ backgroundImage: `url('${content.imageUrl}')` }}
             />
           )}
-          {content.imageUrl && <div className={`absolute inset-0 ${overlay}`} />}
+          {content.imageUrl && <div className="absolute inset-0" style={overlayStyle(design?.overlayOpacity, 50)} />}
           <div className={`relative z-10 ${containerWidth} mx-auto px-4 flex flex-col ${alignClass}`}>
             {content.eyebrow && (
               <span className="inline-block px-4 py-1.5 bg-accent/20 text-accent font-bold rounded-full text-sm mb-4 tracking-wide uppercase">
@@ -206,7 +216,6 @@ export default function SectionRenderer({ section }: { section: any }) {
     }
 
     case 'BANNER': {
-      const overlayOpacity = design?.overlayOpacity || 'bg-black/60';
       const textAlign = design?.textAlign || 'text-center';
       const contentAlign = textAlign === 'text-left' ? 'items-start text-left' : textAlign === 'text-right' ? 'items-end text-right' : 'items-center text-center';
       const minH = design?.minHeight || 'min-h-[360px]';
@@ -219,7 +228,7 @@ export default function SectionRenderer({ section }: { section: any }) {
             ...(content.imageUrl ? { backgroundImage: `url(${content.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {})
           }}
         >
-          {content.imageUrl && <div className={`absolute inset-0 ${overlayOpacity}`} />}
+          {content.imageUrl && <div className="absolute inset-0" style={overlayStyle(design?.overlayOpacity, 60)} />}
           <div className={`relative z-10 w-full ${containerWidth} mx-auto px-6 flex flex-col ${contentAlign}`}>
             {content.eyebrow && (
               <span 

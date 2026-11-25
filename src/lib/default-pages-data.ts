@@ -28,8 +28,7 @@ export const SYSTEM_PAGES: DefaultPageDefinition[] = [
           buttonLink: "/deutsch-grundbildung",
           secondaryButtonText: "telc Prüfungen",
           secondaryButtonLink: "/telc-pruefungen",
-          imageUrl: "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80",
-          imageOverlayClass: "mix-blend-overlay opacity-30"
+          imageUrl: "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80"
         },
         design: {
           backgroundColor: "#0F4761",

@@ -19,6 +19,15 @@ import { Reorder, useDragControls } from "framer-motion";
 import { generatePageSeo } from "@/actions/ai-seo";
 import type { PagePayload } from "@/actions/pages";
 
+function overlayPercent(value: any, fallback: number): number {
+  if (typeof value === 'number') return Math.max(0, Math.min(100, value));
+  if (typeof value === 'string') {
+    const m = value.match(/(\d+)/);
+    if (m) return Math.max(0, Math.min(100, parseInt(m[1], 10)));
+  }
+  return fallback;
+}
+
 function relativeTime(value?: string | Date | null): string | null {
   if (!value) return null;
   const date = new Date(value);
@@ -2266,19 +2275,22 @@ export default function PageBuilder({
                               {/* Overlay for Hero/Banner */}
                               {(section.type === 'HERO' || section.type === 'BANNER') && (
                                 <div className="sm:col-span-2">
-                                  <label className="block text-xs font-semibold text-gray-700 mb-1">Görsel Karartma / Filtre</label>
-                                  <select
-                                    value={section.design?.overlayOpacity || 'bg-black/50'}
-                                    onChange={e => updateSectionData(section.id, 'design', 'overlayOpacity', e.target.value)}
-                                    className="w-full border rounded-lg p-2 text-sm bg-white"
-                                  >
-                                    <option value="bg-black/0">Yok (%0)</option>
-                                    <option value="bg-black/20">Açık (%20)</option>
-                                    <option value="bg-black/40">Orta-Hafif (%40)</option>
-                                    <option value="bg-black/50">Standart (%50)</option>
-                                    <option value="bg-black/70">Koyu (%70)</option>
-                                    <option value="bg-black/85">Çok Koyu (%85)</option>
-                                  </select>
+                                  <label className="block text-xs font-semibold text-gray-700 mb-1">
+                                    Görsel Koyuluk/Açıklık Oranı — %{overlayPercent(section.design?.overlayOpacity, section.type === 'HERO' ? 50 : 60)}
+                                  </label>
+                                  <input
+                                    type="range"
+                                    min={0}
+                                    max={100}
+                                    step={5}
+                                    value={overlayPercent(section.design?.overlayOpacity, section.type === 'HERO' ? 50 : 60)}
+                                    onChange={e => updateSectionData(section.id, 'design', 'overlayOpacity', Number(e.target.value))}
+                                    className="w-full"
+                                  />
+                                  <div className="flex justify-between text-[10px] text-gray-400 mt-0.5">
+                                    <span>Açık (görsel net)</span>
+                                    <span>Koyu (tamamen siyah)</span>
+                                  </div>
                                 </div>
                               )}
                             </div>
