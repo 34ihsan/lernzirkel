@@ -143,6 +143,18 @@ export default function AgbPage() {
           ),
         },
         {
+          id: "ki-berater",
+          title: "KI-Berater (Chatbot)",
+          content: (
+            <p>
+              Die Antworten des KI-Beraters sind automatisiert erstellte Informationen ohne
+              Gewähr; sie stellen keine Rechts-, Steuer- oder verbindliche Zusage zu
+              Förderleistungen dar. Verbindliche Auskünfte erteilt ausschließlich unser
+              Fachpersonal.
+            </p>
+          ),
+        },
+        {
           id: "haftung",
           title: "Haftung",
           content: (

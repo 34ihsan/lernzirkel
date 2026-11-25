@@ -87,6 +87,29 @@ export default function CountryFlag({
           </g>
         </svg>
       )}
+
+      {normalizedCode === 'ru' && (
+        <svg viewBox="0 0 640 480" className="w-full h-full object-cover">
+          <path fill="#ffffff" d="M0 0h640v160H0z" />
+          <path fill="#0039A6" d="M0 160h640v160H0z" />
+          <path fill="#D52B1E" d="M0 320h640v160H0z" />
+        </svg>
+      )}
+
+      {normalizedCode === 'uk' && (
+        <svg viewBox="0 0 640 480" className="w-full h-full object-cover">
+          <path fill="#005BBB" d="M0 0h640v240H0z" />
+          <path fill="#FFD500" d="M0 240h640v240H0z" />
+        </svg>
+      )}
+
+      {normalizedCode === 'prs' && (
+        <svg viewBox="0 0 640 480" className="w-full h-full object-cover">
+          <path fill="#000000" d="M0 0h213v480H0z" />
+          <path fill="#D32011" d="M213 0h214v480H213z" />
+          <path fill="#007A36" d="M427 0h213v480H427z" />
+        </svg>
+      )}
     </span>
   );
 }

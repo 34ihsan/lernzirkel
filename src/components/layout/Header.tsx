@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Globe, Heart, Phone, Mail, ChevronDown, ArrowRight, Send, Sparkles, Search } from 'lucide-react';
+import { Menu, X, Heart, Phone, Mail, ChevronDown, ArrowRight, Send, Sparkles, Search } from 'lucide-react';
 import EmailObfuscator from '../common/EmailObfuscator';
 import DynamicIcon from '../common/DynamicIcon';
 import LanguageSwitcher from '../common/LanguageSwitcher';
@@ -176,12 +176,12 @@ export default function Header({
     <header
       className={`w-full z-50 transition-all duration-300 ${
         header.design?.isSticky
-          ? isScrolled 
-            ? 'fixed top-0 shadow-md dark:shadow-none backdrop-blur-md bg-white dark:bg-gray-900/90' 
+          ? isScrolled
+            ? 'fixed top-0 shadow-md dark:shadow-none'
             : 'relative'
           : 'relative'
       }`}
-      style={{ backgroundColor: isScrolled ? undefined : navBg }}
+      style={{ backgroundColor: navBg }}
     >
       {/* Top Bar (İletişim, Hızlı Linkler, Dil & Bağış Butonu) */}
       {header.topBar?.enabled && (
@@ -255,7 +255,7 @@ export default function Header({
               style={{ gap: `${Math.max(10, itemGap - 4)}px` }}
             >
               {/* Live Opening Status Indicator */}
-              <LiveOpeningStatus className="text-white/95 hidden sm:inline-flex whitespace-nowrap shrink-0" />
+              <LiveOpeningStatus className="text-foreground/90 hidden sm:inline-flex whitespace-nowrap shrink-0" />
               {showDividers && (
                 <span className="opacity-25 select-none hidden sm:inline">|</span>
               )}
@@ -284,7 +284,7 @@ export default function Header({
                 </>
               )}
               {header.topBar.showLanguage !== false && (
-                <LanguageSwitcher theme="dark" />
+                <LanguageSwitcher theme="light" />
               )}
               {header.topBar.donateButton?.enabled && (
                 <>
@@ -401,7 +401,7 @@ export default function Header({
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`hover:opacity-85 transition-colors py-1 px-1 lg:px-2 flex items-center gap-1 rounded-md hover:bg-black/5 shrink text-center leading-tight break-words ${item.isHighlight ? 'text-accent font-bold' : ''}`}
+                  className={`transition-colors py-1 px-1 lg:px-2 flex items-center gap-1 rounded-md hover:!bg-white hover:!text-[#1e293b] shrink text-center leading-tight break-words ${item.isHighlight ? 'text-accent font-bold' : ''}`}
                   style={{ color: item.isHighlight ? undefined : navTextColor }}
                 >
                   <span>{item.label}</span>
@@ -415,7 +415,7 @@ export default function Header({
                 <Link
                   key={idx}
                   href={item.url}
-                  className={`hover:opacity-85 transition-colors py-1 px-1 lg:px-2 flex items-center gap-1 rounded-md hover:bg-black/5 shrink text-center leading-tight break-words ${item.isHighlight ? 'text-accent font-bold' : ''}`}
+                  className={`transition-colors py-1 px-1 lg:px-2 flex items-center gap-1 rounded-md hover:!bg-white hover:!text-[#1e293b] shrink text-center leading-tight break-words ${item.isHighlight ? 'text-accent font-bold' : ''}`}
                   style={{ color: item.isHighlight ? undefined : navTextColor }}
                 >
                   <span>{item.label}</span>
@@ -439,8 +439,8 @@ export default function Header({
                 <Link
                   href={item.url}
                   onClick={() => setActiveDesktopDropdown(null)}
-                  className={`flex items-center gap-0.5 py-1 px-1 lg:px-2 rounded-md hover:bg-black/5 transition-all select-none shrink text-center leading-tight break-words ${
-                    isOpen ? 'font-bold bg-black/5' : ''
+                  className={`flex items-center gap-0.5 py-1 px-1 lg:px-2 rounded-md transition-all select-none shrink text-center leading-tight break-words ${
+                    isOpen ? 'font-bold bg-white' : 'hover:!bg-white'
                   } ${item.isHighlight ? 'text-accent font-bold' : ''}`}
                   style={{
                     color: isOpen ? navActiveColor : (item.isHighlight ? undefined : navTextColor)
@@ -468,19 +468,12 @@ export default function Header({
                   }`}
                   style={{ minWidth: '320px', maxWidth: '420px' }}
                 >
-                  <div className="bg-white dark:bg-gray-900/95 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800 p-3 overflow-hidden ring-1 ring-black/5">
-                    {/* Header category link helper */}
-                    <div className="pb-2 mb-2 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between px-2">
+                  <div className="bg-secondary backdrop-blur-md rounded-2xl shadow-2xl border border-gray-100 p-3 overflow-hidden ring-1 ring-black/5">
+                    {/* Header category label */}
+                    <div className="pb-2 mb-2 border-b border-gray-200/70 flex items-center px-2">
                       <span className="text-[11px] font-bold uppercase tracking-wider text-blue-900">
                         {item.label}
                       </span>
-                      <Link 
-                        href={item.url}
-                        onClick={() => setActiveDesktopDropdown(null)}
-                        className="text-[11px] text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1"
-                      >
-                        {t('header.allOffers', 'Tümünü Gör').replace('{category}', item.label)} →
-                      </Link>
                     </div>
 
                     {/* Submenu links */}
@@ -488,13 +481,13 @@ export default function Header({
                       {item.children?.map((sub, subIdx) => {
                         const isSubExt = sub.isExternal || sub.url.startsWith('http');
                         const subContent = (
-                          <div className="flex items-start gap-3 p-2 rounded-xl hover:bg-blue-50/70 transition-colors group/sub">
-                            <div className="w-8 h-8 rounded-lg bg-blue-100/70 text-blue-700 flex items-center justify-center shrink-0 group-hover/sub:bg-blue-600 group-hover/sub:text-white transition-colors mt-0.5">
+                          <div className="flex items-start gap-3 p-2 rounded-xl hover:bg-primary/10 transition-colors group/sub">
+                            <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover/sub:bg-primary group-hover/sub:text-white transition-colors mt-0.5">
                               <DynamicIcon name={sub.icon || 'GraduationCap'} className="w-4 h-4" />
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2">
-                                <span className="font-bold text-xs text-gray-900 dark:text-gray-100 group-hover/sub:text-blue-700 transition-colors">
+                                <span className="font-bold text-sm text-gray-900 group-hover/sub:text-[#1e293b] transition-colors">
                                   {sub.label}
                                 </span>
                                 {sub.badge && (
@@ -503,11 +496,6 @@ export default function Header({
                                   </span>
                                 )}
                               </div>
-                              {sub.description && (
-                                <p className="text-[11px] text-gray-500 dark:text-gray-400 line-clamp-1 mt-0.5">
-                                  {sub.description}
-                                </p>
-                              )}
                             </div>
                           </div>
                         );
@@ -538,13 +526,13 @@ export default function Header({
                                 {sub.children.map((child, cIdx) => {
                                   const isChildExt = child.isExternal || child.url.startsWith('http');
                                   const childContent = (
-                                    <div className="flex items-start gap-2.5 p-1.5 rounded-lg hover:bg-blue-50/80 transition-colors group/child">
-                                      <div className="w-5 h-5 rounded-md bg-blue-100/60 text-blue-700 flex items-center justify-center shrink-0 group-hover/child:bg-blue-600 group-hover/child:text-white transition-colors mt-0.5">
+                                    <div className="flex items-start gap-2.5 p-1.5 rounded-lg hover:bg-primary/10 transition-colors group/child">
+                                      <div className="w-5 h-5 rounded-md bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover/child:bg-primary group-hover/child:text-white transition-colors mt-0.5">
                                         <DynamicIcon name={child.icon || 'Sparkles'} className="w-3 h-3" />
                                       </div>
                                       <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-1.5">
-                                          <span className="font-semibold text-[11px] text-gray-800 dark:text-gray-200 group-hover/child:text-blue-700 transition-colors">
+                                          <span className="font-semibold text-xs text-gray-800 group-hover/child:text-[#1e293b] transition-colors">
                                             {child.label}
                                           </span>
                                           {child.badge && (
@@ -553,11 +541,6 @@ export default function Header({
                                             </span>
                                           )}
                                         </div>
-                                        {child.description && (
-                                          <p className="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-1 mt-0.5">
-                                            {child.description}
-                                          </p>
-                                        )}
                                       </div>
                                     </div>
                                   );
@@ -677,7 +660,7 @@ export default function Header({
                 <button
                   type="button"
                   onClick={() => setIsSearchOpen(true)}
-                  className="hidden lg:flex items-center gap-1.5 lg:gap-2 px-2 lg:px-3 py-1.5 lg:py-2 rounded-xl text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-primary hover:bg-gray-100 dark:bg-gray-800/50 transition-all border border-gray-200 dark:border-gray-700 hover:border-gray-300 shadow-2xs"
+                  className="hidden lg:flex items-center gap-1.5 lg:gap-2 px-2 lg:px-3 py-1.5 lg:py-2 rounded-xl text-xs font-medium text-gray-600 bg-white/95 hover:bg-white dark:bg-gray-800/50 dark:text-gray-400 transition-all border border-white/40 dark:border-gray-700 shadow-sm"
                   title="Website durchsuchen (Strg+K / ⌘K)"
                   aria-label="Suche öffnen"
                 >
@@ -725,13 +708,13 @@ export default function Header({
                   onClick={() => setIsSearchOpen(true)}
                   aria-label="Suche öffnen"
                 >
-                  <Search className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                  <Search className="w-5 h-5 text-white dark:text-gray-400" />
                 </button>
               )}
 
               {/* Mobile Hamburger Toggle */}
-              <button 
-                className="lg:hidden p-2 text-foreground focus:outline-none rounded-lg hover:bg-gray-100 dark:bg-gray-800/50 transition-colors"
+              <button
+                className="lg:hidden p-2 text-white dark:text-foreground focus:outline-none rounded-lg hover:bg-white/10 dark:hover:bg-gray-800/50 transition-colors"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label="Menü öffnen"
               >
@@ -770,15 +753,6 @@ export default function Header({
           {/* Mobile Language Selector Pills */}
           {header.topBar?.showLanguage !== false && (
             <div className="pb-3 mb-3 border-b border-gray-100 dark:border-gray-800">
-              <div className="flex items-center justify-between text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 px-1">
-                <span className="flex items-center gap-1.5 text-blue-800">
-                  <Globe className="w-3.5 h-3.5 text-blue-600" />
-                  {t('lang.select', 'Sprache wählen / Dil')}
-                </span>
-                <span className="text-[10px] text-blue-700 font-bold bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
-                  DE • TR • EN • AR
-                </span>
-              </div>
               <LanguageSwitcher variant="pills" />
             </div>
           )}
@@ -863,16 +837,7 @@ export default function Header({
 
                 {/* Mobile Submenu Accordion */}
                 {hasChildren && isSubOpen && (
-                  <div className="pl-3 pr-2 py-2 space-y-1.5 bg-gray-50 dark:bg-gray-800/90 rounded-xl mb-2 border-l-2 border-blue-500 animate-in fade-in duration-200">
-                    {/* Direct link to main category page */}
-                    <Link
-                      href={item.url}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center justify-between p-2 rounded-lg text-xs font-bold text-blue-700 bg-blue-100/60 hover:bg-blue-100 transition-colors"
-                    >
-                      <span>👉 {t('header.allOffers', `Alle Angebote zu "${item.label}" ansehen`, { category: item.label })}</span>
-                      <span>→</span>
-                    </Link>
+                  <div className="pl-3 pr-2 py-2 space-y-1.5 bg-secondary dark:bg-gray-800/90 rounded-xl mb-2 border-l-2 border-blue-500 animate-in fade-in duration-200">
 
                     {item.children?.map((sub, subIdx) => {
                       const isSubExt = sub.isExternal || sub.url.startsWith('http');
@@ -905,8 +870,7 @@ export default function Header({
                               <div className="flex items-center gap-2.5">
                                 {sub.icon && <DynamicIcon name={sub.icon} className="w-4 h-4 text-blue-600 shrink-0" />}
                                 <div>
-                                  <div className="font-medium text-gray-900 dark:text-gray-100">{sub.label}</div>
-                                  {sub.description && <div className="text-[11px] text-gray-500 dark:text-gray-400">{sub.description}</div>}
+                                  <div className="font-medium text-base text-gray-900 dark:text-gray-100">{sub.label}</div>
                                 </div>
                               </div>
                               {sub.badge && (
@@ -951,8 +915,7 @@ export default function Header({
                                     <div className="flex items-center gap-2">
                                       {child.icon && <DynamicIcon name={child.icon} className="w-3.5 h-3.5 text-blue-600 shrink-0" />}
                                       <div>
-                                        <div className="font-medium text-gray-900 dark:text-gray-100">{child.label}</div>
-                                        {child.description && <div className="text-[10px] text-gray-500 dark:text-gray-400">{child.description}</div>}
+                                        <div className="font-medium text-sm text-gray-900 dark:text-gray-100">{child.label}</div>
                                       </div>
                                     </div>
                                     {child.badge && (

@@ -1,7 +1,9 @@
 import React from 'react';
 import { getCachedNews } from '@/lib/cached-content';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Newspaper, Calendar, ArrowRight } from 'lucide-react';
+import { LocalizedText } from '@/components/common/LocalizedText';
 
 export const metadata = {
   title: 'Aktuelles | Lernzirkel Ludwigshafen e.V.',
@@ -37,7 +39,7 @@ export default async function AktuellesPage() {
               <Link href={`/aktuelles/${news.id}`} key={news.id} className="group flex flex-col bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm dark:shadow-none hover:shadow-xl transition-all border border-gray-100 dark:border-gray-800 hover:border-primary/20">
                 <div className="h-48 bg-gray-200 relative overflow-hidden">
                   {news.imageUrl ? (
-                    <img src={news.imageUrl} alt={news.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <Image src={news.imageUrl} alt={news.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-primary/10 text-primary/30">
                       <Newspaper size={48} />
@@ -50,7 +52,7 @@ export default async function AktuellesPage() {
                     {new Date(news.publishDate).toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })}
                   </div>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 group-hover:text-primary transition-colors line-clamp-2">
-                    {news.title}
+                    <LocalizedText base={news.title} translations={news.translations} field="title" />
                   </h2>
                   <div className="mt-auto pt-4 flex items-center text-primary font-semibold text-sm">
                     Mehr lesen <ArrowRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />

@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
@@ -8,15 +8,7 @@ import { ArrowLeft, Network } from 'lucide-react';
 import Image from 'next/image';
 
 export default async function OrganigrammPage() {
-  const page = await prisma.page.findUnique({
-    where: { slug: 'ueber-uns/organigramm' },
-    include: {
-      parent: true,
-      sections: {
-        orderBy: { order: 'asc' }
-      }
-    }
-  });
+  const page = await getCachedPageBySlug('ueber-uns/organigramm');
 
   if (page && page.isPublished && page.sections.length > 0) {
     const breadcrumbs: BreadcrumbItem[] = [];
@@ -27,9 +19,7 @@ export default async function OrganigrammPage() {
         url: `/${currentParent.slug}`
       });
       if (currentParent.parentId) {
-        currentParent = await prisma.page.findUnique({
-          where: { id: currentParent.parentId }
-        });
+        currentParent = await getCachedPageById(currentParent.parentId);
       } else {
         break;
       }
@@ -76,12 +66,13 @@ function StaticOrganigramm() {
           
           <div className="prose max-w-none text-gray-700 dark:text-gray-300 mt-10">
             <div className="relative w-full overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm dark:shadow-none bg-white dark:bg-gray-900 p-4">
-               {/* Using standard img for now since we are hot-linking to WP uploads. 
-                   We will configure next/image domains later if needed, or download the image. */}
-               <img 
-                 src="https://lernzirkel-online.de/wp-content/uploads/2022/02/Organigramm-..png" 
+               <Image
+                 src="https://lernzirkel-online.de/wp-content/uploads/2022/02/Organigramm-..png"
                  alt="Organigramm des Lernzirkel Ludwigshafen e.V."
-                 className="w-full h-auto object-contain"
+                 width={1024}
+                 height={632}
+                 style={{ width: '100%', height: 'auto' }}
+                 className="object-contain"
                />
             </div>
           </div>

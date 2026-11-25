@@ -33,7 +33,7 @@ export default function LoginForm() {
           <div className="w-12 h-12 bg-gray-900 rounded-xl flex items-center justify-center mx-auto mb-3">
             <Lock className="text-white" size={20} />
           </div>
-          <h1 className="text-xl font-bold text-gray-900">Lernzirkel CMS</h1>
+          <h1 className="text-xl font-bold text-gray-900">Lernzirkel Yönetim Paneli</h1>
           <p className="text-sm text-gray-500 mt-1">Yönetim paneline giriş yapın</p>
         </div>
 

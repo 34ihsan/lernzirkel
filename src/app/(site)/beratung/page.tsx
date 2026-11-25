@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import { getCachedPageBySlug } from '@/lib/cached-content';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
@@ -7,14 +7,7 @@ import { LifeBuoy, Clock, MapPin, CheckCircle2 } from 'lucide-react';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 export default async function BeratungPage() {
-  const cmsPage = await prisma.page.findUnique({
-    where: { slug: 'beratung' },
-    include: {
-      sections: {
-        orderBy: { order: 'asc' }
-      }
-    }
-  });
+  const cmsPage = await getCachedPageBySlug('beratung');
 
   if (cmsPage && cmsPage.isPublished && cmsPage.sections.length > 0) {
     return (

@@ -2,8 +2,10 @@ import React from 'react';
 import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Calendar, User, ArrowLeft, Tag } from 'lucide-react';
 import type { Metadata, ResolvingMetadata } from 'next';
+import { LocalizedText } from '@/components/common/LocalizedText';
 
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> },
@@ -33,7 +35,8 @@ export async function generateMetadata(
 export default async function ArticleDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const article = await prisma.article.findUnique({
-    where: { slug }
+    where: { slug },
+    include: { translations: true },
   });
 
   if (!article || (!article.isPublished && process.env.NODE_ENV === 'production')) {
@@ -42,13 +45,14 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
 
   // Find related articles (same category)
   const relatedArticles = await prisma.article.findMany({
-    where: { 
-      isPublished: true, 
+    where: {
+      isPublished: true,
       category: article.category,
       id: { not: article.id }
     },
     take: 3,
-    orderBy: { publishedAt: 'desc' }
+    orderBy: { publishedAt: 'desc' },
+    include: { translations: true },
   });
 
   // Basic SEO JSON-LD
@@ -76,7 +80,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
         {/* Cover Image Header */}
         <div className="w-full h-[40vh] min-h-[300px] max-h-[500px] bg-gray-100 dark:bg-gray-800/50 relative overflow-hidden">
           {article.coverImage ? (
-            <img src={article.coverImage} alt={article.title} className="w-full h-full object-cover" />
+            <Image src={article.coverImage} alt={article.title} fill priority sizes="100vw" className="object-cover" />
           ) : (
             <div className="w-full h-full bg-gradient-to-r from-primary to-blue-600 opacity-90" />
           )}
@@ -88,7 +92,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                 {article.category}
               </span>
               <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-6 max-w-3xl mx-auto drop-shadow-lg">
-                {article.title}
+                <LocalizedText base={article.title} translations={article.translations} field="title" />
               </h1>
               <div className="flex items-center justify-center gap-6 text-white/90 text-sm font-medium">
                 <div className="flex items-center">
@@ -124,19 +128,23 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
             {/* Lead/Excerpt */}
             {article.excerpt && (
               <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed mb-10 font-medium">
-                {article.excerpt}
+                <LocalizedText base={article.excerpt} translations={article.translations} field="excerpt" />
               </p>
             )}
 
             {/* Main Content */}
-            {/* Note: The 'prose' class is from @tailwindcss/typography plugin, if it's installed. 
+            {/* Note: The 'prose' class is from @tailwindcss/typography plugin, if it's installed.
                 If not, we use raw styling or the CMS standard styling. */}
-            <div 
+            <LocalizedText
+              as="div"
               className="prose prose-lg prose-blue max-w-none text-gray-700 dark:text-gray-300 leading-relaxed
                 prose-headings:font-bold prose-headings:text-gray-900 dark:text-gray-100 prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl
                 prose-a:text-primary prose-a:font-semibold hover:prose-a:text-primary-light
                 prose-img:rounded-xl prose-img:shadow-sm dark:shadow-none"
-              dangerouslySetInnerHTML={{ __html: article.content }} 
+              base={article.content}
+              translations={article.translations}
+              field="content"
+              html
             />
             
             {/* Tags */}
@@ -164,12 +172,14 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                 <Link href={`/blog/${rel.slug}`} key={rel.id} className="group block">
                   <div className="h-40 bg-gray-100 dark:bg-gray-800/50 rounded-xl mb-4 overflow-hidden relative">
                     {rel.coverImage ? (
-                      <img src={rel.coverImage} alt={rel.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <Image src={rel.coverImage} alt={rel.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-blue-50 to-primary/10" />
                     )}
                   </div>
-                  <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-primary transition-colors line-clamp-2 mb-2">{rel.title}</h4>
+                  <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-primary transition-colors line-clamp-2 mb-2">
+                    <LocalizedText base={rel.title} translations={rel.translations} field="title" />
+                  </h4>
                   <p className="text-sm text-gray-500 dark:text-gray-400">{new Date(rel.publishedAt).toLocaleDateString('de-DE')}</p>
                 </Link>
               ))}

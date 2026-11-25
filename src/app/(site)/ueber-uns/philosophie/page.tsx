@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
@@ -7,15 +7,7 @@ import Link from 'next/link';
 import { ArrowLeft, Lightbulb, Users, GraduationCap, Globe } from 'lucide-react';
 
 export default async function PhilosophiePage() {
-  const page = await prisma.page.findUnique({
-    where: { slug: 'ueber-uns/philosophie' },
-    include: {
-      parent: true,
-      sections: {
-        orderBy: { order: 'asc' }
-      }
-    }
-  });
+  const page = await getCachedPageBySlug('ueber-uns/philosophie');
 
   if (page && page.isPublished && page.sections.length > 0) {
     const breadcrumbs: BreadcrumbItem[] = [];
@@ -26,9 +18,7 @@ export default async function PhilosophiePage() {
         url: `/${currentParent.slug}`
       });
       if (currentParent.parentId) {
-        currentParent = await prisma.page.findUnique({
-          where: { id: currentParent.parentId }
-        });
+        currentParent = await getCachedPageById(currentParent.parentId);
       } else {
         break;
       }

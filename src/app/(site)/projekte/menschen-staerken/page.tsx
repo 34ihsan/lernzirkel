@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { 
   ArrowLeft, Calendar, Users, Globe, Sparkles, 
@@ -8,7 +9,7 @@ import {
 } from 'lucide-react';
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
-import prisma from '@/lib/prisma';
+import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
@@ -19,15 +20,7 @@ export const metadata = {
 };
 
 export default async function MenschenStaerkenPage() {
-  const page = await prisma.page.findUnique({
-    where: { slug: 'projekte/menschen-staerken' },
-    include: {
-      parent: true,
-      sections: {
-        orderBy: { order: 'asc' }
-      }
-    }
-  });
+  const page = await getCachedPageBySlug('projekte/menschen-staerken');
 
   if (page && page.isPublished && page.sections.length > 0) {
     const breadcrumbs: BreadcrumbItem[] = [];
@@ -38,9 +31,7 @@ export default async function MenschenStaerkenPage() {
         url: `/${currentParent.slug}`
       });
       if (currentParent.parentId) {
-        currentParent = await prisma.page.findUnique({
-          where: { id: currentParent.parentId }
-        });
+        currentParent = await getCachedPageById(currentParent.parentId);
       } else {
         break;
       }
@@ -164,11 +155,13 @@ function StaticMenschenStaerken() {
 
             {/* Featured Hero Image */}
             <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm dark:shadow-none bg-slate-100">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
+              <Image
                 src="https://lernzirkel-online.de/wp-content/uploads/2016/09/Slide_Integration.jpg"
                 alt="Patenschaft Menschen stärken Menschen – Integration und Zusammenhalt"
-                className="w-full h-full object-cover"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 1024px"
+                className="object-cover"
               />
             </div>
 
@@ -301,10 +294,11 @@ function StaticMenschenStaerken() {
                   
                   {/* Der Paritätische */}
                   <div className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center text-center gap-4 shadow-2xs hover:shadow-sm dark:shadow-none transition">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img 
-                      src="https://lernzirkel-online.de/wp-content/uploads/2020/01/der-paritaetische-v2_LOGO-300x150.jpg" 
-                      alt="Der Paritätische Wohlfahrtsverband" 
+                    <Image
+                      src="https://lernzirkel-online.de/wp-content/uploads/2020/01/der-paritaetische-v2_LOGO-300x150.jpg"
+                      alt="Der Paritätische Wohlfahrtsverband"
+                      width={300}
+                      height={150}
                       className="h-16 w-auto object-contain"
                     />
                     <div>
@@ -315,10 +309,11 @@ function StaticMenschenStaerken() {
 
                   {/* BAFzA */}
                   <div className="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center text-center gap-4 shadow-2xs hover:shadow-sm dark:shadow-none transition">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img 
-                      src="https://lernzirkel-online.de/wp-content/uploads/2020/04/Bafza-300x124.png" 
-                      alt="Bundesamt für Familie und zivilgesellschaftliche Aufgaben (BAFzA)" 
+                    <Image
+                      src="https://lernzirkel-online.de/wp-content/uploads/2020/04/Bafza-300x124.png"
+                      alt="Bundesamt für Familie und zivilgesellschaftliche Aufgaben (BAFzA)"
+                      width={300}
+                      height={124}
                       className="h-16 w-auto object-contain"
                     />
                     <div>

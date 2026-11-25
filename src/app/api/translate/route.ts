@@ -1,9 +1,6 @@
-import { generateObject } from 'ai';
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { z } from 'zod';
 import { NextResponse } from 'next/server';
 import { requireAdminSession } from '@/lib/auth-server';
-import prisma from '@/lib/prisma';
+import { translateFields, defaultTargetLanguages } from '@/lib/content-translation';
 
 export async function POST(req: Request) {
   try {
@@ -14,49 +11,24 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const { fields, targetLanguages = ['en', 'tr', 'ar'] } = body;
+    const { fields, targetLanguages = defaultTargetLanguages() } = body;
 
     // fields should be an object: { title: "Mein Kurs", content: "<p>Hallo</p>" }
     if (!fields || typeof fields !== 'object') {
       return NextResponse.json({ error: "Invalid fields object provided." }, { status: 400 });
     }
 
-    // /admin/ai-settings'te kaydedilen anahtarı kullan (chat asistanıyla aynı kaynak) —
-    // önceden burada env var bekleniyordu ama o hiçbir yerde set edilmiyordu.
-    const settings = await prisma.siteSettings.findFirst();
-    const aiConfig = (settings?.aiConfig as any) || {};
-    if (!aiConfig.apiKey || aiConfig.provider !== 'gemini') {
+    const translations = await translateFields(fields, targetLanguages);
+    if (!translations) {
       return NextResponse.json(
         { error: 'AI henüz yapılandırılmamış. /admin/ai-settings üzerinden bir Gemini API anahtarı ekleyin.' },
         { status: 503 }
       );
     }
-    const google = createGoogleGenerativeAI({ apiKey: aiConfig.apiKey });
-
-    // Google Gemini 1.5 Flash is extremely fast, high quality, and has a very generous free tier.
-    const result = await generateObject({
-      model: google('gemini-1.5-flash'),
-      system: `You are a professional multi-language translator. You will receive a JSON object containing text or HTML content in German.
-      Your task is to translate ALL the fields in the object into the requested target languages.
-      
-      CRITICAL RULES:
-      1. Preserve ALL HTML tags, attributes, and structure exactly as they are. ONLY translate the text content between tags.
-      2. Keep names, specific locations (e.g. Ludwigshafen), and brand names unchanged.
-      3. Ensure professional, culturally appropriate translations.
-      4. Return a JSON where the root keys are the target language codes (e.g., 'en', 'tr', 'ar'), and the values are objects with the exact same keys as the input fields, but translated.`,
-      prompt: `Target Languages: ${targetLanguages.join(', ')}\n\nFields to translate:\n${JSON.stringify(fields, null, 2)}`,
-      schema: z.record(z.string(), z.record(z.string(), z.string())),
-      // Example output schema:
-      // {
-      //   "en": { "title": "...", "content": "..." },
-      //   "tr": { "title": "...", "content": "..." },
-      //   "ar": { "title": "...", "content": "..." }
-      // }
-    });
 
     return NextResponse.json({
       success: true,
-      translations: result.object,
+      translations,
     });
   } catch (error: any) {
     console.error("Translation API Error:", error);

@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { 
   ArrowLeft, Calendar, Users, Sparkles, 
@@ -9,7 +10,7 @@ import {
 } from 'lucide-react';
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
-import prisma from '@/lib/prisma';
+import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
@@ -20,15 +21,7 @@ export const metadata = {
 };
 
 export default async function WettbewerbeOverviewPage() {
-  const page = await prisma.page.findUnique({
-    where: { slug: 'projekte/wettbewerbe' },
-    include: {
-      parent: true,
-      sections: {
-        orderBy: { order: 'asc' }
-      }
-    }
-  });
+  const page = await getCachedPageBySlug('projekte/wettbewerbe');
 
   if (page && page.isPublished && page.sections.length > 0) {
     const breadcrumbs: BreadcrumbItem[] = [];
@@ -39,9 +32,7 @@ export default async function WettbewerbeOverviewPage() {
         url: `/${currentParent.slug}`
       });
       if (currentParent.parentId) {
-        currentParent = await prisma.page.findUnique({
-          where: { id: currentParent.parentId }
-        });
+        currentParent = await getCachedPageById(currentParent.parentId);
       } else {
         break;
       }
@@ -272,12 +263,13 @@ function StaticWettbewerbeHub() {
 
                       {/* Image & Description Grid */}
                       <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
-                        <div className="md:col-span-5 h-48 sm:h-52 rounded-2xl overflow-hidden bg-slate-100 border border-gray-100 dark:border-gray-800 shrink-0">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img 
-                            src={item.image} 
-                            alt={item.title} 
-                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        <div className="relative md:col-span-5 h-48 sm:h-52 rounded-2xl overflow-hidden bg-slate-100 border border-gray-100 dark:border-gray-800 shrink-0">
+                          <Image
+                            src={item.image}
+                            alt={item.title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 42vw"
+                            className="object-cover hover:scale-105 transition-transform duration-300"
                           />
                         </div>
 

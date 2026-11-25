@@ -1,15 +1,28 @@
 import { modelConfig } from "@/lib/admin-config";
 import { saveModelRecord } from "@/actions/admin";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ShieldAlert } from "lucide-react";
 import { notFound } from "next/navigation";
 import EditFormWithPreview from "@/components/admin/EditFormWithPreview";
+import { getAreaAccess, MODEL_TO_AREA } from "@/lib/permissions";
 
 export default async function NewModelPage({ params }: { params: Promise<{ model: string }> }) {
   const { model } = await params;
   const config = modelConfig[model];
-  
+
   if (!config) return notFound();
+
+  const area = MODEL_TO_AREA[model];
+  const access = area ? await getAreaAccess(area) : { canView: true, canEdit: true };
+  if (!access.canEdit) {
+    return (
+      <div className="max-w-2xl mx-auto mt-12 bg-white rounded-lg shadow-sm border border-red-200 p-8 text-center">
+        <ShieldAlert className="mx-auto mb-4 text-red-500" size={40} />
+        <h1 className="text-lg font-bold text-gray-900 mb-2">Bu bölümde düzenleme yetkiniz yok</h1>
+        <p className="text-sm text-gray-500">Erişmek için yöneticinizden yetki talep edin.</p>
+      </div>
+    );
+  }
 
   async function handleSave(formData: FormData) {
     "use server";

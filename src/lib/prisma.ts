@@ -18,7 +18,7 @@ const prismaClientSingleton = () => {
   return new PrismaClient({ adapter })
 }
 
-const SCHEMA_VERSION = 13 // bumped: removed LeadApplication, added Registration.assignedTo*/lastContactedAt
+const SCHEMA_VERSION = 14 // bumped: GalleryImage -> GalleryMedia (photo+video), added DepotDocument
 
 declare const globalThis: {
   prismaGlobal: ReturnType<typeof prismaClientSingleton>;
@@ -32,7 +32,9 @@ const isStale = !existingClient ||
   !('page' in existingClient) || 
   !('announcement' in existingClient) ||
   !('jobPosition' in existingClient) ||
-  !('article' in existingClient)
+  !('article' in existingClient) ||
+  !('galleryMedia' in existingClient) ||
+  !('depotDocument' in existingClient)
 
 const prisma = (!isStale && existingClient) ? existingClient : prismaClientSingleton()
 

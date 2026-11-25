@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { 
   ArrowLeft, Calendar, Users, Sparkles, 
@@ -9,7 +10,7 @@ import {
 } from 'lucide-react';
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
-import prisma from '@/lib/prisma';
+import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
@@ -20,15 +21,7 @@ export const metadata = {
 };
 
 export default async function BildungsmessePage() {
-  const page = await prisma.page.findUnique({
-    where: { slug: 'projekte/wettbewerbe/bildungsmesse' },
-    include: {
-      parent: true,
-      sections: {
-        orderBy: { order: 'asc' }
-      }
-    }
-  });
+  const page = await getCachedPageBySlug('projekte/wettbewerbe/bildungsmesse');
 
   if (page && page.isPublished && page.sections.length > 0) {
     const breadcrumbs: BreadcrumbItem[] = [];
@@ -39,9 +32,7 @@ export default async function BildungsmessePage() {
         url: `/${currentParent.slug}`
       });
       if (currentParent.parentId) {
-        currentParent = await prisma.page.findUnique({
-          where: { id: currentParent.parentId }
-        });
+        currentParent = await getCachedPageById(currentParent.parentId);
       } else {
         break;
       }
@@ -197,11 +188,13 @@ function StaticBildungsmesse() {
 
             {/* Featured Hero Image */}
             <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm dark:shadow-none bg-slate-100">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
+              <Image
                 src="https://lernzirkel-online.de/wp-content/uploads/2016/08/Download-2-1.jpg"
                 alt="Bildungsmesse des Lernzirkel Ludwigshafen e.V."
-                className="w-full h-full object-cover"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 1024px"
+                className="object-cover"
               />
             </div>
 

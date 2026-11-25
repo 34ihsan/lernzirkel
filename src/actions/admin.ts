@@ -6,9 +6,12 @@ import { redirect } from "next/navigation";
 import fs from "fs";
 import path from "path";
 import { requireAdminSession } from "@/lib/auth-server";
+import { requireAreaPermission, MODEL_TO_AREA } from "@/lib/permissions";
 
 // Design Settings (Legacy form support)
 export async function updateSiteSettings(formData: FormData) {
+  await requireAreaPermission("design", "edit");
+
   const data = {
     siteName: formData.get("siteName") as string,
     description: formData.get("description") as string,
@@ -40,6 +43,8 @@ export async function updateDesignSettings(payload: {
   description: string;
   designConfig: any;
 }) {
+  await requireAreaPermission("design", "edit");
+
   const { siteName, description, designConfig } = payload;
   const colors = designConfig?.colors || {};
 
@@ -72,7 +77,7 @@ export async function updateDesignSettings(payload: {
 }
 
 export async function updateHeaderFooterSettings(headerConfig: any, footerConfig: any) {
-  await requireAdminSession();
+  await requireAreaPermission("design", "edit");
 
   await prisma.siteSettings.upsert({
     where: { id: "global" },
@@ -99,19 +104,29 @@ export async function updateHeaderFooterSettings(headerConfig: any, footerConfig
 const MODEL_PUBLIC_PATHS: Record<string, string[]> = {
   Course: ['/kurse', '/'],
   News: ['/aktuelles', '/'],
-  GalleryImage: ['/galerie', '/'],
+  GalleryMedia: ['/ueber-uns/galerie', '/'],
   TeamMember: ['/ueber-uns', '/organigramm', '/'],
   Project: ['/projekte', '/projekte/wettbewerbe', '/projekte/wettbewerbe/wir-sind-vielfalt', '/projekte/wettbewerbe/bildungsmesse', '/projekte/menschen-staerken', '/projekte/future-connect', '/projekte/konfliktmanagement', '/projekte/sprach-cafe', '/'],
   Department: ['/kontakt', '/'],
 };
 
+// revalidatePath tek başına unstable_cache tag'lerini temizlemez (bkz. cached-content.ts) —
+// bu model'ler o cache'in de geçersiz kılınmasını gerektiriyor.
+const MODEL_CACHE_TAGS: Record<string, string[]> = {
+  GalleryMedia: ['site-gallery'],
+};
+
 // Model Delete Utility
 export async function deleteModelRecord(modelName: string, id: string) {
+  const area = MODEL_TO_AREA[modelName];
+  if (area) await requireAreaPermission(area, "edit");
+
   // @ts-ignore
   await prisma[modelName.charAt(0).toLowerCase() + modelName.slice(1)].delete({
     where: { id },
   });
 
+  for (const tag of MODEL_CACHE_TAGS[modelName] || []) updateTag(tag);
   revalidatePath(`/admin/content/${modelName}`);
   revalidatePath('/', 'layout');
   const targetPaths = MODEL_PUBLIC_PATHS[modelName] || [];
@@ -136,6 +151,9 @@ export async function restoreRevision(revisionId: string) {
   }
 
   const { modelName, recordId } = revision;
+  const area = MODEL_TO_AREA[modelName];
+  if (area) await requireAreaPermission(area, "edit");
+
   const delegate = (prisma as any)[modelName.charAt(0).toLowerCase() + modelName.slice(1)];
 
   // Geri yüklenecek anlık görüntü sadece skaler/JSON alanları içerir (ilişkiler hariç);
@@ -155,6 +173,7 @@ export async function restoreRevision(revisionId: string) {
 
   await delegate.update({ where: { id: recordId }, data: snapshot });
 
+  for (const tag of MODEL_CACHE_TAGS[modelName] || []) updateTag(tag);
   revalidatePath(`/admin/content/${modelName}`);
   revalidatePath("/", "layout");
   const targetPaths = MODEL_PUBLIC_PATHS[modelName] || [];
@@ -166,8 +185,18 @@ export async function restoreRevision(revisionId: string) {
 
 // Generic Model Save
 export async function saveModelRecord(modelName: string, id: string | null, data: any) {
+  const area = MODEL_TO_AREA[modelName];
+  const session = area ? await requireAreaPermission(area, "edit") : await requireAdminSession();
+
+  // Yetki yükseltme koruması: ADMIN olmayan biri "team.edit" yetkisine sahip olsa bile,
+  // Ekip Üyesi formundan kendine veya başkasına admin rolü/yetki atayamaz.
+  if (modelName === "TeamMember" && session.adminRole !== "ADMIN") {
+    delete data.adminRole;
+    delete data.permissions;
+  }
+
   const delegate = (prisma as any)[modelName.charAt(0).toLowerCase() + modelName.slice(1)];
-  
+
   if (modelName === 'Course') {
     // Form metin alanı olarak gönderiyor; Prisma Int bekliyor
     if ('capacity' in data) {
@@ -258,6 +287,7 @@ export async function saveModelRecord(modelName: string, id: string | null, data
     });
   }
 
+  for (const tag of MODEL_CACHE_TAGS[modelName] || []) updateTag(tag);
   revalidatePath(`/admin/content/${modelName}`);
   revalidatePath('/', 'layout');
   const targetPaths = MODEL_PUBLIC_PATHS[modelName] || [];
@@ -525,6 +555,7 @@ export async function syncSystemPages() {
   // Auto-sync page hierarchy
   await syncPageHierarchy();
 
+  updateTag("site-pages");
   revalidatePath("/admin/pages");
   revalidatePath("/", "layout");
 }
@@ -635,6 +666,7 @@ export async function syncPageHierarchy() {
     }
   }
 
+  if (updatedCount > 0) updateTag("site-pages");
   revalidatePath('/admin/pages');
   revalidatePath('/admin/header-footer');
   revalidatePath('/', 'layout');
@@ -679,7 +711,7 @@ export async function reorderPage(pageId: string, direction: 'up' | 'down') {
     })
   ]);
 
-  // @ts-ignore  updateTag("site-pages");
+  updateTag("site-pages");
   revalidatePath('/admin/pages');
   revalidatePath('/', 'layout');
   return { success: true };
@@ -718,7 +750,7 @@ export async function updatePageHierarchy(pageId: string, parentId: string | nul
     data: dataToUpdate
   });
 
-  // @ts-ignore  updateTag("site-pages");
+  updateTag("site-pages");
   revalidatePath('/admin/pages');
   revalidatePath('/', 'layout');
   return { success: true };

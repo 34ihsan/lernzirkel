@@ -94,16 +94,16 @@ export const THEME_PRESETS: ThemePreset[] = [
     badge: 'Resmi & Orijinal',
     description: 'Lernzirkel Ludwigshafen için özel hazırlanmış asil lacivert, gümüş mavi ve mercan kırmızısı armoni.',
     colors: {
-      primary: '#0F4761',
-      primaryLight: '#1a6d92',
-      primaryDark: '#082c3d',
-      secondary: '#e8f4f8',
+      primary: '#3B9AD7',
+      primaryLight: '#88C3E7',
+      primaryDark: '#206D9D',
+      secondary: '#EEF6FC',
       accent: '#e63946',
       background: '#fbfbfb',
       surface: '#ffffff',
       foreground: '#1e293b',
       muted: '#64748b',
-      border: '#e2e8f0'
+      border: '#D9E8F2'
     },
     typography: {
       bodyFont: 'Roboto',

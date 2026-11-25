@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { 
   ArrowLeft, Calendar, Users, Globe, Sparkles, 
@@ -8,7 +9,7 @@ import {
 } from 'lucide-react';
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
-import prisma from '@/lib/prisma';
+import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
@@ -19,15 +20,7 @@ export const metadata = {
 };
 
 export default async function KonfliktmanagementPage() {
-  const page = await prisma.page.findUnique({
-    where: { slug: 'projekte/konfliktmanagement' },
-    include: {
-      parent: true,
-      sections: {
-        orderBy: { order: 'asc' }
-      }
-    }
-  });
+  const page = await getCachedPageBySlug('projekte/konfliktmanagement');
 
   if (page && page.isPublished && page.sections.length > 0) {
     const breadcrumbs: BreadcrumbItem[] = [];
@@ -38,9 +31,7 @@ export default async function KonfliktmanagementPage() {
         url: `/${currentParent.slug}`
       });
       if (currentParent.parentId) {
-        currentParent = await prisma.page.findUnique({
-          where: { id: currentParent.parentId }
-        });
+        currentParent = await getCachedPageById(currentParent.parentId);
       } else {
         break;
       }
@@ -194,11 +185,13 @@ function StaticKonfliktmanagement() {
 
             {/* Featured Hero Image */}
             <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm dark:shadow-none bg-slate-100">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
+              <Image
                 src="https://lernzirkel-online.de/wp-content/uploads/2026/05/KI-generiertes-Symbolbild-750x458.jpg"
                 alt="Projekt Stark im Umgang mit Konflikten und Krisen – Kompetenzen für Engagierte"
-                className="w-full h-full object-cover"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 1024px"
+                className="object-cover"
               />
             </div>
 
@@ -347,10 +340,11 @@ function StaticKonfliktmanagement() {
                       Förderung von sozialem Zusammenhalt, Chancengleichheit, Demokratieförderung und interkulturellem Dialog.
                     </p>
                   </div>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img 
-                    src="https://lernzirkel-online.de/wp-content/uploads/2026/05/PL_Foerderlogo_rot-1024x337.png" 
-                    alt="Förderlogo Deutsche Postcode Lotterie" 
+                  <Image
+                    src="https://lernzirkel-online.de/wp-content/uploads/2026/05/PL_Foerderlogo_rot-1024x337.png"
+                    alt="Förderlogo Deutsche Postcode Lotterie"
+                    width={1024}
+                    height={337}
                     className="h-14 sm:h-16 w-auto object-contain shrink-0"
                   />
                 </div>

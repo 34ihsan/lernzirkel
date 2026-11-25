@@ -87,7 +87,8 @@ export interface BadgePartnerItem {
   id?: string;
   name: string;
   logoUrl?: string; // Yerel yüklenen görsel URL'i (örn: /uploads/...) veya harici URL
-  url?: string; // Tıklandığında gidilecek web bağlantısı (opsiyonel)
+  url?: string; // description yoksa tıklandığında açılacak harici web bağlantısı (opsiyonel)
+  description?: string; // Doluysa tıklandığında harici linke gitmek yerine bunu bir pencerede gösterir (ne işe yaradığını açıklar)
   width?: number; // Logo genişliği px (varsayılan: 120)
   height?: number; // Logo yüksekliği px (varsayılan: 40)
 }
@@ -413,18 +414,18 @@ export const defaultHeaderConfig: HeaderConfig = {
     fontSize: 13,
     borderRadius: 'pill',
     style: 'primary',
-    customBgColor: '#0F4761',
+    customBgColor: '#206D9D',
     customTextColor: '#ffffff',
     icon: 'none',
     isExternal: false
   },
   design: {
-    topBarBg: "#0F4761",
-    topBarText: "#ffffff",
-    navBg: "#ffffff",
-    navText: "#333333",
-    navHoverText: "#0F4761",
-    navActiveText: "#0F4761",
+    topBarBg: "#EEF6FC",
+    topBarText: "#1e293b",
+    navBg: "#3B9AD7",
+    navText: "#ffffff",
+    navHoverText: "#1e293b",
+    navActiveText: "#1e293b",
     navFontSize: 16,
     navFontWeight: 'semibold',
     isSticky: true,
@@ -475,13 +476,32 @@ export const defaultFooterConfig: FooterConfig = {
     ]
   },
   badges: {
-    title: "Zertifiziert & Gefördert durch:",
-    items: ["AZAV", "BAMF", "ESF+", "Stadt Ludwigshafen"],
+    title: "Zertifiziert, gefördert & Mitglied bei:",
+    items: ["AZAV", "BAMF", "ESF+", "Stadt Ludwigshafen", "Der Paritätische", "telc", "BVB", "LAG anderes lernen"],
     partners: [
-      { name: "AZAV", logoUrl: "", url: "", width: 120, height: 40 },
+      {
+        name: "AZAV", logoUrl: "/images/certqua-azav-siegel.png", url: "https://www.certqua.de", width: 120, height: 61,
+        description: "Der Lernzirkel Ludwigshafen e.V. ist im Besitz des CERTQUA-Zertifikats und als Bildungsträger nach AZAV (Akkreditierungs- und Zulassungsverordnung Arbeitsförderung) des Bundesministeriums für Arbeit und Soziales zugelassen. Auch unsere Bildungs- und Coachingangebote sind nach AZAV zertifiziert. Unsere Qualitätsstandards werden regelmäßig durch die Fachkundige Stelle CERTQUA überprüft."
+      },
       { name: "BAMF", logoUrl: "", url: "https://www.bamf.de", width: 120, height: 40 },
       { name: "ESF+", logoUrl: "", url: "", width: 120, height: 40 },
-      { name: "Stadt Ludwigshafen", logoUrl: "", url: "https://www.ludwigshafen.de", width: 120, height: 40 }
+      { name: "Stadt Ludwigshafen", logoUrl: "", url: "https://www.ludwigshafen.de", width: 120, height: 40 },
+      {
+        name: "Der Paritätische Rheinland-Pfalz | Saarland", logoUrl: "/images/mitglied-paritaetische.png", url: "", width: 221, height: 48,
+        description: "Als Mitglied im Paritätischen Wohlfahrtsverband Rheinland-Pfalz | Saarland sind wir Teil eines der größten Dachverbände der freien Wohlfahrtspflege in Deutschland. Das bedeutet für Sie: fachlichen Austausch, verlässliche Qualitätsstandards und ein starkes Netzwerk sozialer Organisationen, von dem auch unsere Arbeit in Ludwigshafen profitiert."
+      },
+      {
+        name: "telc — Lizenziertes Prüfungszentrum", logoUrl: "/images/mitglied-telc.png", url: "", width: 55, height: 48,
+        description: "Als lizenziertes telc-Prüfungszentrum können wir offizielle, international anerkannte Sprachprüfungen (z. B. für Deutsch als Fremdsprache) direkt bei uns vor Ort anbieten — ohne dass Sie dafür an einen anderen Standort reisen müssen."
+      },
+      {
+        name: "BVB — Berufsverband für Integrations- und Berufssprachkurse e.V.", logoUrl: "/images/mitglied-bvb.png", url: "", width: 48, height: 48,
+        description: "Als Mitglied im BVB verpflichten wir uns zu hohen fachlichen und pädagogischen Standards in der Durchführung von Integrations- und Berufssprachkursen und sind Teil eines bundesweiten fachlichen Austauschs unter spezialisierten Bildungsträgern."
+      },
+      {
+        name: "LAG anderes lernen", logoUrl: "/images/mitglied-lag-anderes-lernen.png", url: "", width: 63, height: 48,
+        description: "Als Mitglied der Landesarbeitsgemeinschaft „anderes lernen“ engagieren wir uns gemeinsam mit anderen Bildungsträgern in Rheinland-Pfalz für innovative, alternative Lernansätze und den fachlichen Austausch zur Weiterentwicklung unserer pädagogischen Arbeit."
+      }
     ],
     showTitle: true
   },

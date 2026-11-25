@@ -2,14 +2,26 @@ import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import PageBuilder, { type DraftData } from "@/components/admin/PageBuilder";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ShieldAlert } from "lucide-react";
 import { saveDraft, discardDraft, publishPage, getPageRevisions, restorePageRevision } from "@/actions/pages";
+import { getAreaAccess } from "@/lib/permissions";
 
 export const dynamic = "force-dynamic";
 
 export default async function PageEditorPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  
+
+  const access = await getAreaAccess("pages");
+  if (!access.canEdit) {
+    return (
+      <div className="max-w-2xl mx-auto mt-12 bg-white rounded-lg shadow-sm border border-red-200 p-8 text-center">
+        <ShieldAlert className="mx-auto mb-4 text-red-500" size={40} />
+        <h1 className="text-lg font-bold text-gray-900 mb-2">Bu bölümde düzenleme yetkiniz yok</h1>
+        <p className="text-sm text-gray-500">Erişmek için yöneticinizden yetki talep edin.</p>
+      </div>
+    );
+  }
+
   const [page, allPages] = await Promise.all([
     prisma.page.findUnique({
       where: { id },

@@ -4,10 +4,11 @@ import React, { useState, useTransition } from "react";
 import { 
   Bot, ShieldCheck, ShieldAlert, Sparkles, Key, 
   Save, Play, CheckCircle2, MessageSquare, AlertCircle,
-  Plus, Edit2, Trash2, Tag, Database, BookOpen, 
-  Search, Check, X, ArrowRight, HelpCircle, Layers
+  Plus, Edit2, Trash2, Tag, Database, BookOpen,
+  Search, Check, X, ArrowRight, HelpCircle, Layers, Languages
 } from "lucide-react";
 import { updateAISettings } from "@/actions/ai";
+import { translateSiteContent, type TranslateSiteSummary } from "@/actions/translate-site";
 import { AIConfig, KnowledgeTopic, DEFAULT_KNOWLEDGE_TOPICS } from "@/lib/ai-config";
 
 export default function AISettingsClient({ initialConfig }: { initialConfig: AIConfig }) {
@@ -45,6 +46,26 @@ export default function AISettingsClient({ initialConfig }: { initialConfig: AIC
   const [testTopicTitle, setTestTopicTitle] = useState("");
   const [testSuggestions, setTestSuggestions] = useState<string[]>([]);
   const [isTesting, setIsTesting] = useState(false);
+
+  // Toplu Site Çevirisi (AI)
+  const [isTranslatingSite, setIsTranslatingSite] = useState(false);
+  const [translateSummary, setTranslateSummary] = useState<TranslateSiteSummary | null>(null);
+  const [translateError, setTranslateError] = useState("");
+
+  const handleTranslateSite = () => {
+    setIsTranslatingSite(true);
+    setTranslateError("");
+    setTranslateSummary(null);
+    startTransition(async () => {
+      const res = await translateSiteContent();
+      setIsTranslatingSite(false);
+      if (res.success) {
+        setTranslateSummary(res.summary);
+      } else {
+        setTranslateError(res.error);
+      }
+    });
+  };
 
   // Handle Save
   const handleSaveSettings = (newConfigToSave?: AIConfig) => {
@@ -356,6 +377,72 @@ export default function AISettingsClient({ initialConfig }: { initialConfig: AIC
             />
           </div>
         </div>
+      </div>
+
+      {/* SECTION 1b: TOPLU SİTE ÇEVİRİSİ */}
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 bg-purple-700 text-white rounded-lg">
+                <Languages size={18} />
+              </div>
+              <h2 className="text-lg font-bold text-gray-900">Toplu Site Çevirisi (AI)</h2>
+            </div>
+            <p className="text-xs text-gray-600 mt-1 max-w-2xl">
+              Tüm kurs, proje, haber, makale ve sayfaları tarar; henüz çevirisi olmayan
+              dilleri AI ile üretip kaydeder. Daha önce çevrilmiş veya elle düzenlenmiş diller
+              asla üzerine yazılmaz — sadece eksik olanlar bir kez doldurulur. Üretilen çeviriler
+              "incelenmedi" (reviewed: false) olarak işaretlenir; yayınlamadan önce gözden
+              geçirilmesi önerilir (EU AI Act Art. 50 Abs. 4). (Duyurular/Announcement bu
+              kapsamda değil — onlar kayıt anında kendi otomatik çeviri sistemiyle anlık
+              çevriliyor.)
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={handleTranslateSite}
+            disabled={isTranslatingSite || config.provider !== "gemini" || !config.apiKey}
+            title={config.provider !== "gemini" || !config.apiKey ? "Önce Gemini API anahtarını kaydedin" : undefined}
+            className="px-4 py-2 bg-purple-700 hover:bg-purple-800 text-white text-xs font-medium rounded-xl flex items-center gap-1.5 shadow-sm transition shrink-0 self-start md:self-auto disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isTranslatingSite ? (
+              <>
+                <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Çevriliyor...
+              </>
+            ) : (
+              <>
+                <Languages size={16} />
+                Tüm Siteyi Çevir
+              </>
+            )}
+          </button>
+        </div>
+
+        {(translateSummary || translateError) && (
+          <div className="px-6 pb-6">
+            {translateError && (
+              <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                {translateError}
+              </p>
+            )}
+            {translateSummary && (
+              <div className="text-xs bg-purple-50 border border-purple-200 rounded-lg px-3 py-2 text-purple-800">
+                {translateSummary.totalCreated === 0 ? (
+                  <span>Eksik çeviri bulunamadı — her şey zaten çevrilmiş.</span>
+                ) : (
+                  <>
+                    <strong>{translateSummary.totalCreated}</strong> yeni çeviri oluşturuldu:{" "}
+                    {Object.entries(translateSummary.byModel)
+                      .map(([model, count]) => `${model}: ${count}`)
+                      .join(", ")}
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* SECTION 2: ADMIN KNOWLEDGE BASE & TOPIC MANAGEMENT */}

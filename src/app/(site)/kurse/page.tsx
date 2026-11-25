@@ -1,7 +1,6 @@
-import prisma from '@/lib/prisma';
+import { getCachedCourses, getCachedPageBySlug } from '@/lib/cached-content';
 
 export const dynamic = 'force-dynamic';
-import { getCachedCourses } from '@/lib/cached-content';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 import AdvancedCourseExplorer from '@/components/courses/AdvancedCourseExplorer';
 import Link from 'next/link';
@@ -14,14 +13,7 @@ export const metadata = {
 
 export default async function KursePage() {
   const [cmsPage, dbCourses] = await Promise.all([
-    prisma.page.findUnique({
-      where: { slug: 'kurse' },
-      include: {
-        sections: {
-          orderBy: { order: 'asc' }
-        }
-      }
-    }).catch(() => null),
+    getCachedPageBySlug('kurse'),
     getCachedCourses().catch(() => [])
   ]);
 

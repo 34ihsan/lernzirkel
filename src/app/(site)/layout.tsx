@@ -88,16 +88,16 @@ export default async function RootLayout({
   const geometry = design.geometry || {};
   const buttons = design.buttons || {};
 
-  const primary = colors.primary || settings?.primaryColor || "#0F4761";
-  const primaryLight = colors.primaryLight || settings?.primaryLight || "#1a6d92";
-  const primaryDark = colors.primaryDark || "#082c3d";
-  const secondary = colors.secondary || settings?.secondaryColor || "#e8f4f8";
+  const primary = colors.primary || settings?.primaryColor || "#3B9AD7";
+  const primaryLight = colors.primaryLight || settings?.primaryLight || "#88C3E7";
+  const primaryDark = colors.primaryDark || "#206D9D";
+  const secondary = colors.secondary || settings?.secondaryColor || "#EEF6FC";
   const accent = colors.accent || settings?.accentColor || "#e63946";
   const background = colors.background || settings?.backgroundColor || "#fbfbfb";
   const foreground = colors.foreground || settings?.foregroundColor || "#333333";
   const muted = colors.muted || settings?.mutedColor || "#f1f1f1";
   const surface = colors.surface || "#ffffff";
-  const border = colors.border || "#e2e8f0";
+  const border = colors.border || "#D9E8F2";
 
   const bodyFont = typography.bodyFont || "Poppins";
   const headingFont = typography.headingFont || "Roboto";

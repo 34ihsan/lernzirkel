@@ -1,34 +1,49 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
-import { 
-  Plus, Edit, Trash2, ExternalLink, Home, Layers, 
-  Settings2, Palette, RefreshCw, CheckCircle2, AlertCircle, 
-  Sliders, ArrowRight, ShieldCheck, FileText, Sparkles, FolderTree
+import {
+  Plus, Edit, Trash2, ExternalLink, Home, Layers,
+  Settings2, Palette, RefreshCw, CheckCircle2, AlertCircle,
+  Sliders, ArrowRight, ShieldCheck, FileText, Sparkles, FolderTree, ShieldAlert
 } from "lucide-react";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { syncSystemPages } from "@/actions/admin";
 import { duplicatePage, bulkSetPublished, bulkDeletePages } from "@/actions/pages";
 import PageTreeManager from "@/components/admin/PageTreeManager";
+import { requireAreaPermission, getAreaAccess } from "@/lib/permissions";
 
 async function deletePage(id: string) {
   "use server";
+  await requireAreaPermission("pages", "edit");
   const target = await prisma.page.findUnique({ where: { id } });
   if (target?.slug === 'home') {
     throw new Error("Ana sayfa silinemez!");
   }
   await prisma.page.delete({ where: { id } });
+  updateTag("site-pages");
   revalidatePath('/admin/pages');
   revalidatePath('/', 'layout');
 }
 
 async function handleSyncAction() {
   "use server";
+  await requireAreaPermission("pages", "edit");
   await syncSystemPages();
 }
 
 export const dynamic = "force-dynamic";
 
 export default async function PagesManager() {
+  const access = await getAreaAccess("pages");
+  if (!access.canView) {
+    return (
+      <div className="max-w-2xl mx-auto mt-12 bg-white rounded-lg shadow-sm border border-red-200 p-8 text-center">
+        <ShieldAlert className="mx-auto mb-4 text-red-500" size={40} />
+        <h1 className="text-lg font-bold text-gray-900 mb-2">Bu bölüme erişim yetkiniz yok</h1>
+        <p className="text-sm text-gray-500">Erişmek için yöneticinizden yetki talep edin.</p>
+      </div>
+    );
+  }
+
   const pages = await prisma.page.findMany({
     include: {
       parent: {
@@ -92,25 +107,27 @@ export default async function PagesManager() {
             Ana sayfa dahil tüm web sitesi sayfalarının içeriklerini, bölümlerini (hero, kartlar, banner vb.), renk ve tipografilerini buradan canlı olarak düzenleyin.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <form action={handleSyncAction}>
-            <button
-              type="submit"
-              className="px-4 py-2 border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 rounded-lg text-sm font-medium shadow-sm transition-colors flex items-center gap-2"
-              title="Sistem şablonlarını ve eksik varsayılan sayfaları eşitle"
+        {access.canEdit && (
+          <div className="flex items-center gap-3">
+            <form action={handleSyncAction}>
+              <button
+                type="submit"
+                className="px-4 py-2 border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 rounded-lg text-sm font-medium shadow-sm transition-colors flex items-center gap-2"
+                title="Sistem şablonlarını ve eksik varsayılan sayfaları eşitle"
+              >
+                <RefreshCw size={15} />
+                <span>Varsayılanları Eşitle</span>
+              </button>
+            </form>
+            <Link
+              href="/admin/pages/new"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2 text-sm font-medium shadow-sm"
             >
-              <RefreshCw size={15} />
-              <span>Varsayılanları Eşitle</span>
-            </button>
-          </form>
-          <Link 
-            href="/admin/pages/new" 
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2 text-sm font-medium shadow-sm"
-          >
-            <Plus size={16} />
-            <span>Yeni Sayfa Ekle</span>
-          </Link>
-        </div>
+              <Plus size={16} />
+              <span>Yeni Sayfa Ekle</span>
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Quick Navigation Cards */}

@@ -7,6 +7,7 @@ import { Metadata } from 'next';
 import { MagneticButton } from '@/components/ui/MagneticButton';
 import { Reveal, FadeIn } from '@/components/ui/animations';
 import { JsonLd } from '@/components/seo/JsonLd';
+import { LocalizedText } from '@/components/common/LocalizedText';
 
 interface Props {
   params: Promise<{
@@ -98,7 +99,7 @@ export default async function ProjectDetailPage({ params }: Props) {
               </span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white max-w-4xl leading-tight">
-              {project.title}
+              <LocalizedText base={project.title} translations={project.translations} field="title" />
             </h1>
           </div>
         </div>
@@ -113,7 +114,9 @@ export default async function ProjectDetailPage({ params }: Props) {
             <Reveal delay={0.1} className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-800 p-8 md:p-12 mb-8">
               <h2 className="text-2xl font-bold text-primary mb-6">Über das Projekt</h2>
               <div className="prose prose-lg max-w-none text-gray-700 dark:text-gray-300 leading-relaxed mb-12">
-                <p className="whitespace-pre-wrap">{project.description}</p>
+                <p className="whitespace-pre-wrap">
+                  <LocalizedText base={project.description} translations={project.translations} field="description" />
+                </p>
               </div>
 
               {project.goals && (
@@ -123,7 +126,9 @@ export default async function ProjectDetailPage({ params }: Props) {
                     Projektziele
                   </h3>
                   <div className="bg-blue-50 rounded-xl p-6 text-gray-700 dark:text-gray-300">
-                    <p className="whitespace-pre-wrap">{project.goals}</p>
+                    <p className="whitespace-pre-wrap">
+                      <LocalizedText base={project.goals} translations={project.translations} field="goals" />
+                    </p>
                   </div>
                 </>
               )}
@@ -145,7 +150,7 @@ export default async function ProjectDetailPage({ params }: Props) {
                     rel={project.actionUrl.startsWith('http') ? 'noopener noreferrer' : undefined}
                     className="w-full flex items-center justify-center bg-accent hover:bg-accent-light text-white font-bold py-4 px-6 rounded-xl transition-all hover:-translate-y-1 hover:shadow-lg text-lg"
                   >
-                    {project.actionText}
+                    <LocalizedText base={project.actionText} translations={project.translations} field="actionText" />
                   </Link>
                 </MagneticButton>
               </FadeIn>
@@ -167,7 +172,9 @@ export default async function ProjectDetailPage({ params }: Props) {
                     <Users className="w-5 h-5 text-gray-400 mr-4 mt-1" />
                     <div>
                       <span className="block text-sm font-semibold text-gray-900 dark:text-gray-100">Zielgruppe</span>
-                      <span className="text-gray-600 dark:text-gray-400">{project.targetGroup}</span>
+                      <span className="text-gray-600 dark:text-gray-400">
+                        <LocalizedText base={project.targetGroup} translations={project.translations} field="targetGroup" />
+                      </span>
                     </div>
                   </li>
                 )}

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, CheckCircle, XCircle } from 'lucide-react';
+import { JOB_TYPES, getJobTypeDef } from '@/lib/job-types';
 
 export default function JobsAdminPage() {
   const [jobs, setJobs] = useState<any[]>([]);
@@ -119,9 +120,9 @@ export default function JobsAdminPage() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Typ</label>
                 <select value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})} className="w-full border p-2 rounded">
-                  <option value="LEHRER">Lehrkraft</option>
-                  <option value="PRAKTIKANT">Praktikant</option>
-                  <option value="OTHER">Sonstiges</option>
+                  {JOB_TYPES.map(t => (
+                    <option key={t.value} value={t.value}>{t.label}</option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -173,8 +174,8 @@ export default function JobsAdminPage() {
                 <tr key={job.id}>
                   <td className="px-6 py-4 font-medium">{job.title}</td>
                   <td className="px-6 py-4">
-                    <span className={`px-2 py-1 text-xs rounded-full ${job.type === 'LEHRER' ? 'bg-blue-100 text-blue-800' : job.type === 'PRAKTIKANT' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                      {job.type}
+                    <span className={`px-2 py-1 text-xs rounded-full ${getJobTypeDef(job.type).badgeClass}`}>
+                      {getJobTypeDef(job.type).label}
                     </span>
                   </td>
                   <td className="px-6 py-4">

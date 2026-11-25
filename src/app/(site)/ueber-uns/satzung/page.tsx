@@ -1,5 +1,6 @@
 import { FileText, ArrowLeft, ShieldCheck, Scale, Users2 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 
 export const metadata = {
@@ -153,10 +154,13 @@ export default function UeberUnsSatzungPage() {
               Organigramm des Lernzirkel Ludwigshafen e.V.
             </h3>
             <div className="flex justify-center mb-8">
-              <img 
-                src="/uploads/organigramm.png" 
-                alt="Organigramm des Lernzirkel Ludwigshafen e.V." 
-                className="max-w-full h-auto rounded-xl border border-gray-200 dark:border-gray-700 shadow-md dark:shadow-none" 
+              <Image
+                src="/uploads/organigramm.png"
+                alt="Organigramm des Lernzirkel Ludwigshafen e.V."
+                width={1024}
+                height={632}
+                style={{ width: '100%', height: 'auto' }}
+                className="max-w-full rounded-xl border border-gray-200 dark:border-gray-700 shadow-md dark:shadow-none"
               />
             </div>
 

@@ -129,12 +129,24 @@ export default function DatenschutzPage() {
           id: "ki",
           title: "KI-Assistent",
           content: (
-            <p>
-              Sofern Sie den KI-Assistenten auf unserer Website nutzen, werden Ihre Eingaben zur
-              Beantwortung an einen Anbieter von KI-Diensten übermittelt. Bitte geben Sie dort keine
-              sensiblen personenbezogenen Daten ein. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f
-              DSGVO bzw. Ihre Einwilligung durch die Nutzung.
-            </p>
+            <>
+              <p>
+                Unser KI-Chatbot ("Elite KI-Berater") ist ein automatisiertes System und keine
+                menschliche Beratung. Dies wird Ihnen gemäß Art. 50 Abs. 1 der KI-Verordnung (EU
+                AI Act) im Chatfenster selbst dauerhaft angezeigt. Sofern Sie den KI-Assistenten
+                nutzen, werden Ihre Eingaben zur Beantwortung an den jeweils konfigurierten
+                KI-Anbieter übermittelt — aktuell Google (Gemini API); je nach Konfiguration im
+                Adminbereich künftig ggf. auch andere Anbieter wie OpenAI. Bitte geben Sie dort
+                keine sensiblen personenbezogenen Daten ein.
+              </p>
+              <p>
+                Die Verarbeitung kann hierbei auch außerhalb der EU/des EWR (z. B. in den USA)
+                erfolgen. In diesem Fall stützen wir die Übermittlung auf geeignete Garantien nach
+                Art. 46 DSGVO, insbesondere die EU-Standardvertragsklauseln der Europäischen
+                Kommission mit dem jeweiligen Anbieter. Rechtsgrundlage der Verarbeitung ist Art. 6
+                Abs. 1 lit. f DSGVO bzw. Ihre Einwilligung durch die Nutzung.
+              </p>
+            </>
           ),
         },
         {

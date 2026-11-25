@@ -1,21 +1,15 @@
 import React from 'react';
 import Link from 'next/link';
-import prisma from '@/lib/prisma';
+import Image from 'next/image';
+import { PlayCircle } from 'lucide-react';
+import { getCachedPageBySlug, getCachedPageById, getCachedGalleryMedia } from '@/lib/cached-content';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 
 export default async function GaleriePage() {
-  const page = await prisma.page.findUnique({
-    where: { slug: 'ueber-uns/galerie' },
-    include: {
-      parent: true,
-      sections: {
-        orderBy: { order: 'asc' }
-      }
-    }
-  });
+  const page = await getCachedPageBySlug('ueber-uns/galerie');
 
   if (page && page.isPublished && page.sections.length > 0) {
     const breadcrumbs: BreadcrumbItem[] = [];
@@ -26,9 +20,7 @@ export default async function GaleriePage() {
         url: `/${currentParent.slug}`
       });
       if (currentParent.parentId) {
-        currentParent = await prisma.page.findUnique({
-          where: { id: currentParent.parentId }
-        });
+        currentParent = await getCachedPageById(currentParent.parentId);
       } else {
         break;
       }
@@ -49,25 +41,16 @@ export default async function GaleriePage() {
     );
   }
 
-  return <StaticGalerie />;
+  return <DbGalerie />;
 }
 
-function StaticGalerie() {
-  // Demo-Bilder für die Galerie (Unsplash Platzhalter)
-  // Später können diese durch Bilder aus der Datenbank/CMS ersetzt werden
-  const images = [
-    { src: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=800', alt: 'Unterricht in kleinen Gruppen', category: 'Lernumgebung' },
-    { src: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=800', alt: 'Unsere Dozenten im Einsatz', category: 'Team' },
-    { src: 'https://images.unsplash.com/photo-1427504494785-319ce224a180?auto=format&fit=crop&q=80&w=800', alt: 'Projektarbeit', category: 'Projekte' },
-    { src: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&q=80&w=800', alt: 'Lernküche & gemeinsames Essen', category: 'Lernküche' },
-    { src: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&q=80&w=800', alt: 'Beratungsgespräch MFD', category: 'Beratung' },
-    { src: 'https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&q=80&w=800', alt: 'Sprachcafé Treffen', category: 'Sprachcafé' },
-  ];
+async function DbGalerie() {
+  const items = await getCachedGalleryMedia();
 
   return (
     <div className="py-16 bg-gray-50 dark:bg-gray-800 min-h-screen">
       <div className="container mx-auto px-4">
-        
+
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="text-accent font-bold uppercase tracking-wider text-sm mb-2 block">Einblicke</span>
@@ -77,34 +60,49 @@ function StaticGalerie() {
           </p>
         </div>
 
-        {/* Gallery Grid (Flatsome Style) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-          {images.map((img, idx) => (
-            <div key={idx} className="group relative overflow-hidden rounded-xl shadow-sm dark:shadow-none cursor-pointer bg-white dark:bg-gray-900 aspect-[4/3] flatsome-card">
-              
-              {/* Image with zoom effect */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
-                src={img.src} 
-                alt={img.alt} 
-                className="object-cover w-full h-full transform transition-transform duration-700 ease-in-out group-hover:scale-110"
-              />
-              
-              {/* Hover Overlay */}
-              <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-colors duration-300 flex flex-col items-center justify-center p-4">
-                <div className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex flex-col items-center text-center">
-                  <span className="text-white font-bold text-lg mb-2 drop-shadow-md dark:shadow-none">
-                    {img.alt}
-                  </span>
-                  <span className="text-white/80 text-sm font-medium uppercase tracking-widest bg-black/30 px-3 py-1 rounded-full">
-                    {img.category}
-                  </span>
-                </div>
+        {items.length === 0 ? (
+          <p className="text-center text-gray-500 dark:text-gray-400">Demnächst finden Sie hier Fotos und Videos aus unserer Arbeit.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+            {items.map((item) => (
+              <div key={item.id} className="group relative overflow-hidden rounded-xl shadow-sm dark:shadow-none bg-white dark:bg-gray-900 aspect-[4/3] flatsome-card">
+                {item.type === 'VIDEO' && item.videoUrl ? (
+                  <>
+                    <video
+                      src={item.videoUrl}
+                      poster={item.thumbnailUrl || undefined}
+                      controls
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    <PlayCircle className="absolute top-3 right-3 text-white/90 drop-shadow pointer-events-none" size={22} />
+                  </>
+                ) : item.imageUrl ? (
+                  <>
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.title}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover transform transition-transform duration-700 ease-in-out group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-colors duration-300 flex flex-col items-center justify-center p-4 pointer-events-none">
+                      <div className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex flex-col items-center text-center">
+                        <span className="text-white font-bold text-lg mb-2 drop-shadow-md dark:shadow-none">
+                          {item.title}
+                        </span>
+                        {item.category && (
+                          <span className="text-white/80 text-sm font-medium uppercase tracking-widest bg-black/30 px-3 py-1 rounded-full">
+                            {item.category}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                ) : null}
               </div>
-              
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* CTA */}
         <div className="mt-20 text-center">

@@ -2,6 +2,7 @@ import React from 'react';
 import { getCachedCourseById } from '@/lib/cached-content';
 import { getCourseAvailability } from '@/actions/register';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import {
   ArrowLeft, Calendar, Clock, MapPin, User, CheckCircle2,
@@ -10,6 +11,7 @@ import {
 import { JsonLd } from '@/components/seo/JsonLd';
 import { generateCourseSchema } from '@/lib/seo';
 import CourseRegistrationForm from '@/components/courses/CourseRegistrationForm';
+import { LocalizedText } from '@/components/common/LocalizedText';
 
 export const revalidate = 60;
 
@@ -131,7 +133,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
               </div>
 
               <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-gray-100 mb-6 leading-tight">
-                {course.title}
+                <LocalizedText base={course.title} translations={course.translations} field="title" />
               </h1>
 
               {/* Quick Info Bar */}
@@ -158,8 +160,8 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
             </div>
 
             {design.imageUrl && (
-              <div className="w-full md:w-1/3 aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shrink-0 border border-gray-100 dark:border-gray-800">
-                <img src={design.imageUrl} alt={course.title} className="w-full h-full object-cover" />
+              <div className="w-full md:w-1/3 aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shrink-0 border border-gray-100 dark:border-gray-800 relative">
+                <Image src={design.imageUrl} alt={course.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
               </div>
             )}
           </div>
@@ -177,7 +179,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
                 <FileText className="text-primary" /> Kursbeschreibung
               </h2>
               <div className="prose prose-lg max-w-none text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
-                {course.description}
+                <LocalizedText base={course.description} translations={course.translations} field="description" />
               </div>
             </section>
 
@@ -204,7 +206,9 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
                   <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
                     <User className="text-primary" size={20} /> Zielgruppe
                   </h3>
-                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{course.targetAudience}</p>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    <LocalizedText base={course.targetAudience} translations={course.translations} field="targetAudience" />
+                  </p>
                 </div>
               )}
               {course.requirements && (
@@ -212,7 +216,9 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
                   <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
                     <FileText className="text-primary" size={20} /> Voraussetzungen
                   </h3>
-                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{course.requirements}</p>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    <LocalizedText base={course.requirements} translations={course.translations} field="requirements" />
+                  </p>
                 </div>
               )}
             </section>

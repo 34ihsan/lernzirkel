@@ -1,4 +1,4 @@
-export const modelConfig: Record<string, { label: string; fields: { name: string; label: string; type: 'text' | 'textarea' | 'date' | 'boolean' | 'enum' | 'image' | 'color'; options?: string[], isDesign?: boolean }[] }> = {
+export const modelConfig: Record<string, { label: string; fields: { name: string; label: string; type: 'text' | 'textarea' | 'date' | 'boolean' | 'enum' | 'image' | 'video' | 'color'; options?: string[], isDesign?: boolean }[] }> = {
   News: {
     label: "Haberler",
     fields: [
@@ -67,12 +67,16 @@ export const modelConfig: Record<string, { label: string; fields: { name: string
       { name: "photoUrl", label: "Fotoğraf URL", type: "image" }
     ]
   },
-  GalleryImage: {
-    label: "Galeri Görselleri",
+  GalleryMedia: {
+    label: "Galeri (Foto & Video)",
     fields: [
       { name: "title", label: "Başlık", type: "text" },
+      { name: "type", label: "Tür", type: "enum", options: ["PHOTO", "VIDEO"] },
       { name: "category", label: "Kategori", type: "text" },
-      { name: "imageUrl", label: "Görsel URL", type: "image" }
+      { name: "imageUrl", label: "Görsel (Tür = PHOTO ise bunu doldurun)", type: "image" },
+      { name: "videoUrl", label: "Video (Tür = VIDEO ise bunu doldurun)", type: "video" },
+      { name: "thumbnailUrl", label: "Video Kapak Görseli (opsiyonel)", type: "image" },
+      { name: "isPublished", label: "Sitede yayında mı?", type: "boolean" }
     ]
   }
 };

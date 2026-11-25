@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, BookOpen, GraduationCap, Users, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { LocalizedText } from '@/components/common/LocalizedText';
 
 export interface HomeCourse {
   id: string;
@@ -11,6 +12,7 @@ export interface HomeCourse {
   category: string;
   description: string;
   design: unknown;
+  translations?: { language: string; [key: string]: any }[];
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -110,9 +112,11 @@ export default function CourseGrid({ courses }: { courses: HomeCourse[] }) {
                       {design.level || CATEGORY_LABELS[course.category] || course.category}
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold text-slate-800 dark:text-gray-100 mb-2">{course.title}</h3>
+                  <h3 className="text-xl font-bold text-slate-800 dark:text-gray-100 mb-2">
+                    <LocalizedText base={course.title} translations={course.translations} field="title" />
+                  </h3>
                   <p className="text-slate-500 dark:text-gray-400 text-sm mb-6 flex-grow line-clamp-3">
-                    {course.description}
+                    <LocalizedText base={course.description} translations={course.translations} field="description" />
                   </p>
                   <Link
                     href={`/kurse/${course.id}`}

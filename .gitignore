@@ -46,3 +46,9 @@ yarn-error.log*
 public/uploads/*
 !public/uploads/.gitkeep
 !public/uploads/documents/.gitkeep
+
+# Depo dokümanları — bilinçli olarak public/ DIŞINDA: Next.js statik servisten hiç geçmez,
+# sadece /api/depo/download/[id] üzerinden yetki kontrolünden sonra okunur. VPS'te DEPOT_DIR
+# ile kalıcı diskte tutulur, repo'ya girmez.
+depot-storage/*
+!depot-storage/.gitkeep

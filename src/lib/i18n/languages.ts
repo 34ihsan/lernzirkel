@@ -1,4 +1,4 @@
-export type SupportedLanguage = 'de' | 'tr' | 'en' | 'ar';
+export type SupportedLanguage = 'de' | 'tr' | 'en' | 'ar' | 'ru' | 'uk' | 'prs';
 
 export interface LanguageMeta {
   code: SupportedLanguage;
@@ -41,6 +41,30 @@ export const SUPPORTED_LANGUAGES: LanguageMeta[] = [
     flag: '🇸🇦',
     dir: 'rtl',
     description: 'دورات الاندماج واللغة'
+  },
+  {
+    code: 'ru',
+    name: 'Russisch',
+    nativeName: 'Русский',
+    flag: '🇷🇺',
+    dir: 'ltr',
+    description: 'Миграционная служба и языковые курсы'
+  },
+  {
+    code: 'uk',
+    name: 'Ukrainisch',
+    nativeName: 'Українська',
+    flag: '🇺🇦',
+    dir: 'ltr',
+    description: 'Міграційна служба та мовні курси'
+  },
+  {
+    code: 'prs',
+    name: 'Dari',
+    nativeName: 'دری',
+    flag: '🇦🇫',
+    dir: 'rtl',
+    description: 'خدمات مهاجرت و کورس‌های زبان'
   }
 ];
 
@@ -311,5 +335,206 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> 
     'cookie.policy': 'سياسة ملفات تعريف الارتباط',
     'cookie.accept': 'قبول الكل',
     'cookie.decline': 'رفض'
+  },
+
+  ru: {
+    // Top Bar & General
+    'topbar.phone': 'Телефон',
+    'topbar.email': 'Эл. почта',
+    'topbar.donate': 'Поддержать',
+    'topbar.contact': 'Контакты',
+    'topbar.careers': 'Вакансии',
+    'topbar.news': 'Новости',
+    'topbar.tagline': 'Образование, консультации и социальные проекты в Людвигсхафене',
+    'header.cta': 'Контакты и запись',
+    'header.allOffers': 'Посмотреть все предложения по теме «{category}»',
+    'header.menu': 'Меню',
+    'header.close': 'Закрыть',
+    'lang.select': 'Выберите язык',
+    'lang.active': 'Текущий язык',
+
+    // Quick links & Actions
+    'btn.moreInfo': 'Узнать больше',
+    'btn.apply': 'Записаться сейчас',
+    'btn.contactUs': 'Связаться с нами',
+    'btn.download': 'Скачать (PDF)',
+    'btn.viewCourses': 'Посмотреть курсы',
+    'btn.submit': 'Отправить',
+    'btn.back': 'Назад',
+
+    // Forms
+    'form.fullName': 'Полное имя',
+    'form.email': 'Адрес эл. почты',
+    'form.phone': 'Номер телефона',
+    'form.interest': 'Интересующий курс / направление',
+    'form.message': 'Ваше сообщение или вопрос',
+    'form.submit': 'Отправить заявку',
+    'form.successTitle': 'Спасибо!',
+    'form.successDesc': 'Ваша заявка успешно отправлена. Мы свяжемся с вами в течение 24 часов.',
+    'form.newSubmission': 'Отправить новую заявку',
+
+    // Nav Categories
+    'nav.deutsch': 'Немецкий язык и базовое образование',
+    'nav.kinder': 'Дети и подростки',
+    'nav.beratung': 'Консультации',
+    'nav.projekte': 'Проекты',
+    'nav.ueberUns': 'О нас',
+
+    // Footer
+    'footer.about': 'О Lernzirkel',
+    'footer.quickLinks': 'Быстрые ссылки',
+    'footer.contact': 'Контакты и как добраться',
+    'footer.legal': 'Выходные данные и конфиденциальность',
+    'footer.rights': 'Все права защищены.',
+
+    // Accessibility
+    'a11y.title': 'Доступность',
+    'a11y.textSize': 'Размер текста',
+    'a11y.contrast': 'Контраст',
+    'a11y.highContrast': 'Высокий контраст',
+    'a11y.language': 'Язык',
+    'a11y.easyLanguage': 'Простой язык',
+    'a11y.easyLangDesc': 'Включает упрощённые тексты для лучшего понимания.',
+
+    // Cookie Banner
+    'cookie.title': 'Мы используем файлы cookie',
+    'cookie.message': 'Мы используем файлы cookie и аналогичные технологии для обеспечения корректной работы сайта, персонализации контента и анализа трафика. Подробнее см. в нашей',
+    'cookie.policy': 'Политике использования файлов cookie',
+    'cookie.accept': 'Принять все',
+    'cookie.decline': 'Отклонить'
+  },
+
+  uk: {
+    // Top Bar & General
+    'topbar.phone': 'Телефон',
+    'topbar.email': 'Ел. пошта',
+    'topbar.donate': 'Підтримати',
+    'topbar.contact': 'Контакти',
+    'topbar.careers': 'Вакансії',
+    'topbar.news': 'Новини',
+    'topbar.tagline': 'Освіта, консультації та соціальні проєкти в Людвігсгафені',
+    'header.cta': 'Контакти та запис',
+    'header.allOffers': 'Переглянути всі пропозиції за темою «{category}»',
+    'header.menu': 'Меню',
+    'header.close': 'Закрити',
+    'lang.select': 'Оберіть мову',
+    'lang.active': 'Поточна мова',
+
+    // Quick links & Actions
+    'btn.moreInfo': 'Дізнатися більше',
+    'btn.apply': 'Записатися зараз',
+    'btn.contactUs': "Зв'язатися з нами",
+    'btn.download': 'Завантажити (PDF)',
+    'btn.viewCourses': 'Переглянути курси',
+    'btn.submit': 'Надіслати',
+    'btn.back': 'Назад',
+
+    // Forms
+    'form.fullName': "Повне ім'я",
+    'form.email': 'Адреса ел. пошти',
+    'form.phone': 'Номер телефону',
+    'form.interest': 'Бажаний курс / напрям',
+    'form.message': 'Ваше повідомлення або запитання',
+    'form.submit': 'Надіслати заявку',
+    'form.successTitle': 'Дякуємо!',
+    'form.successDesc': "Вашу заявку успішно надіслано. Ми зв'яжемося з вами протягом 24 годин.",
+    'form.newSubmission': 'Надіслати нову заявку',
+
+    // Nav Categories
+    'nav.deutsch': 'Німецька мова та базова освіта',
+    'nav.kinder': 'Діти та молодь',
+    'nav.beratung': 'Консультації',
+    'nav.projekte': 'Проєкти',
+    'nav.ueberUns': 'Про нас',
+
+    // Footer
+    'footer.about': 'Про Lernzirkel',
+    'footer.quickLinks': 'Швидкі посилання',
+    'footer.contact': 'Контакти та як дістатися',
+    'footer.legal': 'Вихідні дані та конфіденційність',
+    'footer.rights': 'Усі права захищено.',
+
+    // Accessibility
+    'a11y.title': 'Доступність',
+    'a11y.textSize': 'Розмір тексту',
+    'a11y.contrast': 'Контраст',
+    'a11y.highContrast': 'Високий контраст',
+    'a11y.language': 'Мова',
+    'a11y.easyLanguage': 'Проста мова',
+    'a11y.easyLangDesc': 'Вмикає спрощені тексти для кращого розуміння.',
+
+    // Cookie Banner
+    'cookie.title': 'Ми використовуємо файли cookie',
+    'cookie.message': 'Ми використовуємо файли cookie та подібні технології, щоб забезпечити коректну роботу сайту, персоналізувати контент і аналізувати трафік. Докладніше див. у нашій',
+    'cookie.policy': 'Політиці використання файлів cookie',
+    'cookie.accept': 'Прийняти всі',
+    'cookie.decline': 'Відхилити'
+  },
+
+  prs: {
+    // Top Bar & General
+    'topbar.phone': 'تلفون',
+    'topbar.email': 'ایمیل',
+    'topbar.donate': 'کمک مالی',
+    'topbar.contact': 'تماس',
+    'topbar.careers': 'فرصت‌های کاری',
+    'topbar.news': 'تازه‌ترین خبرها',
+    'topbar.tagline': 'آموزش، مشاوره و پروژه‌های اجتماعی در لودویگسهافن',
+    'header.cta': 'تماس و ثبت‌نام',
+    'header.allOffers': 'مشاهده همه برنامه‌های مربوط به «{category}»',
+    'header.menu': 'مینو',
+    'header.close': 'بستن',
+    'lang.select': 'انتخاب زبان',
+    'lang.active': 'زبان فعال',
+
+    // Quick links & Actions
+    'btn.moreInfo': 'معلومات بیشتر',
+    'btn.apply': 'همین حالا ثبت‌نام کنید',
+    'btn.contactUs': 'با ما تماس بگیرید',
+    'btn.download': 'دانلود (PDF)',
+    'btn.viewCourses': 'مشاهده کورس‌ها',
+    'btn.submit': 'ارسال',
+    'btn.back': 'بازگشت',
+
+    // Forms
+    'form.fullName': 'نام کامل',
+    'form.email': 'آدرس ایمیل',
+    'form.phone': 'شماره تلفون',
+    'form.interest': 'کورس / بخش مورد نظر',
+    'form.message': 'پیام یا سوال شما',
+    'form.submit': 'ارسال درخواست',
+    'form.successTitle': 'تشکر!',
+    'form.successDesc': 'درخواست شما با موفقیت ارسال شد. مشاورین ما ظرف ۲۴ ساعت با شما تماس خواهند گرفت.',
+    'form.newSubmission': 'ارسال درخواست جدید',
+
+    // Nav Categories
+    'nav.deutsch': 'زبان آلمانی و سواد پایه',
+    'nav.kinder': 'کودکان و نوجوانان',
+    'nav.beratung': 'مشاوره',
+    'nav.projekte': 'پروژه‌ها',
+    'nav.ueberUns': 'در باره ما',
+
+    // Footer
+    'footer.about': 'در باره Lernzirkel',
+    'footer.quickLinks': 'لینک‌های سریع',
+    'footer.contact': 'تماس و آدرس',
+    'footer.legal': 'اطلاعات ناشر و حریم خصوصی',
+    'footer.rights': 'تمام حقوق محفوظ است.',
+
+    // Accessibility
+    'a11y.title': 'دسترسی‌پذیری',
+    'a11y.textSize': 'اندازه متن',
+    'a11y.contrast': 'کنتراست',
+    'a11y.highContrast': 'کنتراست بالا',
+    'a11y.language': 'زبان',
+    'a11y.easyLanguage': 'زبان ساده',
+    'a11y.easyLangDesc': 'متن‌های ساده‌شده را برای درک بهتر فعال می‌کند.',
+
+    // Cookie Banner
+    'cookie.title': 'ما از کوکی استفاده می‌کنیم',
+    'cookie.message': 'ما از کوکی‌ها و تکنالوژی‌های مشابه استفاده می‌کنیم تا عملکرد درست ویب‌سایت را تضمین کنیم، محتوا را شخصی‌سازی کنیم و ترافیک خود را تحلیل کنیم. برای معلومات بیشتر لطفاً به این مراجعه کنید:',
+    'cookie.policy': 'پالیسی کوکی',
+    'cookie.accept': 'پذیرفتن همه',
+    'cookie.decline': 'رد کردن'
   }
 };

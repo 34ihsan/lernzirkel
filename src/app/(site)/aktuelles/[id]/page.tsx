@@ -1,9 +1,11 @@
 import React from 'react';
 import { getCachedNewsById } from '@/lib/cached-content';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Calendar, Newspaper } from 'lucide-react';
 import { JsonLd } from '@/components/seo/JsonLd';
+import { LocalizedText } from '@/components/common/LocalizedText';
 
 export const revalidate = 60;
 
@@ -91,19 +93,23 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
               {new Date(news.publishDate).toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })}
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-6 leading-tight">
-              {news.title}
+              <LocalizedText base={news.title} translations={news.translations} field="title" />
             </h1>
           </header>
 
           {news.imageUrl && (
             <div className="w-full h-64 md:h-96 rounded-2xl overflow-hidden mb-12 shadow-md dark:shadow-none relative">
-              <img src={news.imageUrl} alt={news.title} className="w-full h-full object-cover" />
+              <Image src={news.imageUrl} alt={news.title} fill sizes="(max-width: 1024px) 100vw, 896px" className="object-cover" />
             </div>
           )}
 
-          <div 
+          <LocalizedText
+            as="div"
             className="prose prose-lg prose-blue max-w-none prose-headings:font-bold prose-a:text-primary prose-img:rounded-xl"
-            dangerouslySetInnerHTML={{ __html: news.content }}
+            base={news.content}
+            translations={news.translations}
+            field="content"
+            html
           />
 
           {news.design && typeof news.design === 'object' && (news.design as Record<string, any>).linkUrl && (

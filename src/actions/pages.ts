@@ -2,8 +2,8 @@
 
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
-import { revalidatePath } from "next/cache";
-import { requireAdminSession } from "@/lib/auth-server";
+import { revalidatePath, updateTag } from "next/cache";
+import { requireAreaPermission } from "@/lib/permissions";
 
 export interface PageSectionInput {
   type: string;
@@ -42,7 +42,7 @@ function parseJsonSafely(val: any) {
 // Taslağı kaydet (autosave + manuel "Taslak Olarak Kaydet") — canlı Section tablolarına dokunmaz.
 export async function saveDraft(pageId: string, data: PagePayload) {
   try {
-    await requireAdminSession();
+    await requireAreaPermission("pages", "edit");
   } catch {
     return { success: false as const, error: "Unauthorized" };
   }
@@ -63,7 +63,7 @@ export async function saveDraft(pageId: string, data: PagePayload) {
 
 export async function discardDraft(pageId: string) {
   try {
-    await requireAdminSession();
+    await requireAreaPermission("pages", "edit");
   } catch {
     return { success: false as const, error: "Unauthorized" };
   }
@@ -85,7 +85,7 @@ export async function discardDraft(pageId: string) {
 export async function publishPage(pageId: string, data: PagePayload, expectedVersion: number) {
   let session;
   try {
-    session = await requireAdminSession();
+    session = await requireAreaPermission("pages", "edit");
   } catch {
     return { success: false as const, error: "Unauthorized" };
   }
@@ -214,6 +214,7 @@ export async function publishPage(pageId: string, data: PagePayload, expectedVer
 
     const updated = await prisma.page.findUnique({ where: { id: pageId } });
 
+    updateTag("site-pages");
     revalidatePath("/", "layout");
     revalidatePath("/admin/pages");
     if (updated?.slug) revalidatePath(`/${updated.slug}`);
@@ -229,7 +230,7 @@ export async function publishPage(pageId: string, data: PagePayload, expectedVer
 
 export async function getPageRevisions(pageId: string) {
   try {
-    await requireAdminSession();
+    await requireAreaPermission("pages", "view");
   } catch {
     return [];
   }
@@ -243,7 +244,7 @@ export async function getPageRevisions(pageId: string) {
 
 export async function restorePageRevision(revisionId: string) {
   try {
-    await requireAdminSession();
+    await requireAreaPermission("pages", "view");
   } catch {
     return { success: false as const, error: "Unauthorized" };
   }
@@ -266,7 +267,7 @@ export async function restorePageRevision(revisionId: string) {
 // Mevcut bir sayfayı (bölümleriyle) kopyalar — Tier 2: hızlı şablon/duplicate akışı.
 export async function duplicatePage(pageId: string) {
   try {
-    await requireAdminSession();
+    await requireAreaPermission("pages", "edit");
   } catch {
     return { success: false as const, error: "Unauthorized" };
   }
@@ -308,6 +309,7 @@ export async function duplicatePage(pageId: string) {
       },
     });
 
+    updateTag("site-pages");
     revalidatePath("/admin/pages");
     return { success: true as const, newId: created.id };
   } catch (error) {
@@ -320,7 +322,7 @@ export async function duplicatePage(pageId: string) {
 // Toplu yayınla / taslağa al.
 export async function bulkSetPublished(ids: string[], isPublished: boolean) {
   try {
-    await requireAdminSession();
+    await requireAreaPermission("pages", "edit");
   } catch {
     return { success: false as const, error: "Unauthorized" };
   }
@@ -329,6 +331,7 @@ export async function bulkSetPublished(ids: string[], isPublished: boolean) {
     const pages = await prisma.page.findMany({ where: { id: { in: ids } }, select: { slug: true } });
     await prisma.page.updateMany({ where: { id: { in: ids } }, data: { isPublished } });
 
+    updateTag("site-pages");
     revalidatePath("/", "layout");
     revalidatePath("/admin/pages");
     for (const p of pages) revalidatePath(`/${p.slug}`);
@@ -344,7 +347,7 @@ export async function bulkSetPublished(ids: string[], isPublished: boolean) {
 // Toplu silme — ana sayfa (slug: 'home') her zaman korunur, listeye dahil edilse de atlanır.
 export async function bulkDeletePages(ids: string[]) {
   try {
-    await requireAdminSession();
+    await requireAreaPermission("pages", "edit");
   } catch {
     return { success: false as const, error: "Unauthorized" };
   }
@@ -356,6 +359,7 @@ export async function bulkDeletePages(ids: string[]) {
 
     const result = await prisma.page.deleteMany({ where: { id: { in: deletableIds } } });
 
+    updateTag("site-pages");
     revalidatePath("/", "layout");
     revalidatePath("/admin/pages");
 

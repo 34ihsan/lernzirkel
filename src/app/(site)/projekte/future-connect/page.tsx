@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
-import prisma from '@/lib/prisma';
+import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
@@ -19,15 +19,7 @@ export const metadata = {
 };
 
 export default async function FutureConnectPage() {
-  const page = await prisma.page.findUnique({
-    where: { slug: 'projekte/future-connect' },
-    include: {
-      parent: true,
-      sections: {
-        orderBy: { order: 'asc' }
-      }
-    }
-  });
+  const page = await getCachedPageBySlug('projekte/future-connect');
 
   if (page && page.isPublished && page.sections.length > 0) {
     const breadcrumbs: BreadcrumbItem[] = [];
@@ -38,9 +30,7 @@ export default async function FutureConnectPage() {
         url: `/${currentParent.slug}`
       });
       if (currentParent.parentId) {
-        currentParent = await prisma.page.findUnique({
-          where: { id: currentParent.parentId }
-        });
+        currentParent = await getCachedPageById(currentParent.parentId);
       } else {
         break;
       }
@@ -156,11 +146,13 @@ function StaticFutureConnect() {
 
             {/* Featured Image */}
             <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm dark:shadow-none bg-slate-100">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
+              <Image
                 src="https://lernzirkel-online.de/wp-content/uploads/2026/05/KI-generiert-750x458.jpg"
                 alt="Future Connect – Generationen vernetzen für morgen"
-                className="w-full h-full object-cover"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 1024px"
+                className="object-cover"
               />
             </div>
 
@@ -268,10 +260,11 @@ function StaticFutureConnect() {
                       Gemeinsam für digitale Bildung, interkulturellen Dialog und gesellschaftliche Teilhabe in Ludwigshafen.
                     </p>
                   </div>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img 
-                    src="https://lernzirkel-online.de/wp-content/uploads/2026/05/BASF-Logo-300x78.png" 
-                    alt="BASF Logo" 
+                  <Image
+                    src="https://lernzirkel-online.de/wp-content/uploads/2026/05/BASF-Logo-300x78.png"
+                    alt="BASF Logo"
+                    width={300}
+                    height={78}
                     className="h-10 w-auto object-contain shrink-0"
                   />
                 </div>
@@ -293,11 +286,12 @@ function StaticFutureConnect() {
                       className="group relative rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-2xs hover:shadow-md dark:shadow-none transition duration-200 bg-slate-100"
                     >
                       <div className="aspect-square relative w-full overflow-hidden">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img 
-                          src={img.src} 
-                          alt={img.alt} 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        <Image
+                          src={img.src}
+                          alt={img.alt}
+                          fill
+                          sizes="(max-width: 640px) 50vw, 33vw"
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
                           <p className="text-white text-[11px] font-medium leading-tight">{img.caption}</p>

@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { LifeBuoy, Clock, MapPin, CheckCircle2, Globe, ArrowRight, Languages } from 'lucide-react';
-import prisma from '@/lib/prisma';
+import { getCachedPageBySlug } from '@/lib/cached-content';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
@@ -12,14 +12,7 @@ export const metadata = {
 };
 
 export default async function MFDPage() {
-  const cmsPage = await prisma.page.findUnique({
-    where: { slug: 'beratung/mfd' },
-    include: {
-      sections: {
-        orderBy: { order: 'asc' }
-      }
-    }
-  });
+  const cmsPage = await getCachedPageBySlug('beratung/mfd');
 
   if (cmsPage && cmsPage.isPublished && cmsPage.sections.length > 0) {
     return (

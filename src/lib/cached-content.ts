@@ -13,6 +13,7 @@ const getCachedProjectsInternal = unstable_cache(
       return await prisma.project.findMany({
         where: { status: 'AKTIV' },
         orderBy: { createdAt: 'desc' },
+        include: { translations: true },
       });
     } catch (err) {
       console.error('Failed to load cached projects:', err);
@@ -28,6 +29,7 @@ export const getCachedProjects = async () => {
     return await prisma.project.findMany({
       where: { status: 'AKTIV' },
       orderBy: { createdAt: 'desc' },
+      include: { translations: true },
     });
   }
   return getCachedProjectsInternal();
@@ -38,7 +40,7 @@ const getCachedProjectBySlugInternal = unstable_cache(
     try {
       return await prisma.project.findUnique({
         where: { id: slug },
-        include: { contactPerson: true }
+        include: { contactPerson: true, translations: true }
       });
     } catch (err) {
       return null;
@@ -50,7 +52,7 @@ const getCachedProjectBySlugInternal = unstable_cache(
 
 export const getCachedProjectBySlug = async (slug: string) => {
   if (isDev) {
-    return await prisma.project.findUnique({ where: { id: slug }, include: { contactPerson: true } });
+    return await prisma.project.findUnique({ where: { id: slug }, include: { contactPerson: true, translations: true } });
   }
   return getCachedProjectBySlugInternal(slug);
 };
@@ -68,6 +70,7 @@ const coursesWithRegistrationCount = {
         registrations: { where: { status: { not: 'REJECTED' }, isWaitlisted: false } },
       },
     },
+    translations: true,
   },
 };
 
@@ -96,13 +99,14 @@ export const getCachedCourses = async () => {
 // hali, slug tabanlı linklerin her zaman "sayfa bulunamadı" vermesine sebep oluyordu.
 async function findCourseBySlugOrId(slugOrId: string) {
   try {
-    const byId = await prisma.course.findUnique({ where: { id: slugOrId } });
+    const byId = await prisma.course.findUnique({ where: { id: slugOrId }, include: { translations: true } });
     if (byId) return byId;
   } catch {
     // slugOrId bir UUID değilse Prisma hata fırlatabilir, slug aramasına geç
   }
   return prisma.course.findFirst({
     where: { design: { path: ['slug'], equals: slugOrId } },
+    include: { translations: true },
   });
 }
 
@@ -140,7 +144,8 @@ const getCachedNewsInternal = unstable_cache(
             { archiveDate: { gt: now } }
           ]
         },
-        orderBy: { publishDate: 'desc' }
+        orderBy: { publishDate: 'desc' },
+        include: { translations: true },
       });
     } catch (err) {
       console.error('Failed to load cached news:', err);
@@ -162,7 +167,8 @@ export const getCachedNews = async () => {
           { archiveDate: { gt: now } }
         ]
       },
-      orderBy: { publishDate: 'desc' }
+      orderBy: { publishDate: 'desc' },
+      include: { translations: true },
     });
   }
   return getCachedNewsInternal();
@@ -173,6 +179,7 @@ const getCachedNewsByIdInternal = unstable_cache(
     try {
       return await prisma.news.findUnique({
         where: { id },
+        include: { translations: true },
       });
     } catch (err) {
       return null;
@@ -184,7 +191,125 @@ const getCachedNewsByIdInternal = unstable_cache(
 
 export const getCachedNewsById = async (id: string) => {
   if (isDev) {
-    return await prisma.news.findUnique({ where: { id } });
+    return await prisma.news.findUnique({ where: { id }, include: { translations: true } });
   }
   return getCachedNewsByIdInternal(id);
+};
+
+// ---------------------------
+// 4. PAGES (CMS sayfaları — force-dynamic kalıyor, build-time DB erişimi yok;
+//    bu sadece request-time Prisma çağrılarını RAM'den karşılamak için)
+// ---------------------------
+const pageWithSectionsInclude = {
+  parent: true,
+  sections: { orderBy: { order: 'asc' as const } },
+};
+
+const getCachedPageBySlugInternal = unstable_cache(
+  async (slug: string) => {
+    try {
+      return await prisma.page.findUnique({ where: { slug }, include: pageWithSectionsInclude });
+    } catch (err) {
+      console.error('Failed to load cached page:', err);
+      return null;
+    }
+  },
+  ['site-page-by-slug'],
+  { revalidate: 3600, tags: ['site-pages'] }
+);
+
+export const getCachedPageBySlug = async (slug: string) => {
+  if (isDev) {
+    return prisma.page.findUnique({ where: { slug }, include: pageWithSectionsInclude }).catch(() => null);
+  }
+  return getCachedPageBySlugInternal(slug);
+};
+
+// Breadcrumb ata-zinciri yürüyüşü için — hafif, include yok.
+const getCachedPageByIdInternal = unstable_cache(
+  async (id: string) => {
+    try {
+      return await prisma.page.findUnique({ where: { id } });
+    } catch {
+      return null;
+    }
+  },
+  ['site-page-by-id'],
+  { revalidate: 3600, tags: ['site-pages'] }
+);
+
+export const getCachedPageById = async (id: string) => {
+  if (isDev) {
+    return prisma.page.findUnique({ where: { id } }).catch(() => null);
+  }
+  return getCachedPageByIdInternal(id);
+};
+
+// [...slug]/page.tsx yaprak-slug fallback araması (örn. /philosophie -> /ueber-uns/philosophie).
+const getCachedPageFallbackInternal = unstable_cache(
+  async (slugString: string, leaf: string) => {
+    try {
+      return await prisma.page.findFirst({
+        where: {
+          OR: [
+            { slug: { endsWith: `/${slugString}` } },
+            { slug: { endsWith: `/${leaf}` } },
+            { slug: leaf },
+          ],
+          isPublished: true,
+        },
+        include: pageWithSectionsInclude,
+      });
+    } catch {
+      return null;
+    }
+  },
+  ['site-page-fallback'],
+  { revalidate: 3600, tags: ['site-pages'] }
+);
+
+// ---------------------------
+// 5. GALERİ (Foto & Video) — public "/ueber-uns/galerie" sayfasını besler
+// ---------------------------
+const getCachedGalleryMediaInternal = unstable_cache(
+  async () => {
+    try {
+      return await prisma.galleryMedia.findMany({
+        where: { isPublished: true },
+        orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
+      });
+    } catch (err) {
+      console.error('Failed to load cached gallery media:', err);
+      return [];
+    }
+  },
+  ['site-gallery-media'],
+  { revalidate: 3600, tags: ['site-gallery'] }
+);
+
+export const getCachedGalleryMedia = async () => {
+  if (isDev) {
+    return prisma.galleryMedia.findMany({
+      where: { isPublished: true },
+      orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
+    }).catch(() => []);
+  }
+  return getCachedGalleryMediaInternal();
+};
+
+export const getCachedPageFallback = async (slugString: string, leaf: string) => {
+  if (isDev) {
+    return prisma.page.findFirst({
+      where: {
+        OR: [
+          { slug: { endsWith: `/${slugString}` } },
+          { slug: { endsWith: `/${leaf}` } },
+          { slug: leaf },
+        ],
+        isPublished: true,
+      },
+      include: pageWithSectionsInclude,
+    }).catch(() => null);
+  }
+  return getCachedPageFallbackInternal(slugString, leaf);
 };

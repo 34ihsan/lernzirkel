@@ -6,17 +6,19 @@ import { headers } from "next/headers";
 import {
   LayoutDashboard, PaintBucket, FileText, Settings, Users,
   Image as ImageIcon, Newspaper, Megaphone, TrendingUp, Bot, Activity,
-  ClipboardCheck, LogOut, ClipboardList, QrCode, ShieldAlert
+  ClipboardCheck, LogOut, ClipboardList, QrCode, ShieldAlert, Archive
 } from "lucide-react";
 import { getAdminSession } from "@/lib/auth-server";
 import { logoutAdmin } from "@/actions/auth";
+import prisma from "@/lib/prisma";
+import type { PermissionsJson, PermissionArea } from "@/lib/permissions";
 
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  title: "Admin Dashboard | Lernzirkel CMS",
-  description: "Lernzirkel CMS Admin Dashboard",
+  title: "Admin Dashboard | Lernzirkel Yönetim Paneli",
+  description: "Lernzirkel Yönetim Paneli Admin Dashboard",
 };
 
 export const viewport: Viewport = {
@@ -45,6 +47,24 @@ export default async function AdminLayout({
 
   const session = await getAdminSession();
 
+  // Sidebar linklerini yetkiye göre gizlemek için — ADMIN veya permissions hiç
+  // ayarlanmamışsa (legacy) her şeyi görür, aksi halde area.view===false olan gizlenir.
+  let canView: (area: PermissionArea) => boolean = () => true;
+  if (session && session.adminRole !== "ADMIN") {
+    const member = await prisma.teamMember.findUnique({
+      where: { id: session.teamMemberId },
+      select: { permissions: true },
+    }).catch(() => null);
+    const permissions = member?.permissions as PermissionsJson | null;
+    if (permissions) {
+      canView = (area: PermissionArea) => {
+        const areaPerm = permissions[area];
+        if (areaPerm === undefined) return true;
+        return areaPerm.view !== false || areaPerm.edit === true;
+      };
+    }
+  }
+
   return (
     <html lang="de" suppressHydrationWarning>
       <body suppressHydrationWarning className={`${inter.variable} antialiased bg-gray-50 text-gray-900`}>
@@ -52,7 +72,7 @@ export default async function AdminLayout({
           {/* Sidebar */}
           <aside className="w-64 bg-gray-900 text-white flex flex-col">
             <div className="p-4 flex items-center justify-center border-b border-gray-800 h-16">
-              <h1 className="text-xl font-bold tracking-wider">Lernzirkel CMS</h1>
+              <h1 className="text-sm font-bold tracking-wide text-center leading-tight">Lernzirkel<br />Yönetim Paneli</h1>
             </div>
             <nav className="flex-1 overflow-y-auto py-4">
               <ul className="space-y-1 px-2">
@@ -64,52 +84,70 @@ export default async function AdminLayout({
                 </li>
                 
                 <li className="pt-4 pb-2 px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">İçerik (Content)</li>
-                <li>
-                  <Link href="/admin/pages" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
-                    <FileText size={18} />
-                    <span>Sayfalar (Pages)</span>
-                  </Link>
-                </li>
+                {canView("pages") && (
+                  <li>
+                    <Link href="/admin/pages" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
+                      <FileText size={18} />
+                      <span>Sayfalar (Pages)</span>
+                    </Link>
+                  </li>
+                )}
                 <li>
                   <Link href="/admin/announcements" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
                     <Megaphone size={18} />
                     <span>Duyurular (Announcements)</span>
                   </Link>
                 </li>
-                <li>
-                  <Link href="/admin/content/News" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
-                    <Newspaper size={18} />
-                    <span>Duyurular (News)</span>
-                  </Link>
-                </li>
+                {canView("news") && (
+                  <li>
+                    <Link href="/admin/content/News" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
+                      <Newspaper size={18} />
+                      <span>Duyurular (News)</span>
+                    </Link>
+                  </li>
+                )}
                 <li>
                   <Link href="/admin/articles" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
                     <FileText size={18} />
                     <span>Blog & Makale</span>
                   </Link>
                 </li>
+                {canView("courses") && (
+                  <li>
+                    <Link href="/admin/content/Course" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
+                      <FileText size={18} />
+                      <span>Kurslar (Courses)</span>
+                    </Link>
+                  </li>
+                )}
+                {canView("projects") && (
+                  <li>
+                    <Link href="/admin/content/Project" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
+                      <FileText size={18} />
+                      <span>Projeler (Projects)</span>
+                    </Link>
+                  </li>
+                )}
+                {canView("team") && (
+                  <li>
+                    <Link href="/admin/content/TeamMember" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
+                      <Users size={18} />
+                      <span>Ekip (Team)</span>
+                    </Link>
+                  </li>
+                )}
+                {canView("gallery") && (
+                  <li>
+                    <Link href="/admin/content/GalleryMedia" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
+                      <ImageIcon size={18} />
+                      <span>Galeri (Foto & Video)</span>
+                    </Link>
+                  </li>
+                )}
                 <li>
-                  <Link href="/admin/content/Course" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
-                    <FileText size={18} />
-                    <span>Kurslar (Courses)</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/admin/content/Project" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
-                    <FileText size={18} />
-                    <span>Projeler (Projects)</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/admin/content/TeamMember" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
-                    <Users size={18} />
-                    <span>Ekip (Team)</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/admin/content/GalleryImage" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
-                    <ImageIcon size={18} />
-                    <span>Galeri (Gallery)</span>
+                  <Link href="/admin/depo" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
+                    <Archive size={18} />
+                    <span>Depo (Dokümanlar)</span>
                   </Link>
                 </li>
                 <li>
@@ -133,19 +171,23 @@ export default async function AdminLayout({
                   </Link>
                 </li>
 
-                <li className="pt-4 pb-2 px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Tasarım & Ayarlar</li>
-                <li>
-                  <Link href="/admin/header-footer" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
-                    <LayoutDashboard size={18} />
-                    <span>Header & Footer</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/admin/design" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
-                    <PaintBucket size={18} />
-                    <span>Tasarım Editörü</span>
-                  </Link>
-                </li>
+                {canView("design") && (
+                  <>
+                    <li className="pt-4 pb-2 px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Tasarım & Ayarlar</li>
+                    <li>
+                      <Link href="/admin/header-footer" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
+                        <LayoutDashboard size={18} />
+                        <span>Header & Footer</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/admin/design" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
+                        <PaintBucket size={18} />
+                        <span>Tasarım Editörü</span>
+                      </Link>
+                    </li>
+                  </>
+                )}
 
                 <li className="pt-4 pb-2 px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Yönetim & DevOps (Pro Elite)</li>
                 <li>

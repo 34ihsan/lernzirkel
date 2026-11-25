@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { 
-  Briefcase, 
-  MapPin, 
+import {
+  Briefcase,
+  MapPin,
   GraduationCap,
   Sparkles,
   ArrowRight,
@@ -12,24 +12,22 @@ import {
   ChevronDown,
   ChevronUp
 } from 'lucide-react';
+import { getJobTypeDef } from '@/lib/job-types';
 
 export default function JobCard({ job }: { job: any }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const typeDef = getJobTypeDef(job.type);
 
   return (
     <div className="group bg-white dark:bg-gray-900 p-6 md:p-8 rounded-2xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-800 hover:shadow-xl hover:border-primary/20 transition-all duration-300 relative overflow-hidden flex flex-col h-full">
       <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
         {job.type === 'LEHRER' ? <GraduationCap size={80} /> : <Briefcase size={80} />}
       </div>
-      
+
       <div className="mb-4">
         <div className="flex flex-wrap items-center gap-2 mb-3">
-          <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-            job.type === 'LEHRER' ? 'bg-blue-50 text-blue-700' :
-            job.type === 'PRAKTIKANT' ? 'bg-emerald-50 text-emerald-700' :
-            'bg-gray-100 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300'
-          }`}>
-            {job.type === 'LEHRER' ? 'Lehrkraft' : job.type === 'PRAKTIKANT' ? 'Praktikum' : 'Stellenangebot'}
+          <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${typeDef.badgeClass}`}>
+            {typeDef.label}
           </span>
           {job.location && (
             <span className="flex items-center text-gray-500 dark:text-gray-400 text-xs font-medium bg-gray-50 dark:bg-gray-800 px-3 py-1 rounded-full border border-gray-100 dark:border-gray-800">

@@ -73,16 +73,16 @@ export default function FloatingAIAssistant() {
               setIsOpen(true);
               trackEvent("ai_assistant_open");
             }}
-            className="group flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-sky-900 to-indigo-900 hover:from-sky-800 hover:to-indigo-800 text-white rounded-full shadow-[0_0_30px_rgba(14,165,233,0.3)] hover:shadow-[0_0_40px_rgba(14,165,233,0.5)] border border-white/20 transition-all"
+            className="group flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-primary to-primary-dark hover:brightness-110 text-white rounded-full shadow-[0_0_30px_rgba(59,154,215,0.4)] hover:shadow-[0_0_40px_rgba(59,154,215,0.6)] border border-white/20 transition-all"
             aria-label="KI-Kursberater öffnen"
           >
             <div className="relative">
               <Bot size={22} className="text-amber-300" />
-              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-sky-950 animate-pulse"></span>
+              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-primary-dark animate-pulse"></span>
             </div>
             <div className="text-left hidden sm:block">
               <div className="text-xs font-bold leading-none text-white">Elite KI-Berater</div>
-              <div className="text-[10px] text-sky-200 mt-0.5">Online • Agentic RAG</div>
+              <div className="text-[10px] text-white/75 mt-0.5">KI-Chatbot · Online</div>
             </div>
           </motion.button>
         )}
@@ -112,7 +112,7 @@ export default function FloatingAIAssistant() {
                     </span>
                   </div>
                   <div className="text-[11px] text-sky-200 flex items-center gap-1 mt-0.5">
-                    <Sparkles size={10} /> Agentic RAG Enabled
+                    <Sparkles size={10} /> KI-Chatbot · Agentic RAG
                   </div>
                 </div>
               </div>
@@ -124,6 +124,12 @@ export default function FloatingAIAssistant() {
               >
                 <X size={18} />
               </button>
+            </div>
+
+            {/* Permanent AI disclosure notice (EU AI Act Art. 50 Abs. 1) — not dismissible */}
+            <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800/50 px-4 py-2 text-[11px] text-amber-800 dark:text-amber-300 flex items-center gap-1.5 shrink-0">
+              <Bot size={12} className="shrink-0" />
+              <span>Sie chatten mit einem KI-Chatbot, keine echte Person. Antworten können Fehler enthalten.</span>
             </div>
 
             {/* Messages Area */}

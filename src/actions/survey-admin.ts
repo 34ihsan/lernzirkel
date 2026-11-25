@@ -134,10 +134,13 @@ export interface ParticipantInput {
  * Online kayıt formu üzerinden değil, elle/kağıt üzerinden kayıt olmuş kursiyerleri
  * ankete dahil etmek için: normal Registration kaydı gibi oluşturulur (status
  * APPROVED), böylece mevcut gönderim/rapor akışının hiçbiri değişmeden aynen çalışır.
- * Aynı kurs için e-postası zaten kayıtlı olanlar atlanır. Ekleme sonrası davet
- * otomatik olarak gönderilir (ekstra bir "Şimdi Gönder" tıklamasına gerek kalmaz).
+ * Aynı kurs için e-postası zaten kayıtlı olanlar atlanır.
+ *
+ * Gönderim artık BURADA otomatik olmuyor — admin ne zaman/nasıl göndereceğine kendisi
+ * karar veriyor: ya `sendNow: true` ile ekleme anında (eski davranış, checkbox'la seçilebilir),
+ * ya da daha sonra ayrı "Anketi Şimdi Gönder" butonuyla (bkz. sendCourseSurveyNow).
  */
-export async function addCourseParticipants(courseId: string, rows: ParticipantInput[]) {
+export async function addCourseParticipants(courseId: string, rows: ParticipantInput[], options?: { sendNow?: boolean }) {
   const session = await requireAdminSession();
 
   let added = 0;
@@ -174,8 +177,9 @@ export async function addCourseParticipants(courseId: string, rows: ParticipantI
     added++;
   }
 
-  const dispatchResult = added > 0 ? await dispatchCourseSurveys(courseId) : { sent: 0, failed: 0, skipped: 0 };
-  await audit("SURVEY_PARTICIPANTS_ADD", session.name, { courseId, added, skipped });
+  const shouldSend = added > 0 && options?.sendNow === true;
+  const dispatchResult = shouldSend ? await dispatchCourseSurveys(courseId) : { sent: 0, failed: 0, skipped: 0 };
+  await audit("SURVEY_PARTICIPANTS_ADD", session.name, { courseId, added, skipped, sentImmediately: shouldSend });
   revalidatePath(`/admin/surveys/course/${courseId}`);
   revalidatePath("/admin/surveys");
   revalidatePath("/admin/registrations");

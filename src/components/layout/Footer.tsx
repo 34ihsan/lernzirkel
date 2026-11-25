@@ -5,6 +5,7 @@ import { MapPin, Phone, Clock, ChevronRight, Heart, ExternalLink } from 'lucide-
 import EmailObfuscator from '../common/EmailObfuscator';
 import SocialLinksBar from '../common/SocialLinksBar';
 import LiveStatusBadge from '../common/LiveStatusBadge';
+import FooterBadges from './FooterBadges';
 import prisma from '@/lib/prisma';
 import { FooterConfig, defaultFooterConfig } from '@/lib/site-defaults';
 import { DesignConfig } from '@/lib/design-defaults';
@@ -56,7 +57,7 @@ export default async function Footer({
 
   return (
     <footer
-      className="text-sm pt-16 pb-8"
+      className="text-sm pt-16 pb-44 lg:pb-32"
       style={{ 
         backgroundColor: footer.design?.backgroundColor || '#111111',
         color: footer.design?.textColor || '#9ca3af'
@@ -65,62 +66,12 @@ export default async function Footer({
       <div className="container mx-auto px-4">
         
         {/* Zertifikate & Partner Banner */}
-        {footer.badges && ((footer.badges.partners && footer.badges.partners.length > 0) || (footer.badges.items && footer.badges.items.length > 0)) && (
-          <div className="bg-white dark:bg-gray-900 rounded-xl p-6 mb-12 flex flex-col md:flex-row items-center justify-center md:space-x-12 space-y-6 md:space-y-0 shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-800 text-gray-800 dark:text-gray-200">
-            {footer.badges.showTitle !== false && (
-              <p className="font-bold uppercase tracking-wider text-center md:text-left text-gray-700 dark:text-gray-300 text-xs sm:text-sm shrink-0">
-                {footer.badges.title || "Zertifiziert & Gefördert durch:"}
-              </p>
-            )}
-            <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8">
-              {footer.badges.partners && footer.badges.partners.length > 0 ? (
-                footer.badges.partners.map((partner, idx) => {
-                  const content = partner.logoUrl ? (
-                    <div className="flex items-center justify-center p-2 rounded-lg bg-gray-50 dark:bg-gray-800/90 hover:bg-gray-100 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 transition-all">
-                      <Image
-                        src={partner.logoUrl}
-                        alt={partner.name || "Partner Logo"}
-                        width={partner.width || 120}
-                        height={partner.height || 40}
-                        className="object-contain max-h-12 w-auto transition-transform hover:scale-105"
-                        style={{
-                          maxWidth: partner.width ? `${partner.width}px` : '140px',
-                          maxHeight: partner.height ? `${partner.height}px` : '48px',
-                          height: 'auto'
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="h-10 px-4 bg-gray-100 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-300 font-semibold text-xs rounded-md shadow-xs hover:bg-gray-200 transition-colors">
-                      {partner.name}
-                    </div>
-                  );
-
-                  return partner.url ? (
-                    <a
-                      key={idx}
-                      href={partner.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      title={partner.name}
-                      className="inline-block transition-opacity hover:opacity-90"
-                    >
-                      {content}
-                    </a>
-                  ) : (
-                    <div key={idx}>{content}</div>
-                  );
-                })
-              ) : (
-                footer.badges.items?.map((badge, idx) => (
-                  <div key={idx} className="h-10 px-4 bg-gray-100 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-300 font-semibold text-xs rounded-md shadow-xs">
-                    {badge}
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        )}
+        <FooterBadges
+          title={footer.badges?.title}
+          items={footer.badges?.items}
+          partners={footer.badges?.partners}
+          showTitle={footer.badges?.showTitle}
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           

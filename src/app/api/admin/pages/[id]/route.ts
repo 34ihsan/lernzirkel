@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { requireAdminSession } from "@/lib/auth-server";
 
 // GET /api/admin/pages/[id]
@@ -71,6 +71,9 @@ export async function DELETE(
     }
 
     await prisma.page.delete({ where: { id } });
+    // Route Handler bağlamında updateTag kullanılamıyor (sadece Server Action'larda çalışır) —
+    // bunun yerine revalidateTag'in { expire: 0 } profiliyle aynı anlık geçersizleştirme sağlanıyor.
+    revalidateTag("site-pages", { expire: 0 });
     revalidatePath("/admin/pages");
     revalidatePath("/", "layout");
 

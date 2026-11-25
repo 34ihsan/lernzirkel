@@ -10,7 +10,7 @@ const NewsPreview = dynamic(() => import('./previews/NewsPreview'), { ssr: false
 const CoursePreview = dynamic(() => import('./previews/CoursePreview'), { ssr: false });
 const ProjectPreview = dynamic(() => import('./previews/ProjectPreview'), { ssr: false });
 const TeamMemberPreview = dynamic(() => import('./previews/TeamMemberPreview'), { ssr: false });
-const GalleryImagePreview = dynamic(() => import('./previews/GalleryImagePreview'), { ssr: false });
+const GalleryMediaPreview = dynamic(() => import('./previews/GalleryMediaPreview'), { ssr: false });
 
 function PreviewComponent({ model, data }: { model: string; data: Record<string, string> }) {
   switch (model) {
@@ -18,7 +18,7 @@ function PreviewComponent({ model, data }: { model: string; data: Record<string,
     case 'Course':       return <CoursePreview data={data} />;
     case 'Project':      return <ProjectPreview data={data} />;
     case 'TeamMember':   return <TeamMemberPreview data={data} />;
-    case 'GalleryImage': return <GalleryImagePreview data={data} />;
+    case 'GalleryMedia': return <GalleryMediaPreview data={data} />;
     default:             return <div className="text-gray-500 p-4 text-sm">Önizleme mevcut değil.</div>;
   }
 }
@@ -42,12 +42,14 @@ interface ContentListClientProps {
   model: string;
   records: Record<string, any>[];
   displayKeys: string[];
+  canEdit?: boolean;
 }
 
 export default function ContentListClient({
   model,
   records,
   displayKeys,
+  canEdit = true,
 }: ContentListClientProps) {
   const [previewRecord, setPreviewRecord] = useState<Record<string, string> | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -106,23 +108,27 @@ export default function ContentListClient({
                       <Eye size={18} />
                     </button>
                     {/* Düzenle */}
-                    <Link 
-                      href={`/admin/content/${model}/${record.id}`} 
-                      className="text-blue-600 hover:text-blue-900 transition-colors p-1 rounded hover:bg-blue-50" 
-                      title="Düzenle"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    </Link>
+                    {canEdit && (
+                      <Link
+                        href={`/admin/content/${model}/${record.id}`}
+                        className="text-blue-600 hover:text-blue-900 transition-colors p-1 rounded hover:bg-blue-50"
+                        title="Düzenle"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                      </Link>
+                    )}
                     {/* Sil */}
-                    <button
-                      type="button"
-                      disabled={isPending && deletingId === record.id}
-                      onClick={() => handleDelete(record.id)}
-                      className="text-red-600 hover:text-red-900 transition-colors p-1 rounded hover:bg-red-50 disabled:opacity-40"
-                      title="Sil"
-                    >
-                      <Trash2 size={18} />
-                    </button>
+                    {canEdit && (
+                      <button
+                        type="button"
+                        disabled={isPending && deletingId === record.id}
+                        onClick={() => handleDelete(record.id)}
+                        className="text-red-600 hover:text-red-900 transition-colors p-1 rounded hover:bg-red-50 disabled:opacity-40"
+                        title="Sil"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>

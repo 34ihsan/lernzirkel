@@ -5,41 +5,19 @@ import Breadcrumbs, { BreadcrumbItem } from "@/components/common/Breadcrumbs";
 
 import { constructMetadata, generateBreadcrumbSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { getCachedPageBySlug, getCachedPageById, getCachedPageFallback } from "@/lib/cached-content";
 
 export default async function DynamicCmsPage({ params }: { params: Promise<{ slug: string[] }> }) {
   const { slug } = await params;
   const slugString = slug.join("/");
 
   // 1. Exact match lookup
-  let page = await prisma.page.findUnique({
-    where: { slug: slugString },
-    include: {
-      parent: true,
-      sections: {
-        orderBy: { order: "asc" }
-      }
-    }
-  });
+  let page = await getCachedPageBySlug(slugString);
 
   // 2. Fallback lookup: if accessed by leaf slug (e.g. /philosophie instead of /ueber-uns/philosophie)
   if (!page) {
     const leaf = slug[slug.length - 1];
-    const candidate = await prisma.page.findFirst({
-      where: {
-        OR: [
-          { slug: { endsWith: `/${slugString}` } },
-          { slug: { endsWith: `/${leaf}` } },
-          { slug: leaf }
-        ],
-        isPublished: true
-      },
-      include: {
-        parent: true,
-        sections: {
-          orderBy: { order: "asc" }
-        }
-      }
-    });
+    const candidate = await getCachedPageFallback(slugString, leaf);
 
     if (candidate) {
       if (candidate.slug !== slugString) {
@@ -68,9 +46,7 @@ export default async function DynamicCmsPage({ params }: { params: Promise<{ slu
       url: `/${currentParent.slug}`
     });
     if (currentParent.parentId) {
-      currentParent = await prisma.page.findUnique({
-        where: { id: currentParent.parentId }
-      });
+      currentParent = await getCachedPageById(currentParent.parentId);
     } else {
       break;
     }
@@ -100,22 +76,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const slugString = slug.join("/");
 
-  let page = await prisma.page.findUnique({
-    where: { slug: slugString }
-  });
+  let page = await getCachedPageBySlug(slugString);
 
   if (!page) {
     const leaf = slug[slug.length - 1];
-    page = await prisma.page.findFirst({
-      where: {
-        OR: [
-          { slug: { endsWith: `/${slugString}` } },
-          { slug: { endsWith: `/${leaf}` } },
-          { slug: leaf }
-        ],
-        isPublished: true
-      }
-    });
+    page = await getCachedPageFallback(slugString, leaf);
   }
 
   if (!page) {

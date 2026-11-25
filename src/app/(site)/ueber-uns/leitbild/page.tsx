@@ -1,13 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
-import { 
-  ArrowLeft, Target, HeartHandshake, ShieldCheck, Award, 
-  Users, Sparkles, Building2, Phone, Mail, MapPin, 
+import Image from 'next/image';
+import {
+  ArrowLeft, Target, HeartHandshake, ShieldCheck, Award,
+  Users, Sparkles, Building2, Phone, Mail, MapPin,
   Clock, CheckCircle2, ChevronRight, BookOpen, GraduationCap, Compass
 } from 'lucide-react';
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
-import prisma from '@/lib/prisma';
+import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
@@ -18,15 +19,7 @@ export const metadata = {
 };
 
 export default async function LeitbildPage() {
-  const page = await prisma.page.findUnique({
-    where: { slug: 'ueber-uns/leitbild' },
-    include: {
-      parent: true,
-      sections: {
-        orderBy: { order: 'asc' }
-      }
-    }
-  });
+  const page = await getCachedPageBySlug('ueber-uns/leitbild');
 
   if (page && page.isPublished && page.sections.length > 0) {
     const breadcrumbs: BreadcrumbItem[] = [];
@@ -37,9 +30,7 @@ export default async function LeitbildPage() {
         url: `/${currentParent.slug}`
       });
       if (currentParent.parentId) {
-        currentParent = await prisma.page.findUnique({
-          where: { id: currentParent.parentId }
-        });
+        currentParent = await getCachedPageById(currentParent.parentId);
       } else {
         break;
       }
@@ -228,6 +219,31 @@ function StaticLeitbild() {
                 <p>
                   Wir verstehen uns als lernende Organisation, die ihr eigenes Handeln regelmäßig durch Evaluationen und Qualitätsaudits reflektiert und ihre Angebote und Prozesse im Interesse der Teilnehmerinnen und Teilnehmer kontinuierlich weiterentwickelt.
                 </p>
+              </div>
+
+              {/* Section: Qualitätsversprechen */}
+              <div className="space-y-3 pt-4 border-t border-gray-100 dark:border-gray-800">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-rose-600" />
+                  <span>Unser Qualitätsversprechen</span>
+                </h3>
+                <div className="flex flex-col sm:flex-row items-start gap-5">
+                  <Image
+                    src="/images/certqua-azav-siegel.png"
+                    alt="CERTQUA-Siegel: Qualitätsmanagement, zugelassener Träger nach AZAV"
+                    width={150}
+                    height={76}
+                    className="shrink-0 mx-auto sm:mx-0"
+                  />
+                  <div className="space-y-3">
+                    <p>
+                      Der Lernzirkel Ludwigshafen e.V. ist im Besitz des CERTQUA-Zertifikats und als Bildungsträger nach AZAV (Akkreditierungs- und Zulassungsverordnung Arbeitsförderung) des Bundesministeriums für Arbeit und Soziales zugelassen. Auch unsere Bildungs- und Coachingangebote sind nach AZAV zertifiziert.
+                    </p>
+                    <p>
+                      Unsere Qualitätsstandards werden regelmäßig durch die Fachkundige Stelle CERTQUA überprüft.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* Section: Chancengleichheit */}

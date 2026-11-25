@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowLeft, Image as ImageIcon } from 'lucide-react';
 
 const galleryImages = [
@@ -94,13 +95,13 @@ export default function RaeumlichkeitenPage() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {galleryImages.map((image, idx) => (
-              <div key={idx} className="group relative rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800/50 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img 
-                  src={image.src} 
-                  alt={image.alt} 
-                  className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
+              <div key={idx} className="group relative h-64 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800/50 shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700">
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 {image.caption && (
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 pt-12">

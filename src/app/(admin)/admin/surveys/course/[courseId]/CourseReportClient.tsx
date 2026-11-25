@@ -4,8 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
-import { Download, Printer, Flag, MessageSquare, QrCode, Eye, UserCog, Copy, Check, MessageCircle, RefreshCw, UserPlus, Loader2, MailWarning, MailCheck, MailX, Clock3 } from "lucide-react";
-import { exportCourseResponsesCsv, resendSurveyInviteNow, addCourseParticipants } from "@/actions/survey-admin";
+import { Download, Printer, Flag, MessageSquare, QrCode, Eye, UserCog, Copy, Check, MessageCircle, RefreshCw, UserPlus, Loader2, MailWarning, MailCheck, MailX, Clock3, Mail } from "lucide-react";
+import { exportCourseResponsesCsv, resendSurveyInviteNow, addCourseParticipants, sendCourseSurveyNow } from "@/actions/survey-admin";
 import type { CourseSurveyReport, CourseInviteRow } from "@/lib/survey-reports";
 
 const CHART_COLOR = "#0F4761";
@@ -70,6 +70,9 @@ export default function CourseReportClient({
   const [bulkText, setBulkText] = useState("");
   const [addingParticipants, setAddingParticipants] = useState(false);
   const [addResult, setAddResult] = useState<string | null>(null);
+  const [sendImmediately, setSendImmediately] = useState(true);
+  const [sendingNow, setSendingNow] = useState(false);
+  const [sendNowResult, setSendNowResult] = useState<string | null>(null);
 
   function handleCopy(id: string, link: string) {
     navigator.clipboard?.writeText(link);
@@ -98,15 +101,33 @@ export default function CourseReportClient({
     setAddingParticipants(true);
     setAddResult(null);
     try {
-      const result = await addCourseParticipants(courseId, rows);
+      const result = await addCourseParticipants(courseId, rows, { sendNow: sendImmediately });
       setAddResult(
-        `${result.added} kişi eklendi, ${result.skipped} atlandı (geçersiz/zaten kayıtlı). ${result.emailsSent} davet e-postası gönderildi` +
-          (result.emailsFailed > 0 ? `, ${result.emailsFailed} tanesi gönderilemedi.` : ".")
+        `${result.added} kişi eklendi, ${result.skipped} atlandı (geçersiz/zaten kayıtlı).` +
+          (sendImmediately
+            ? ` ${result.emailsSent} davet e-postası gönderildi` + (result.emailsFailed > 0 ? `, ${result.emailsFailed} tanesi gönderilemedi.` : ".")
+            : " Anket henüz gönderilmedi — \"Anketi Şimdi Gönder\" ile istediğiniz zaman gönderebilirsiniz.")
       );
       setBulkText("");
       router.refresh();
     } finally {
       setAddingParticipants(false);
+    }
+  }
+
+  async function handleSendNow() {
+    setSendingNow(true);
+    setSendNowResult(null);
+    try {
+      const result = await sendCourseSurveyNow(courseId);
+      setSendNowResult(
+        result.sent === 0 && result.failed === 0
+          ? "Davet edilecek yeni kursiyer yok — herkese zaten davet gönderilmiş."
+          : `${result.sent} davet gönderildi` + (result.failed > 0 ? `, ${result.failed} tanesi gönderilemedi.` : ".")
+      );
+      router.refresh();
+    } finally {
+      setSendingNow(false);
     }
   }
 
@@ -146,6 +167,14 @@ export default function CourseReportClient({
           </p>
         </div>
         <div className="flex gap-2 print:hidden">
+          <button
+            onClick={handleSendNow}
+            disabled={sendingNow}
+            className="inline-flex items-center gap-2 px-3 py-2 bg-sky-50 text-sky-700 border border-sky-200 rounded-lg text-sm font-bold hover:bg-sky-100 disabled:opacity-50"
+            title="Bu kurs için anket davetlerini şimdi gönder (henüz davet edilmemiş onaylı kursiyerlere, e-posta ile) — ne zaman isterseniz kullanabilirsiniz, kurs bitişini beklemenize gerek yok"
+          >
+            {sendingNow ? <Loader2 size={15} className="animate-spin" /> : <Mail size={15} />} Anketi Şimdi Gönder
+          </button>
           <a href={previewUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50">
             <Eye size={15} /> Önizle
           </a>
@@ -160,6 +189,10 @@ export default function CourseReportClient({
           </button>
         </div>
       </div>
+
+      {sendNowResult && (
+        <p className="text-sm text-sky-700 bg-sky-50 p-2.5 rounded-lg print:hidden">{sendNowResult}</p>
+      )}
 
       {showQr && (
         <div className="bg-white rounded-xl border border-gray-200 p-6 flex items-center gap-6 print:hidden">
@@ -267,12 +300,22 @@ export default function CourseReportClient({
               placeholder={"Ad Soyad, e-posta, telefon\nAd Soyad, e-posta, telefon"}
               className="w-full border border-gray-300 rounded-lg p-3 text-sm font-mono"
             />
+            <label className="flex items-center gap-2 text-xs text-gray-600 select-none">
+              <input
+                type="checkbox"
+                checked={sendImmediately}
+                onChange={(e) => setSendImmediately(e.target.checked)}
+                className="rounded border-gray-300"
+              />
+              Eklendikten hemen sonra anketi gönder (işaretlemezseniz sadece eklenir — "Anketi Şimdi Gönder" ile istediğiniz zaman ayrıca gönderebilirsiniz)
+            </label>
             <button
               onClick={handleAddParticipants}
               disabled={addingParticipants || !bulkText.trim()}
               className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-black disabled:opacity-50"
             >
-              {addingParticipants && <Loader2 size={14} className="animate-spin" />} Ekle ve Anketi Gönder
+              {addingParticipants && <Loader2 size={14} className="animate-spin" />}
+              {sendImmediately ? "Ekle ve Anketi Gönder" : "Kursiyerleri Ekle"}
             </button>
             {addResult && <p className="text-sm text-green-700 bg-green-50 p-2 rounded-lg">{addResult}</p>}
           </div>

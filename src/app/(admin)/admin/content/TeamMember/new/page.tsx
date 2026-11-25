@@ -7,14 +7,19 @@ export default function NewTeamMemberPage() {
   async function handleSave(formData: FormData) {
     "use server";
 
+    const areas = ["pages", "news", "courses", "team", "gallery", "projects", "design"] as const;
     const permissions = {
-      pages: formData.get("perm_pages") === "on",
-      news: formData.get("perm_news") === "on",
-      courses: formData.get("perm_courses") === "on",
-      team: formData.get("perm_team") === "on",
-      gallery: formData.get("perm_gallery") === "on",
-      projects: formData.get("perm_projects") === "on",
-      design: formData.get("perm_design") === "on",
+      ...Object.fromEntries(
+        areas.map((area) => [
+          area,
+          {
+            view: formData.get(`perm_${area}_view`) === "on",
+            edit: formData.get(`perm_${area}_edit`) === "on",
+          },
+        ])
+      ),
+      depotDownload: formData.get("perm_depotDownload") === "on",
+      depotUpload: formData.get("perm_depotUpload") === "on",
     };
 
     const adminRole = formData.get("adminRole") as string;

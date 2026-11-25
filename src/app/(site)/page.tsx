@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma';
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 import Link from 'next/link';
+import Image from 'next/image';
 import { constructMetadata } from '@/lib/seo';
 import {
   ArrowRight, BookOpen, Users, GraduationCap, LifeBuoy,
@@ -13,9 +14,7 @@ import {
 } from 'lucide-react';
 
 export async function generateMetadata() {
-  const page = await prisma.page.findUnique({
-    where: { slug: 'home' }
-  });
+  const page = await getCachedPageBySlug('home');
   if (page?.title) {
     return constructMetadata({
       title: page.title,
@@ -35,18 +34,12 @@ export async function generateMetadata() {
 import TrustBanner from '@/components/home/TrustBanner';
 import CourseGrid from '@/components/home/CourseGrid';
 import AnimatedHero from '@/components/home/AnimatedHero';
-import { getCachedCourses } from '@/lib/cached-content';
+import { getCachedCourses, getCachedPageBySlug } from '@/lib/cached-content';
 import { defaultFooterConfig } from '@/lib/site-defaults';
+import { LocalizedText } from '@/components/common/LocalizedText';
 
 export default async function Home() {
-  const homePage = await prisma.page.findUnique({
-    where: { slug: 'home' },
-    include: {
-      sections: {
-        orderBy: { order: 'asc' }
-      }
-    }
-  });
+  const homePage = await getCachedPageBySlug('home');
 
   if (homePage && homePage.isPublished && homePage.sections.length > 0) {
     return (
@@ -73,7 +66,8 @@ async function StaticHome() {
         ]
       },
       orderBy: { publishDate: 'desc' },
-      take: 3
+      take: 3,
+      include: { translations: true },
     }).catch(() => []),
     getCachedCourses().catch(() => []),
     prisma.siteSettings.findUnique({ where: { id: 'global' } }).catch(() => null),
@@ -118,7 +112,7 @@ async function StaticHome() {
             </Link>
             <Link href="/spenden" className="flatsome-card p-6 flex flex-col items-center text-center group bg-white dark:bg-gray-900 shadow-sm dark:shadow-none hover:shadow-md dark:shadow-none transition-all">
               <HandHeart className="w-10 h-10 text-secondary mb-4 group-hover:scale-110 transition-transform" />
-              <h3 className="text-lg font-bold mb-2 text-foreground">Spenden</h3>
+              <h3 className="text-lg font-bold mb-2 text-foreground">Spenden & Mitgliedschaft</h3>
               <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">Unterstützen Sie unsere Arbeit für Chancengleichheit.</p>
               <span className="text-primary text-sm flex items-center mt-auto font-semibold">Jetzt spenden <ArrowRight className="w-4 h-4 ml-1" /></span>
             </Link>
@@ -255,7 +249,7 @@ async function StaticHome() {
                 <Link href={`/aktuelles/${news.id}`} key={news.id} className="group flex flex-col bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden hover:shadow-lg transition-all border border-gray-100 dark:border-gray-800 hover:border-primary/20">
                   <div className="h-48 bg-gray-200 relative overflow-hidden">
                     {news.imageUrl ? (
-                      <img src={news.imageUrl} alt={news.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <Image src={news.imageUrl} alt={news.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-primary/10 text-primary/30">
                         <Newspaper size={40} />
@@ -268,7 +262,7 @@ async function StaticHome() {
                       {new Date(news.publishDate).toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })}
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3 group-hover:text-primary transition-colors line-clamp-2">
-                      {news.title}
+                      <LocalizedText base={news.title} translations={news.translations} field="title" />
                     </h3>
                     <div className="mt-auto flex items-center text-primary font-semibold text-sm">
                       Weiterlesen <ArrowRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />

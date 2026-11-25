@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
+import { LocalizedText } from '@/components/common/LocalizedText';
 import { 
   Search, 
   Filter, 
@@ -52,6 +53,7 @@ export interface CourseItem {
   badgeColor?: string;
   isPopular?: boolean;
   capacityBadge?: { text: string; colorClass: string } | null;
+  translations?: { language: string; [key: string]: any }[];
 }
 
 interface Props {
@@ -85,6 +87,7 @@ export default function AdvancedCourseExplorer({ initialCourses = [] }: Props) {
       return {
         id: db.id,
         title: db.title,
+        translations: db.translations,
         link: db.design?.slug ? `/kurse/${db.design.slug}` : `/kurse/${db.id}`,
         category: db.category || 'ANDERE',
         categoryLabel: db.category === 'INTEGRATION' ? 'Integrationskurse' :
@@ -508,13 +511,13 @@ export default function AdvancedCourseExplorer({ initialCourses = [] }: Props) {
                   {/* Title */}
                   <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-primary transition-colors leading-snug mb-3">
                     <Link href={course.link} className="focus:outline-none">
-                      {course.title}
+                      <LocalizedText base={course.title} translations={course.translations} field="title" />
                     </Link>
                   </h3>
 
                   {/* Description */}
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4 line-clamp-3">
-                    {course.description}
+                    <LocalizedText base={course.description} translations={course.translations} field="description" />
                   </p>
 
                   {/* Level Pills */}
@@ -612,12 +615,12 @@ export default function AdvancedCourseExplorer({ initialCourses = [] }: Props) {
 
                 <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-primary transition-colors">
                   <Link href={course.link}>
-                    {course.title}
+                    <LocalizedText base={course.title} translations={course.translations} field="title" />
                   </Link>
                 </h3>
 
                 <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed">
-                  {course.description}
+                  <LocalizedText base={course.description} translations={course.translations} field="description" />
                 </p>
 
                 <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 flex-wrap pt-1">
@@ -706,7 +709,9 @@ export default function AdvancedCourseExplorer({ initialCourses = [] }: Props) {
             <div className="flex items-start justify-between gap-4 border-b border-gray-100 dark:border-gray-800 pb-4">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-primary">Unverbindliche Anfrage</span>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mt-1">{inquiryCourse.title}</h3>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mt-1">
+                  <LocalizedText base={inquiryCourse.title} translations={inquiryCourse.translations} field="title" />
+                </h3>
               </div>
               <button
                 onClick={() => setInquiryCourse(null)}
@@ -717,7 +722,7 @@ export default function AdvancedCourseExplorer({ initialCourses = [] }: Props) {
             </div>
 
             <div className="bg-blue-50/60 rounded-xl p-3.5 text-xs text-blue-900 space-y-1">
-              <p><strong>Gewähltes Angebot:</strong> {inquiryCourse.title}</p>
+              <p><strong>Gewähltes Angebot:</strong> <LocalizedText base={inquiryCourse.title} translations={inquiryCourse.translations} field="title" /></p>
               <p><strong>Finanzierung:</strong> {inquiryCourse.costsInfo || 'BAMF / BuT / Privat'}</p>
               <p><strong>Zeiten:</strong> {inquiryCourse.schedule || 'Nach Absprache'}</p>
             </div>

@@ -19,7 +19,7 @@ export default async function AdminDashboard() {
     prisma.project.count(),
     prisma.news.count(),
     prisma.teamMember.count(),
-    prisma.galleryImage.count(),
+    prisma.galleryMedia.count(),
     prisma.page.count().catch(() => 0),
     prisma.registration.count({ where: { status: "PENDING" } }).catch(() => 0),
     prisma.eventLog.count().catch(() => 0),
@@ -53,7 +53,7 @@ export default async function AdminDashboard() {
     { name: "Haberler", count: newsCount, icon: Newspaper, color: "bg-orange-500", href: "/admin/content/News" },
     { name: "Projeler", count: projectsCount, icon: FileText, color: "bg-emerald-500", href: "/admin/content/Project" },
     { name: "Ekip Üyeleri", count: teamCount, icon: Users, color: "bg-purple-500", href: "/admin/content/TeamMember" },
-    { name: "Galeri Fotoğrafları", count: galleryCount, icon: ImageIcon, color: "bg-pink-500", href: "/admin/content/GalleryImage" },
+    { name: "Galeri (Foto & Video)", count: galleryCount, icon: ImageIcon, color: "bg-pink-500", href: "/admin/content/GalleryMedia" },
     { name: "Sistem Sağlığı & DevOps", count: "100%", icon: Activity, color: "bg-slate-700", href: "/admin/system-health" },
   ];
 

@@ -3120,6 +3120,17 @@ export default function HeaderFooterEditor({ initialHeader, initialFooter }: Pro
                             className="w-full border rounded-lg px-2.5 py-1 text-xs bg-white"
                           />
                         </div>
+
+                        <div className="sm:col-span-2">
+                          <label className="block text-xs font-semibold text-gray-700 mb-1">Açıklama (Opsiyonel)</label>
+                          <textarea
+                            placeholder="Doldurursanız, ziyaretçi logoya tıkladığında web bağlantısına gitmek yerine bu metni gösteren bir pencere açılır."
+                            value={partner.description || ''}
+                            onChange={(e) => updatePartner(idx, 'description', e.target.value)}
+                            rows={2}
+                            className="w-full border rounded-lg px-3 py-1.5 text-xs bg-white"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>

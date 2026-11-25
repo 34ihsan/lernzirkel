@@ -25,13 +25,16 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     // Read saved language from localStorage on client mount
     try {
       const saved = localStorage.getItem(STORAGE_KEY) as SupportedLanguage;
-      if (saved && (saved === 'de' || saved === 'tr' || saved === 'en' || saved === 'ar')) {
+      if (saved && SUPPORTED_LANGUAGES.some(l => l.code === saved)) {
         setLanguageState(saved);
       } else if (typeof navigator !== 'undefined') {
         // Auto-detect language if no saved preference
         const browserLang = navigator.language.toLowerCase();
         if (browserLang.startsWith('tr')) setLanguageState('tr');
         else if (browserLang.startsWith('ar')) setLanguageState('ar');
+        else if (browserLang.startsWith('ru')) setLanguageState('ru');
+        else if (browserLang.startsWith('uk')) setLanguageState('uk');
+        else if (browserLang.startsWith('prs')) setLanguageState('prs');
         else if (browserLang.startsWith('en')) setLanguageState('en');
         else setLanguageState('de');
       }

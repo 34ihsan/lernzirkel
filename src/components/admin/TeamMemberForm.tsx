@@ -2,16 +2,28 @@
 
 import ImageUploadInput from "@/components/admin/ImageUploadInput";
 import { useState } from "react";
-import { Shield, Eye, Pencil, Crown } from "lucide-react";
+import { Shield } from "lucide-react";
 
-const ROLE_PRESETS = {
-  "": { label: "Rol Yok (Sadece Ekip Üyesi)", icon: "👤", color: "gray", permissions: {} },
-  VIEWER: { label: "Görüntüleyici", icon: "👁️", color: "blue", permissions: { pages: true, news: true, courses: true, team: true, gallery: true, projects: true, design: false } },
-  EDITOR: { label: "İçerik Editörü", icon: "✏️", color: "yellow", permissions: { pages: true, news: true, courses: true, team: false, gallery: true, projects: true, design: false } },
-  ADMIN: { label: "Yönetici (Admin)", icon: "👑", color: "red", permissions: { pages: true, news: true, courses: true, team: true, gallery: true, projects: true, design: true } },
-};
+interface AreaPerm {
+  view?: boolean;
+  edit?: boolean;
+}
 
-const PERMISSION_LABELS: Record<string, string> = {
+interface Perms {
+  pages?: AreaPerm;
+  news?: AreaPerm;
+  courses?: AreaPerm;
+  team?: AreaPerm;
+  gallery?: AreaPerm;
+  projects?: AreaPerm;
+  design?: AreaPerm;
+  depotDownload?: boolean;
+  depotUpload?: boolean;
+}
+
+const AREA_KEYS = ["pages", "news", "courses", "team", "gallery", "projects", "design"] as const;
+
+const AREA_LABELS: Record<(typeof AREA_KEYS)[number], string> = {
   pages: "📄 Sayfalar (Sayfa Düzenleyici)",
   news: "📰 Haberler",
   courses: "📚 Kurslar",
@@ -21,25 +33,86 @@ const PERMISSION_LABELS: Record<string, string> = {
   design: "🎨 Tasarım & Ayarlar",
 };
 
+const ROLE_PRESETS: Record<string, { label: string; icon: string; permissions: Perms }> = {
+  "": { label: "Rol Yok (Sadece Ekip Üyesi)", icon: "👤", permissions: {} },
+  VIEWER: {
+    label: "Görüntüleyici", icon: "👁️",
+    permissions: {
+      pages: { view: true, edit: false },
+      news: { view: true, edit: false },
+      courses: { view: true, edit: false },
+      team: { view: true, edit: false },
+      gallery: { view: true, edit: false },
+      projects: { view: true, edit: false },
+      design: { view: false, edit: false },
+      depotDownload: true,
+      depotUpload: false,
+    },
+  },
+  EDITOR: {
+    label: "İçerik Editörü", icon: "✏️",
+    permissions: {
+      pages: { view: true, edit: true },
+      news: { view: true, edit: true },
+      courses: { view: true, edit: true },
+      team: { view: true, edit: false },
+      gallery: { view: true, edit: true },
+      projects: { view: true, edit: true },
+      design: { view: false, edit: false },
+      depotDownload: true,
+      depotUpload: true,
+    },
+  },
+  ADMIN: {
+    label: "Yönetici (Admin)", icon: "👑",
+    permissions: {
+      pages: { view: true, edit: true },
+      news: { view: true, edit: true },
+      courses: { view: true, edit: true },
+      team: { view: true, edit: true },
+      gallery: { view: true, edit: true },
+      projects: { view: true, edit: true },
+      design: { view: true, edit: true },
+      depotDownload: true,
+      depotUpload: true,
+    },
+  },
+};
+
 export default function TeamMemberForm({ action, member }: { action: any; member: any }) {
   const [adminRole, setAdminRole] = useState<string>(member?.adminRole || "");
-  const [perms, setPerms] = useState<Record<string, boolean>>(
-    member?.permissions && typeof member.permissions === "object"
-      ? member.permissions
-      : {}
+  const [perms, setPerms] = useState<Perms>(
+    member?.permissions && typeof member.permissions === "object" ? member.permissions : {}
   );
 
   const applyPreset = (role: string) => {
     setAdminRole(role);
-    const preset = ROLE_PRESETS[role as keyof typeof ROLE_PRESETS];
-    if (preset) setPerms(preset.permissions as Record<string, boolean>);
+    const preset = ROLE_PRESETS[role];
+    if (preset) setPerms(preset.permissions);
   };
 
-  const togglePerm = (key: string) => {
+  const toggleAreaPerm = (area: (typeof AREA_KEYS)[number], field: "view" | "edit") => {
+    setPerms((p) => {
+      const current = p[area] || {};
+      const nextEdit = field === "edit" ? !current.edit : current.edit;
+      const nextView = field === "view" ? !current.view : current.view;
+      return {
+        ...p,
+        // Düzenleme yetkisi görüntülemeyi de kapsar — "edit" açılırken "view" de açılır,
+        // "view" kapatılırken "edit" de kapanır (düzenleyemeyen ama görmeyen tutarsız olurdu).
+        [area]: {
+          view: field === "edit" && nextEdit ? true : nextView,
+          edit: field === "view" && !nextView ? false : nextEdit,
+        },
+      };
+    });
+  };
+
+  const toggleFlatPerm = (key: "depotDownload" | "depotUpload") => {
     setPerms((p) => ({ ...p, [key]: !p[key] }));
   };
 
-  const selectedPreset = ROLE_PRESETS[adminRole as keyof typeof ROLE_PRESETS];
+  const selectedPreset = ROLE_PRESETS[adminRole];
 
   return (
     <form action={action} className="space-y-8">
@@ -80,7 +153,7 @@ export default function TeamMemberForm({ action, member }: { action: any; member
           <Shield size={20} className="text-blue-600" />
           <h2 className="text-lg font-semibold text-gray-800">Admin Rolü & Yetkiler</h2>
         </div>
-        <p className="text-sm text-gray-500 mb-5 pb-3 border-b">Bu kişiye CMS paneline erişim izni vermek istiyorsanız bir rol seçin ve gerekli yetkileri ayarlayın.</p>
+        <p className="text-sm text-gray-500 mb-5 pb-3 border-b">Bu kişiye CMS paneline erişim izni vermek istiyorsanız bir rol seçin ve her alan için görüntüleme/düzenleme yetkisini ayrı ayrı ayarlayın. Not: Yönetici (Admin) rolü her zaman her şeyi yapabilir, aşağıdaki kutucuklardan bağımsız olarak.</p>
 
         {/* Role Presets */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
@@ -104,9 +177,9 @@ export default function TeamMemberForm({ action, member }: { action: any; member
         {/* Hidden adminRole field */}
         <input type="hidden" name="adminRole" value={adminRole} />
 
-        {/* Permission checkboxes */}
+        {/* Permission table */}
         {adminRole !== "" && (
-          <div className="space-y-3">
+          <div className="space-y-4">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-700">Ayrıntılı Yetki Ayarları</h3>
               <span className={`text-xs px-2 py-1 rounded-full font-medium ${
@@ -118,27 +191,77 @@ export default function TeamMemberForm({ action, member }: { action: any; member
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {Object.entries(PERMISSION_LABELS).map(([key, label]) => (
-                <label
-                  key={key}
-                  className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
-                    perms[key] ? "bg-blue-50 border-blue-300" : "bg-gray-50 border-gray-200 hover:border-gray-300"
-                  }`}
-                >
-                  <input
-                    type="checkbox"
-                    name={`perm_${key}`}
-                    checked={!!perms[key]}
-                    onChange={() => togglePerm(key)}
-                    className="rounded border-gray-300 text-blue-600 w-4 h-4"
-                  />
-                  <span className="text-sm font-medium text-gray-700">{label}</span>
-                </label>
-              ))}
+            {adminRole === "ADMIN" && (
+              <p className="text-xs bg-red-50 text-red-700 border border-red-200 rounded-lg p-2.5">
+                👑 Yönetici rolündeki kişiler her zaman tam yetkiye sahiptir — aşağıdaki kutucuklar sadece bilgi amaçlıdır, kapatılsalar bile erişim kısıtlanmaz.
+              </p>
+            )}
+
+            <div className="border border-gray-200 rounded-lg overflow-hidden">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="text-left font-semibold text-gray-600 px-3 py-2">Alan</th>
+                    <th className="text-center font-semibold text-gray-600 px-3 py-2 w-24">Görüntüle</th>
+                    <th className="text-center font-semibold text-gray-600 px-3 py-2 w-24">Düzenle</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {AREA_KEYS.map((area) => {
+                    const areaPerm = perms[area] || {};
+                    return (
+                      <tr key={area} className="hover:bg-gray-50">
+                        <td className="px-3 py-2.5 font-medium text-gray-700">{AREA_LABELS[area]}</td>
+                        <td className="text-center px-3 py-2.5">
+                          <input
+                            type="checkbox"
+                            name={`perm_${area}_view`}
+                            checked={!!areaPerm.view || !!areaPerm.edit}
+                            onChange={() => toggleAreaPerm(area, "view")}
+                            className="rounded border-gray-300 text-blue-600 w-4 h-4"
+                          />
+                        </td>
+                        <td className="text-center px-3 py-2.5">
+                          <input
+                            type="checkbox"
+                            name={`perm_${area}_edit`}
+                            checked={!!areaPerm.edit}
+                            onChange={() => toggleAreaPerm(area, "edit")}
+                            className="rounded border-gray-300 text-blue-600 w-4 h-4"
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                  <tr className="hover:bg-gray-50 bg-gray-50/50">
+                    <td className="px-3 py-2.5 font-medium text-gray-700">🗄️ Depo — İndirme</td>
+                    <td colSpan={2} className="text-center px-3 py-2.5">
+                      <input
+                        type="checkbox"
+                        name="perm_depotDownload"
+                        checked={!!perms.depotDownload}
+                        onChange={() => toggleFlatPerm("depotDownload")}
+                        className="rounded border-gray-300 text-blue-600 w-4 h-4"
+                      />
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-50 bg-gray-50/50">
+                    <td className="px-3 py-2.5 font-medium text-gray-700">📤 Depo — Yükleme</td>
+                    <td colSpan={2} className="text-center px-3 py-2.5">
+                      <input
+                        type="checkbox"
+                        name="perm_depotUpload"
+                        checked={!!perms.depotUpload}
+                        onChange={() => toggleFlatPerm("depotUpload")}
+                        className="rounded border-gray-300 text-blue-600 w-4 h-4"
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
-            <p className="text-xs text-gray-400 mt-2">💡 İpucu: Roller bir başlangıç noktasıdır. Yukarıdaki kutucuklarla kişiye özel ince ayar yapabilirsiniz.</p>
+            <p className="text-xs text-gray-400 mt-2">💡 İpucu: Roller bir başlangıç noktasıdır. Yukarıdaki tabloyla kişiye özel ince ayar yapabilirsiniz. &quot;Düzenle&quot; işaretlendiğinde &quot;Görüntüle&quot; de otomatik açılır.</p>
           </div>
         )}
       </div>

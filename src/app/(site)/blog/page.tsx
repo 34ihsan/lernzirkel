@@ -3,15 +3,18 @@ import prisma from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 import Link from 'next/link';
+import Image from 'next/image';
 import { BookOpen, Calendar, ArrowRight } from 'lucide-react';
+import { LocalizedText } from '@/components/common/LocalizedText';
 
 export const metadata = {
   title: 'Blog & Wissen | Lernzirkel Ludwigshafen e.V.',
   description: 'Aktuelle Artikel, Ratgeber und Neuigkeiten rund um Bildung, Integration und den Migrationsfachdienst.',
 };
 
-export default async function BlogPage({ searchParams }: { searchParams: { category?: string } }) {
-  const currentCategory = searchParams.category || 'ALL';
+export default async function BlogPage({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
+  const resolvedSearchParams = await searchParams;
+  const currentCategory = resolvedSearchParams.category || 'ALL';
   
   const whereClause = currentCategory === 'ALL' 
     ? { isPublished: true } 
@@ -19,7 +22,8 @@ export default async function BlogPage({ searchParams }: { searchParams: { categ
 
   const articles = await prisma.article.findMany({
     where: whereClause,
-    orderBy: { publishedAt: 'desc' }
+    orderBy: { publishedAt: 'desc' },
+    include: { translations: true },
   }).catch(() => []);
 
   // Get distinct categories that actually have articles
@@ -72,7 +76,7 @@ export default async function BlogPage({ searchParams }: { searchParams: { categ
               <Link href={`/blog/${article.slug}`} key={article.id} className="group flex flex-col bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm dark:shadow-none hover:shadow-xl transition-all border border-gray-100 dark:border-gray-800 hover:border-primary/20">
                 <div className="h-48 bg-gray-200 relative overflow-hidden">
                   {article.coverImage ? (
-                    <img src={article.coverImage} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <Image src={article.coverImage} alt={article.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-primary/10 text-primary/30">
                       <BookOpen size={48} />
@@ -88,10 +92,10 @@ export default async function BlogPage({ searchParams }: { searchParams: { categ
                     {new Date(article.publishedAt).toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })}
                   </div>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 group-hover:text-primary transition-colors line-clamp-2">
-                    {article.title}
+                    <LocalizedText base={article.title} translations={article.translations} field="title" />
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 line-clamp-3">
-                    {article.excerpt}
+                    <LocalizedText base={article.excerpt} translations={article.translations} field="excerpt" />
                   </p>
                   <div className="mt-auto flex items-center text-primary font-semibold text-sm">
                     Weiterlesen <ArrowRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />

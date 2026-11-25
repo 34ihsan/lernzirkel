@@ -1,6 +1,8 @@
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import NewPageForm from "@/components/admin/NewPageForm";
+import { getAreaAccess } from "@/lib/permissions";
+import { ShieldAlert } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -9,6 +11,17 @@ export default async function NewPage({
 }: {
   searchParams?: Promise<{ parentId?: string }>;
 }) {
+  const access = await getAreaAccess("pages");
+  if (!access.canEdit) {
+    return (
+      <div className="max-w-2xl mx-auto mt-12 bg-white rounded-lg shadow-sm border border-red-200 p-8 text-center">
+        <ShieldAlert className="mx-auto mb-4 text-red-500" size={40} />
+        <h1 className="text-lg font-bold text-gray-900 mb-2">Bu bölümde düzenleme yetkiniz yok</h1>
+        <p className="text-sm text-gray-500">Erişmek için yöneticinizden yetki talep edin.</p>
+      </div>
+    );
+  }
+
   const resolvedSearchParams = searchParams ? await searchParams : {};
   const initialParentId = resolvedSearchParams.parentId;
 

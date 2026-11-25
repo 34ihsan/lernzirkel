@@ -1,5 +1,8 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import Image from 'next/image';
+import { X, ExternalLink } from 'lucide-react';
 import { BadgePartnerItem } from '@/lib/site-defaults';
 
 export default function TrustBanner({
@@ -9,6 +12,8 @@ export default function TrustBanner({
   title?: string;
   partners?: BadgePartnerItem[];
 }) {
+  const [activePartner, setActivePartner] = useState<BadgePartnerItem | null>(null);
+
   if (!partners || partners.length === 0) return null;
 
   return (
@@ -36,7 +41,16 @@ export default function TrustBanner({
 
             return (
               <div key={p.id || idx} className="flex items-center justify-center">
-                {p.url ? (
+                {p.description ? (
+                  <button
+                    type="button"
+                    onClick={() => setActivePartner(p)}
+                    title={p.name}
+                    className="cursor-pointer"
+                  >
+                    {content}
+                  </button>
+                ) : p.url ? (
                   <a href={p.url} target="_blank" rel="noopener noreferrer" title={p.name}>
                     {content}
                   </a>
@@ -48,6 +62,53 @@ export default function TrustBanner({
           })}
         </div>
       </div>
+
+      {/* Açıklama Modalı */}
+      {activePartner && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          onClick={() => setActivePartner(null)}
+        >
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div
+            className="relative z-10 w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6 sm:p-8"
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setActivePartner(null)}
+              className="absolute top-3 right-3 p-1.5 rounded-full hover:bg-gray-100 dark:bg-gray-800 transition-colors"
+              title="Kapat"
+            >
+              <X size={18} className="text-gray-500" />
+            </button>
+
+            {activePartner.logoUrl && (
+              <Image
+                src={activePartner.logoUrl}
+                alt={activePartner.name}
+                width={activePartner.width || 120}
+                height={activePartner.height || 40}
+                className="object-contain mb-5"
+                style={{ maxWidth: `${Math.max(activePartner.width || 120, 140)}px`, height: 'auto' }}
+              />
+            )}
+            <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">{activePartner.name}</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-line">
+              {activePartner.description}
+            </p>
+            {activePartner.url && (
+              <a
+                href={activePartner.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+              >
+                Mehr erfahren <ExternalLink size={14} />
+              </a>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

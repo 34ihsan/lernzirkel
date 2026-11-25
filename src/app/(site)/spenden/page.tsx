@@ -2,6 +2,11 @@ import Link from 'next/link';
 import { Heart, Users, Euro, ArrowRight, Phone, CreditCard } from 'lucide-react';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 
+export const metadata = {
+  title: 'Spenden & Mitgliedschaft | Lernzirkel Ludwigshafen e.V.',
+  description: 'Unterstützen Sie den Lernzirkel Ludwigshafen e.V. durch eine Spende oder werden Sie Mitglied unseres gemeinnützigen Vereins.',
+};
+
 export default function SpendenPage() {
   return (
     <div className="py-12 bg-gray-50 dark:bg-gray-800/50 min-h-screen">
@@ -47,10 +52,6 @@ export default function SpendenPage() {
                     </li>
                     <li className="flex items-start">
                       <ArrowRight className="w-5 h-5 text-accent mr-3 mt-1 flex-shrink-0" />
-                      <span>Als Mitglied im Vorstand unseres Vereins</span>
-                    </li>
-                    <li className="flex items-start">
-                      <ArrowRight className="w-5 h-5 text-accent mr-3 mt-1 flex-shrink-0" />
                       <span>Als Sponsor</span>
                     </li>
                     <li className="flex items-start">
@@ -84,8 +85,8 @@ export default function SpendenPage() {
                     <Phone className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm text-blue-200">Rufen Sie uns an</p>
-                    <a href="tel:062130737271" className="text-lg font-bold hover:text-accent transition-colors">
+                    <p className="text-sm text-gray-500 dark:text-blue-200">Rufen Sie uns an</p>
+                    <a href="tel:062130737271" className="text-lg font-bold text-primary dark:text-white hover:text-accent transition-colors">
                       0621 30 73 72 71
                     </a>
                   </div>
@@ -98,8 +99,8 @@ export default function SpendenPage() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm text-blue-200">Schreiben Sie uns</p>
-                    <div className="text-lg font-bold hover:text-accent transition-colors">
+                    <p className="text-sm text-gray-500 dark:text-blue-200">Schreiben Sie uns</p>
+                    <div className="text-lg font-bold text-primary dark:text-white hover:text-accent transition-colors">
                        <EmailObfuscator user="info" domain="lernzirkel-online.de" />
                     </div>
                   </div>

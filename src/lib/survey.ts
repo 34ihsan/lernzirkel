@@ -207,22 +207,6 @@ export async function resendSurveyInvite(registrationId: string) {
   return result.success ? { success: true as const } : { success: false as const, error: "E-posta gönderilemedi." };
 }
 
-/** Süresi dolmamış, henüz tamamlanmamış tüm biten kurslar için otomatik davet gönderir (cron). */
-export async function dispatchDueCourseSurveys() {
-  const now = new Date();
-  const dueCourses = await prisma.course.findMany({
-    where: { endDate: { lte: now, not: null } },
-    select: { id: true },
-  });
-
-  let totalSent = 0;
-  for (const c of dueCourses) {
-    const result = await dispatchCourseSurveys(c.id);
-    totalSent += result.sent;
-  }
-  return { coursesChecked: dueCourses.length, invitesSent: totalSent };
-}
-
 /** 5+ gün yanıtsız davetlere, en fazla 2 kez, 5 günde bir hatırlatma gönderir. */
 export async function sendSurveyReminders() {
   const now = new Date();

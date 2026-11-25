@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import ImageUploadInput from './ImageUploadInput';
+import VideoUploadInput from './VideoUploadInput';
 import AutoTranslateButton from './AutoTranslateButton';
 
 // Lazy-load preview bileşenleri
@@ -11,7 +12,7 @@ const NewsPreview = dynamic(() => import('./previews/NewsPreview'), { ssr: false
 const CoursePreview = dynamic(() => import('./previews/CoursePreview'), { ssr: false });
 const ProjectPreview = dynamic(() => import('./previews/ProjectPreview'), { ssr: false });
 const TeamMemberPreview = dynamic(() => import('./previews/TeamMemberPreview'), { ssr: false });
-const GalleryImagePreview = dynamic(() => import('./previews/GalleryImagePreview'), { ssr: false });
+const GalleryMediaPreview = dynamic(() => import('./previews/GalleryMediaPreview'), { ssr: false });
 
 interface Field {
   name: string;
@@ -35,7 +36,7 @@ function PreviewComponent({ model, data }: { model: string; data: Record<string,
     case 'Course':      return <CoursePreview data={data} />;
     case 'Project':     return <ProjectPreview data={data} />;
     case 'TeamMember':  return <TeamMemberPreview data={data} />;
-    case 'GalleryImage': return <GalleryImagePreview data={data} />;
+    case 'GalleryMedia': return <GalleryMediaPreview data={data} />;
     default:            return (
       <div className="bg-white rounded-lg border border-gray-200 p-6 text-sm text-gray-500">
         Bu model için önizleme desteklenmiyor.
@@ -208,10 +209,16 @@ export default function EditFormWithPreview({
                     />
                   </div>
                 ) : field.type === 'image' ? (
-                  <ImageUploadInput 
-                    name={field.name} 
-                    value={displayVal} 
-                    onChange={v => handleChange(field.name, v)} 
+                  <ImageUploadInput
+                    name={field.name}
+                    value={displayVal}
+                    onChange={v => handleChange(field.name, v)}
+                  />
+                ) : field.type === 'video' ? (
+                  <VideoUploadInput
+                    name={field.name}
+                    value={displayVal}
+                    onChange={v => handleChange(field.name, v)}
                   />
                 ) : (
                   <input

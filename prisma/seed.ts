@@ -65,18 +65,20 @@ async function main() {
     },
   })
 
-  // 3. Galerie (Gallery Images)
-  await prisma.galleryImage.create({
+  // 3. Galerie (Foto & Video)
+  await prisma.galleryMedia.create({
     data: {
       title: 'Unser Team',
+      type: 'PHOTO',
       imageUrl: '/images/gallery/team.jpg',
       category: 'Allgemein',
     },
   })
-  
-  await prisma.galleryImage.create({
+
+  await prisma.galleryMedia.create({
     data: {
       title: 'Unterrichtsraum',
+      type: 'PHOTO',
       imageUrl: '/images/gallery/raum.jpg',
       category: 'Räumlichkeiten',
     },

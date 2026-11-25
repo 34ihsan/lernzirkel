@@ -1,7 +1,6 @@
-import prisma from '@/lib/prisma';
+import { getCachedProjects, getCachedPageBySlug } from '@/lib/cached-content';
 
 export const dynamic = 'force-dynamic';
-import { getCachedProjects } from '@/lib/cached-content';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 import Link from 'next/link';
 import { ArrowRight, ImageIcon } from 'lucide-react';
@@ -9,6 +8,7 @@ import Image from 'next/image';
 import { Suspense } from 'react';
 import { Reveal, FadeIn, StaggerContainer, StaggerItem } from '@/components/ui/animations';
 import { ProjectSkeleton } from '@/components/skeletons/ProjectSkeleton';
+import { LocalizedText } from '@/components/common/LocalizedText';
 
 export const metadata = {
   title: 'Projekte & Engagement | Lernzirkel',
@@ -16,14 +16,7 @@ export const metadata = {
 };
 
 export default async function ProjektePage() {
-  const cmsPage = await prisma.page.findUnique({
-    where: { slug: 'projekte' },
-    include: {
-      sections: {
-        orderBy: { order: 'asc' }
-      }
-    }
-  });
+  const cmsPage = await getCachedPageBySlug('projekte');
 
   const hasCmsSections = cmsPage && cmsPage.isPublished && cmsPage.sections.length > 0;
 
@@ -101,8 +94,12 @@ async function ProjectGrid() {
             </div>
             
             <div className="p-8 flex flex-col flex-grow">
-              <h3 className="text-xl font-bold text-foreground mb-3 line-clamp-2 group-hover:text-primary transition-colors">{p.title}</h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-6 flex-grow leading-relaxed line-clamp-3 text-sm">{p.description}</p>
+              <h3 className="text-xl font-bold text-foreground mb-3 line-clamp-2 group-hover:text-primary transition-colors">
+                <LocalizedText base={p.title} translations={(p as any).translations} field="title" />
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-6 flex-grow leading-relaxed line-clamp-3 text-sm">
+                <LocalizedText base={p.description} translations={(p as any).translations} field="description" />
+              </p>
               <div className="mt-auto pt-4 border-t border-gray-50">
                 <span className="text-accent font-bold inline-flex items-center group-hover:text-accent/80 transition-colors text-sm tracking-wider uppercase">
                   Mehr erfahren <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />

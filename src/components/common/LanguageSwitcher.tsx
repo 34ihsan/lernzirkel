@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import { ChevronDown, Check, Globe } from 'lucide-react';
+import { ChevronDown, Check } from 'lucide-react';
 import { SupportedLanguage } from '@/lib/i18n/languages';
 import CountryFlag from './CountryFlag';
 
@@ -98,16 +98,6 @@ export default function LanguageSwitcher({
           className="absolute right-0 mt-2 w-64 rounded-2xl bg-white dark:bg-gray-900/95 backdrop-blur-md shadow-2xl border border-gray-100 dark:border-gray-800 p-2 z-[100] animate-in fade-in zoom-in-95 duration-150"
           style={{ transformOrigin: 'top right' }}
         >
-          <div className="px-3 py-2 border-b border-gray-100 dark:border-gray-800 mb-1 flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1">
-              <Globe className="w-3 h-3 text-blue-500" />
-              Sprache / Dil Seçin
-            </span>
-            <span className="text-[10px] font-medium bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded">
-              4 Diller
-            </span>
-          </div>
-
           <div className="space-y-1">
             {languages.map((item) => {
               const active = item.code === language;
@@ -127,14 +117,8 @@ export default function LanguageSwitcher({
                 >
                   <div className="flex items-center gap-2.5">
                     <CountryFlag code={item.code} size="md" shape="circle" />
-                    <div>
-                      <div className="text-xs font-bold flex items-center gap-1.5">
-                        <span>{item.nativeName}</span>
-                        <span className="text-[10px] text-gray-400 font-normal">({item.code.toUpperCase()})</span>
-                      </div>
-                      <div className="text-[10px] text-gray-400 leading-tight">
-                        {item.description}
-                      </div>
+                    <div className="text-sm font-bold">
+                      {item.nativeName}
                     </div>
                   </div>
 

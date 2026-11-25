@@ -788,17 +788,22 @@ export default function PageBuilder({
               <p className="text-xs text-red-600 mt-1">{seoError}</p>
             )}
             {seoSuggestion && (
-              <div className="mt-1.5 text-xs bg-purple-50 border border-purple-200 rounded-lg px-2.5 py-1.5 flex items-center justify-between gap-2">
-                <span className="text-purple-800">
-                  <strong>Önerilen başlık</strong> ({seoSuggestion.metaTitle.length}/60): {seoSuggestion.metaTitle}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => { setTitle(seoSuggestion.metaTitle); setSeoSuggestion(null); }}
-                  className="shrink-0 font-semibold text-purple-700 hover:text-purple-900 underline"
-                >
-                  Başlığa Uygula
-                </button>
+              <div className="mt-1.5 text-xs bg-purple-50 border border-purple-200 rounded-lg px-2.5 py-1.5 space-y-1.5">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-purple-800">
+                    <strong>Önerilen başlık</strong> ({seoSuggestion.metaTitle.length}/60): {seoSuggestion.metaTitle}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => { setTitle(seoSuggestion.metaTitle); setSeoSuggestion(null); }}
+                    className="shrink-0 font-semibold text-purple-700 hover:text-purple-900 underline"
+                  >
+                    Başlığa Uygula
+                  </button>
+                </div>
+                <p className="text-purple-600">
+                  ⚠️ KI-Vorschlag — bitte vor Veröffentlichung inhaltlich prüfen (EU AI Act Art. 50 Abs. 4: redaktionelle Kontrolle erforderlich).
+                </p>
               </div>
             )}
           </div>
