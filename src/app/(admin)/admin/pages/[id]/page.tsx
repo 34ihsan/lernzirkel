@@ -4,6 +4,7 @@ import PageBuilder, { type DraftData } from "@/components/admin/PageBuilder";
 import Link from "next/link";
 import { ArrowLeft, ShieldAlert } from "lucide-react";
 import { saveDraft, discardDraft, publishPage, getPageRevisions, restorePageRevision } from "@/actions/pages";
+import { getPhysicalPageSupport } from "@/actions/admin";
 import { getAreaAccess } from "@/lib/permissions";
 
 export const dynamic = "force-dynamic";
@@ -54,6 +55,8 @@ export default async function PageEditorPage({ params }: { params: Promise<{ id:
     notFound();
   }
 
+  const physicalPageInfo = await getPhysicalPageSupport(page.slug);
+
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       <div className="flex items-center space-x-4">
@@ -79,6 +82,7 @@ export default async function PageEditorPage({ params }: { params: Promise<{ id:
         publishAction={publishPage}
         getRevisionsAction={getPageRevisions}
         restoreRevisionAction={restorePageRevision}
+        physicalPageInfo={physicalPageInfo}
       />
     </div>
   );

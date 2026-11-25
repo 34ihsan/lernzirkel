@@ -434,6 +434,26 @@ function findPhysicalPages(dir: string, baseDir: string): string[] {
   return pages;
 }
 
+// Read-only check (no DB writes): does this slug have a hardcoded route file outside
+// the [...slug] CMS catch-all, and if so, does that file actually render CMS sections
+// when they exist (vs. being 100% static and ignoring the Page record entirely)?
+export async function getPhysicalPageSupport(slug: string): Promise<{ isPhysical: boolean; supportsCms: boolean }> {
+  const siteDir = path.join(process.cwd(), 'src', 'app', '(site)');
+  const filePath = path.join(siteDir, ...slug.split('/'), 'page.tsx');
+
+  if (!fs.existsSync(filePath)) {
+    return { isPhysical: false, supportsCms: false };
+  }
+
+  try {
+    const source = fs.readFileSync(filePath, 'utf-8');
+    const supportsCms = source.includes('getCachedPageBySlug') && source.includes('SectionRenderer');
+    return { isPhysical: true, supportsCms };
+  } catch {
+    return { isPhysical: true, supportsCms: false };
+  }
+}
+
 export async function syncPhysicalPages() {
   const siteDir = path.join(process.cwd(), 'src', 'app', '(site)');
   const physicalSlugs = findPhysicalPages(siteDir, siteDir);

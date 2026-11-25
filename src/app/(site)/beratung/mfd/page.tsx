@@ -3,14 +3,26 @@ import Link from 'next/link';
 import { LifeBuoy, Clock, MapPin, CheckCircle2, Globe, ArrowRight, Languages } from 'lucide-react';
 import { getCachedPageBySlug } from '@/lib/cached-content';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
+import { constructMetadata } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 
-export const metadata = {
-  title: 'Migrationsfachdienst (MFD) - Lernzirkel Ludwigshafen',
-  description: 'Der Migrationsfachdienst bietet individuelle Unterstützung für Migrant*innen und Geflüchtete in Rhein-Pfalzkreis und Ludwigshafen.',
-};
+export async function generateMetadata() {
+  const page = await getCachedPageBySlug('beratung/mfd');
+  if (page?.title) {
+    return constructMetadata({
+      title: page.title,
+      description: page.description || undefined,
+      image: page.ogImage || undefined,
+      noIndex: page.noIndex,
+    });
+  }
+  return constructMetadata({
+    title: 'Migrationsfachdienst (MFD)',
+    description: 'Der Migrationsfachdienst bietet individuelle Unterstützung für Migrant*innen und Geflüchtete in Rhein-Pfalzkreis und Ludwigshafen.',
+  });
+}
 
 export default async function MFDPage() {
   const cmsPage = await getCachedPageBySlug('beratung/mfd');

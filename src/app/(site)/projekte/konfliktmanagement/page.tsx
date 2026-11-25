@@ -10,14 +10,26 @@ import {
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
+import { constructMetadata } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 
-export const metadata = {
-  title: 'Projekt: „Stark im Umgang mit Konflikten und Krisen – Kompetenzen für Engagierte“ | Lernzirkel Ludwigshafen e.V.',
-  description: 'Qualifizierungsworkshops in Ludwigshafen: Resilienz, Gewaltfreie Kommunikation, Deeskalation und Krisenkompetenz für ehrenamtlich Engagierte – gefördert durch die Deutsche Postcode Lotterie.',
-};
+export async function generateMetadata() {
+  const page = await getCachedPageBySlug('projekte/konfliktmanagement');
+  if (page?.title) {
+    return constructMetadata({
+      title: page.title,
+      description: page.description || undefined,
+      image: page.ogImage || undefined,
+      noIndex: page.noIndex,
+    });
+  }
+  return constructMetadata({
+    title: 'Projekt: „Stark im Umgang mit Konflikten und Krisen – Kompetenzen für Engagierte“',
+    description: 'Qualifizierungsworkshops in Ludwigshafen: Resilienz, Gewaltfreie Kommunikation, Deeskalation und Krisenkompetenz für ehrenamtlich Engagierte – gefördert durch die Deutsche Postcode Lotterie.',
+  });
+}
 
 export default async function KonfliktmanagementPage() {
   const page = await getCachedPageBySlug('projekte/konfliktmanagement');

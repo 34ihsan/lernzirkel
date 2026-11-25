@@ -5,11 +5,23 @@ import SectionRenderer from '@/components/cms/SectionRenderer';
 import AdvancedCourseExplorer from '@/components/courses/AdvancedCourseExplorer';
 import Link from 'next/link';
 import { GraduationCap, CheckCircle2, ArrowRight } from 'lucide-react';
+import { constructMetadata } from '@/lib/seo';
 
-export const metadata = {
-  title: 'Alle Kurse & Bildungsangebote | Lernzirkel e.V. Ludwigshafen',
-  description: 'Entdecken und filtern Sie alle BAMF-Integrationskurse, ESF+ Alpha Grundbildung, kostenlose BuT-Nachhilfe, telc Sprachprüfungen und Privatkurse beim Lernzirkel e.V. in Ludwigshafen.',
-};
+export async function generateMetadata() {
+  const page = await getCachedPageBySlug('kurse');
+  if (page?.title) {
+    return constructMetadata({
+      title: page.title,
+      description: page.description || undefined,
+      image: page.ogImage || undefined,
+      noIndex: page.noIndex,
+    });
+  }
+  return constructMetadata({
+    title: 'Alle Kurse & Bildungsangebote',
+    description: 'Entdecken und filtern Sie alle BAMF-Integrationskurse, ESF+ Alpha Grundbildung, kostenlose BuT-Nachhilfe, telc Sprachprüfungen und Privatkurse beim Lernzirkel e.V. in Ludwigshafen.',
+  });
+}
 
 export default async function KursePage() {
   const [cmsPage, dbCourses] = await Promise.all([

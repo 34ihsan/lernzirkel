@@ -9,11 +9,23 @@ import { Suspense } from 'react';
 import { Reveal, FadeIn, StaggerContainer, StaggerItem } from '@/components/ui/animations';
 import { ProjectSkeleton } from '@/components/skeletons/ProjectSkeleton';
 import { LocalizedText } from '@/components/common/LocalizedText';
+import { constructMetadata } from '@/lib/seo';
 
-export const metadata = {
-  title: 'Projekte & Engagement | Lernzirkel',
-  description: 'Wir engagieren uns aktiv im sozialen Bereich, um gesellschaftliche Teilhabe nachhaltig zu fördern.',
-};
+export async function generateMetadata() {
+  const page = await getCachedPageBySlug('projekte');
+  if (page?.title) {
+    return constructMetadata({
+      title: page.title,
+      description: page.description || undefined,
+      image: page.ogImage || undefined,
+      noIndex: page.noIndex,
+    });
+  }
+  return constructMetadata({
+    title: 'Projekte & Engagement',
+    description: 'Wir engagieren uns aktiv im sozialen Bereich, um gesellschaftliche Teilhabe nachhaltig zu fördern.',
+  });
+}
 
 export default async function ProjektePage() {
   const cmsPage = await getCachedPageBySlug('projekte');

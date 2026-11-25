@@ -1,4 +1,5 @@
 import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
+import { constructMetadata } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
@@ -6,6 +7,22 @@ import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 import Link from 'next/link';
 import { ArrowLeft, Network } from 'lucide-react';
 import Image from 'next/image';
+
+export async function generateMetadata() {
+  const page = await getCachedPageBySlug('ueber-uns/organigramm');
+  if (page?.title) {
+    return constructMetadata({
+      title: page.title,
+      description: page.description || undefined,
+      image: page.ogImage || undefined,
+      noIndex: page.noIndex,
+    });
+  }
+  return constructMetadata({
+    title: 'Organigramm des Lernzirkel Ludwigshafen e.V.',
+    description: 'Organisationsstruktur und Zuständigkeiten des Lernzirkel Ludwigshafen e.V.',
+  });
+}
 
 export default async function OrganigrammPage() {
   const page = await getCachedPageBySlug('ueber-uns/organigramm');

@@ -11,14 +11,26 @@ import {
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
+import { constructMetadata } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 
-export const metadata = {
-  title: 'Wettbewerbe & Schülerinitiativen | Lernzirkel Ludwigshafen e.V.',
-  description: 'Entdecken Sie die Wettbewerbe des Lernzirkel Ludwigshafen e.V.: „Wir sind Vielfalt“ zur Stärkung von Toleranz und die jährliche „Bildungsmesse“ für Forschergeist und Experimentierfreude.',
-};
+export async function generateMetadata() {
+  const page = await getCachedPageBySlug('projekte/wettbewerbe');
+  if (page?.title) {
+    return constructMetadata({
+      title: page.title,
+      description: page.description || undefined,
+      image: page.ogImage || undefined,
+      noIndex: page.noIndex,
+    });
+  }
+  return constructMetadata({
+    title: 'Wettbewerbe & Schülerinitiativen',
+    description: 'Entdecken Sie die Wettbewerbe des Lernzirkel Ludwigshafen e.V.: „Wir sind Vielfalt“ zur Stärkung von Toleranz und die jährliche „Bildungsmesse“ für Forschergeist und Experimentierfreude.',
+  });
+}
 
 export default async function WettbewerbeOverviewPage() {
   const page = await getCachedPageBySlug('projekte/wettbewerbe');

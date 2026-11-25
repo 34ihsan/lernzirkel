@@ -3,10 +3,27 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { PlayCircle } from 'lucide-react';
 import { getCachedPageBySlug, getCachedPageById, getCachedGalleryMedia } from '@/lib/cached-content';
+import { constructMetadata } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
+
+export async function generateMetadata() {
+  const page = await getCachedPageBySlug('ueber-uns/galerie');
+  if (page?.title) {
+    return constructMetadata({
+      title: page.title,
+      description: page.description || undefined,
+      image: page.ogImage || undefined,
+      noIndex: page.noIndex,
+    });
+  }
+  return constructMetadata({
+    title: 'Bildergalerie',
+    description: 'Einblicke in die tägliche Arbeit, die Räumlichkeiten und die gemeinsamen Projekte des Lernzirkel Ludwigshafen e.V.',
+  });
+}
 
 export default async function GaleriePage() {
   const page = await getCachedPageBySlug('ueber-uns/galerie');

@@ -1,10 +1,27 @@
 import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
+import { constructMetadata } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 import Link from 'next/link';
 import { ArrowLeft, Lightbulb, Users, GraduationCap, Globe } from 'lucide-react';
+
+export async function generateMetadata() {
+  const page = await getCachedPageBySlug('ueber-uns/philosophie');
+  if (page?.title) {
+    return constructMetadata({
+      title: page.title,
+      description: page.description || undefined,
+      image: page.ogImage || undefined,
+      noIndex: page.noIndex,
+    });
+  }
+  return constructMetadata({
+    title: 'Entstehung und Intension des Lernzirkel Ludwigshafen e.V.',
+    description: 'Geschichte, Entstehung und Leitidee des Lernzirkel Ludwigshafen e.V.',
+  });
+}
 
 export default async function PhilosophiePage() {
   const page = await getCachedPageBySlug('ueber-uns/philosophie');

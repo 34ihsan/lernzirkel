@@ -108,6 +108,7 @@ export default function PageBuilder({
   publishAction,
   getRevisionsAction,
   restoreRevisionAction,
+  physicalPageInfo = null,
 }: {
   page: PageProps;
   initialSections: any[];
@@ -120,6 +121,7 @@ export default function PageBuilder({
   publishAction: (pageId: string, data: PagePayload, expectedVersion: number) => Promise<ActionResult<{ newVersion?: number; conflict?: boolean; latestVersion?: number }>>;
   getRevisionsAction: (pageId: string) => Promise<{ id: string; createdAt: Date | string; data: any }[]>;
   restoreRevisionAction: (revisionId: string) => Promise<ActionResult<{ data?: any }>>;
+  physicalPageInfo?: { isPhysical: boolean; supportsCms: boolean } | null;
 }) {
   const router = useRouter();
 
@@ -605,6 +607,31 @@ export default function PageBuilder({
             <button onClick={discardDraftNow} className="text-xs font-semibold text-blue-700 hover:text-blue-900 bg-white border border-blue-200 px-3 py-1.5 rounded-lg transition-colors">
               Taslağı Sil
             </button>
+          </div>
+        </div>
+      )}
+
+      {physicalPageInfo?.isPhysical && !physicalPageInfo.supportsCms && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-800 flex items-start gap-3">
+          <AlertTriangle size={18} className="shrink-0 mt-0.5" />
+          <div>
+            <p className="font-semibold">Bu sayfanın görünümü şu anda yalnızca kaynak koduyla yönetiliyor</p>
+            <p className="mt-1 text-red-700">
+              <code className="bg-red-100 px-1 rounded">{pageUrl}</code> adresi, bu Sayfa Düzenleyici kayıtlarını değil, projedeki sabit kodlu bir dosyayı (<code className="bg-red-100 px-1 rounded">src/app/(site)/{slug}/page.tsx</code>) gösterir.
+              Buraya eklediğiniz bölümler yayınlasanız da canlı sitede görünmeyecektir — sadece SEO başlığı/açıklaması/OG görseli ve "arama motorlarından gizle" ayarı gerçekten etkilidir. İçeriği değiştirmek için geliştiriciden kod güncellemesi istemeniz gerekir.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {physicalPageInfo?.isPhysical && physicalPageInfo.supportsCms && sections.length === 0 && (
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-800 flex items-start gap-3">
+          <UploadCloud size={18} className="shrink-0 mt-0.5" />
+          <div>
+            <p className="font-semibold">Bu sayfa şu anda kaynak koddaki sabit içeriği gösteriyor</p>
+            <p className="mt-1 text-blue-700">
+              Henüz hiç bölüm eklenmediği için <code className="bg-blue-100 px-1 rounded">{pageUrl}</code> adresi, projedeki hazır tasarımı gösteriyor. Aşağıya bölüm ekleyip "Yayınla"ya bastığınızda site otomatik olarak buradaki içeriği gösterecek ve sabit tasarımın yerini alacaktır.
+            </p>
           </div>
         </div>
       )}

@@ -11,14 +11,26 @@ import {
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
+import { constructMetadata } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 
-export const metadata = {
-  title: 'Bildungsmesse – Jährliche Messe für Schüler-Experimente & Projekte | Lernzirkel Ludwigshafen e.V.',
-  description: 'Die Bildungsmesse des Lernzirkel Ludwigshafen e.V. findet einmal im Jahr statt: Schülerteams präsentieren eigene Experimente an Messeständen und forschen gemeinsam mit anschließender Prämierung.',
-};
+export async function generateMetadata() {
+  const page = await getCachedPageBySlug('projekte/wettbewerbe/bildungsmesse');
+  if (page?.title) {
+    return constructMetadata({
+      title: page.title,
+      description: page.description || undefined,
+      image: page.ogImage || undefined,
+      noIndex: page.noIndex,
+    });
+  }
+  return constructMetadata({
+    title: 'Bildungsmesse – Jährliche Messe für Schüler-Experimente & Projekte',
+    description: 'Die Bildungsmesse des Lernzirkel Ludwigshafen e.V. findet einmal im Jahr statt: Schülerteams präsentieren eigene Experimente an Messeständen und forschen gemeinsam mit anschließender Prämierung.',
+  });
+}
 
 export default async function BildungsmessePage() {
   const page = await getCachedPageBySlug('projekte/wettbewerbe/bildungsmesse');

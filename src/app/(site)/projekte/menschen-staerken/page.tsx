@@ -10,14 +10,26 @@ import {
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
+import { constructMetadata } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 
-export const metadata = {
-  title: 'Patenschaft „MENSCHEN STÄRKEN MENSCHEN“ | Lernzirkel Ludwigshafen e.V.',
-  description: 'Das Patenschaftsprogramm „Menschen stärken Menschen“ beim Lernzirkel Ludwigshafen e.V. begleitet Menschen mit Flucht- und Migrationshintergrund bei Arbeit, Bildung und gesellschaftlicher Teilhabe.',
-};
+export async function generateMetadata() {
+  const page = await getCachedPageBySlug('projekte/menschen-staerken');
+  if (page?.title) {
+    return constructMetadata({
+      title: page.title,
+      description: page.description || undefined,
+      image: page.ogImage || undefined,
+      noIndex: page.noIndex,
+    });
+  }
+  return constructMetadata({
+    title: 'Patenschaft „MENSCHEN STÄRKEN MENSCHEN“',
+    description: 'Das Patenschaftsprogramm „Menschen stärken Menschen“ beim Lernzirkel Ludwigshafen e.V. begleitet Menschen mit Flucht- und Migrationshintergrund bei Arbeit, Bildung und gesellschaftlicher Teilhabe.',
+  });
+}
 
 export default async function MenschenStaerkenPage() {
   const page = await getCachedPageBySlug('projekte/menschen-staerken');

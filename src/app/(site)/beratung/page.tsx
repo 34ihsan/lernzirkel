@@ -1,10 +1,27 @@
 import { getCachedPageBySlug } from '@/lib/cached-content';
+import { constructMetadata } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 import Link from 'next/link';
 import { LifeBuoy, Clock, MapPin, CheckCircle2 } from 'lucide-react';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
+
+export async function generateMetadata() {
+  const page = await getCachedPageBySlug('beratung');
+  if (page?.title) {
+    return constructMetadata({
+      title: page.title,
+      description: page.description || undefined,
+      image: page.ogImage || undefined,
+      noIndex: page.noIndex,
+    });
+  }
+  return constructMetadata({
+    title: 'Beratung & Migrationsfachdienst',
+    description: 'Kostenlose und vertrauliche Beratung für Migrant*innen und Geflüchtete beim Lernzirkel Ludwigshafen e.V.',
+  });
+}
 
 export default async function BeratungPage() {
   const cmsPage = await getCachedPageBySlug('beratung');

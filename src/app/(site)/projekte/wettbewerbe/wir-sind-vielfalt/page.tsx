@@ -10,14 +10,26 @@ import {
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
+import { constructMetadata } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 
-export const metadata = {
-  title: 'Wir sind Vielfalt – Jährlicher Wettbewerb für Schüler & Jugendliche | Lernzirkel Ludwigshafen e.V.',
-  description: 'Der Schüler- und Jugendwettbewerb „Wir sind Vielfalt“ stärkt Toleranz, gegenseitige Achtung und soziales Miteinander in Ludwigshafen und der Region. Jährlich mit wechselnden Mottos und feierlicher Preisverleihung.',
-};
+export async function generateMetadata() {
+  const page = await getCachedPageBySlug('projekte/wettbewerbe/wir-sind-vielfalt');
+  if (page?.title) {
+    return constructMetadata({
+      title: page.title,
+      description: page.description || undefined,
+      image: page.ogImage || undefined,
+      noIndex: page.noIndex,
+    });
+  }
+  return constructMetadata({
+    title: 'Wir sind Vielfalt – Jährlicher Wettbewerb für Schüler & Jugendliche',
+    description: 'Der Schüler- und Jugendwettbewerb „Wir sind Vielfalt“ stärkt Toleranz, gegenseitige Achtung und soziales Miteinander in Ludwigshafen und der Region. Jährlich mit wechselnden Mottos und feierlicher Preisverleihung.',
+  });
+}
 
 export default async function WirSindVielfaltPage() {
   const page = await getCachedPageBySlug('projekte/wettbewerbe/wir-sind-vielfalt');

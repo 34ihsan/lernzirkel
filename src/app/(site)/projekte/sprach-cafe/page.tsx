@@ -11,14 +11,26 @@ import {
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
+import { constructMetadata } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 
-export const metadata = {
-  title: 'Sprach Café – Deutsch sprechen, begegnen & austauschen | Lernzirkel Ludwigshafen e.V.',
-  description: 'In entspannter Atmosphäre bei Kaffee und Kuchen Deutschkenntnisse üben und neue Leute kennenlernen. Immer montags von 15:00 bis 16:30 Uhr im Lernzirkel Ludwigshafen e.V. Kostenlos!',
-};
+export async function generateMetadata() {
+  const page = await getCachedPageBySlug('projekte/sprach-cafe');
+  if (page?.title) {
+    return constructMetadata({
+      title: page.title,
+      description: page.description || undefined,
+      image: page.ogImage || undefined,
+      noIndex: page.noIndex,
+    });
+  }
+  return constructMetadata({
+    title: 'Sprach Café – Deutsch sprechen, begegnen & austauschen',
+    description: 'In entspannter Atmosphäre bei Kaffee und Kuchen Deutschkenntnisse üben und neue Leute kennenlernen. Immer montags von 15:00 bis 16:30 Uhr im Lernzirkel Ludwigshafen e.V. Kostenlos!',
+  });
+}
 
 export default async function SprachCafePage() {
   const page = await getCachedPageBySlug('projekte/sprach-cafe');

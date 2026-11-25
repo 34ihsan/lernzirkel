@@ -9,14 +9,26 @@ import {
 import Breadcrumbs, { BreadcrumbItem } from '@/components/common/Breadcrumbs';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 import { getCachedPageBySlug, getCachedPageById } from '@/lib/cached-content';
+import { constructMetadata } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 import SectionRenderer from '@/components/cms/SectionRenderer';
 
-export const metadata = {
-  title: 'Leitbild des Lernzirkel Ludwigshafen e.V. | Über uns',
-  description: 'Leitbild, Werte, Ziele und gesellschaftliche Verantwortung des gemeinnützigen Vereins Lernzirkel Ludwigshafen e.V. seit 2002.',
-};
+export async function generateMetadata() {
+  const page = await getCachedPageBySlug('ueber-uns/leitbild');
+  if (page?.title) {
+    return constructMetadata({
+      title: page.title,
+      description: page.description || undefined,
+      image: page.ogImage || undefined,
+      noIndex: page.noIndex,
+    });
+  }
+  return constructMetadata({
+    title: 'Leitbild des Lernzirkel Ludwigshafen e.V.',
+    description: 'Leitbild, Werte, Ziele und gesellschaftliche Verantwortung des gemeinnützigen Vereins Lernzirkel Ludwigshafen e.V. seit 2002.',
+  });
+}
 
 export default async function LeitbildPage() {
   const page = await getCachedPageBySlug('ueber-uns/leitbild');
