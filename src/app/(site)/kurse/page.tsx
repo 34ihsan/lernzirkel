@@ -6,6 +6,8 @@ import AdvancedCourseExplorer from '@/components/courses/AdvancedCourseExplorer'
 import Link from 'next/link';
 import { GraduationCap, CheckCircle2, ArrowRight } from 'lucide-react';
 import { constructMetadata } from '@/lib/seo';
+import Breadcrumbs from '@/components/common/Breadcrumbs';
+import { staticBreadcrumb } from '@/lib/breadcrumbs';
 
 export async function generateMetadata() {
   const page = await getCachedPageBySlug('kurse');
@@ -32,6 +34,7 @@ export default async function KursePage() {
   if (cmsPage && cmsPage.isPublished && cmsPage.sections.length > 0) {
     return (
       <article className="min-h-screen bg-background">
+        <Breadcrumbs items={staticBreadcrumb('Kurse', '/kurse')} />
         {cmsPage.sections.map((section: any) => (
           <SectionRenderer key={section.id} section={section} />
         ))}
@@ -58,6 +61,7 @@ export default async function KursePage() {
 
   return (
     <div className="py-12 md:py-16 bg-gray-50 dark:bg-gray-800/40 min-h-screen">
+      <Breadcrumbs items={staticBreadcrumb('Kurse', '/kurse')} className="mb-8 -mt-12 md:-mt-16" />
       <div className="container mx-auto px-4 max-w-7xl space-y-12">
 
         {/* Page Header */}

@@ -12,6 +12,7 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import { generateCourseSchema } from '@/lib/seo';
 import CourseRegistrationForm from '@/components/courses/CourseRegistrationForm';
 import { LocalizedText } from '@/components/common/LocalizedText';
+import Breadcrumbs from '@/components/common/Breadcrumbs';
 
 export const revalidate = 60;
 
@@ -103,6 +104,10 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-800 pt-28 pb-24">
       <JsonLd data={jsonLd} />
+      <Breadcrumbs items={[
+        { label: 'Kurse', url: '/kurse' },
+        { label: course.title, url: `/kurse/${resolvedParams.slug}`, isCurrent: true },
+      ]} />
       {/* Hero Section */}
       <div className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 mb-12">
         <div className="container mx-auto px-4 max-w-5xl py-12">

@@ -6,6 +6,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { BookOpen, Calendar, ArrowRight } from 'lucide-react';
 import { LocalizedText } from '@/components/common/LocalizedText';
+import Breadcrumbs from '@/components/common/Breadcrumbs';
+import { staticBreadcrumb } from '@/lib/breadcrumbs';
 
 export const metadata = {
   title: 'Blog & Wissen | Lernzirkel Ludwigshafen e.V.',
@@ -35,6 +37,7 @@ export default async function BlogPage({ searchParams }: { searchParams: Promise
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-800 pt-32 pb-24">
+      <Breadcrumbs items={staticBreadcrumb('Blog', '/blog')} />
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="text-center mb-16">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-primary mb-6">

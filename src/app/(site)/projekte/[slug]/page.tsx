@@ -1,4 +1,4 @@
-import { getCachedProjectBySlug } from '@/lib/cached-content';
+import { getCachedProjectBySlug, getCachedPageBySlug } from '@/lib/cached-content';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,6 +8,13 @@ import { MagneticButton } from '@/components/ui/MagneticButton';
 import { Reveal, FadeIn } from '@/components/ui/animations';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { LocalizedText } from '@/components/common/LocalizedText';
+import Breadcrumbs from '@/components/common/Breadcrumbs';
+import { constructMetadata } from '@/lib/seo';
+import SectionRenderer from '@/components/cms/SectionRenderer';
+
+// Next.js matches this single dynamic segment before the top-level [...slug] CMS catch-all,
+// so any admin-managed CMS page living directly under /projekte/<slug> (e.g. /projekte/dsee)
+// would otherwise 404 here when no matching Project record exists. Fall back to the CMS page.
 
 interface Props {
   params: Promise<{
@@ -18,8 +25,19 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const project = await getCachedProjectBySlug(slug);
-  
-  if (!project) return { title: 'Projekt nicht gefunden | Lernzirkel' };
+
+  if (!project) {
+    const page = await getCachedPageBySlug(`projekte/${slug}`);
+    if (page?.title) {
+      return constructMetadata({
+        title: page.title,
+        description: page.description || undefined,
+        image: page.ogImage || undefined,
+        noIndex: page.noIndex,
+      });
+    }
+    return { title: 'Projekt nicht gefunden | Lernzirkel' };
+  }
 
   // Use dynamic OG endpoint or fallback to project image
   const ogImageUrl = project.imageUrl || `/api/og?title=${encodeURIComponent(project.title)}&description=${encodeURIComponent(project.description.substring(0, 100))}&badge=Proje`;
@@ -47,6 +65,20 @@ export default async function ProjectDetailPage({ params }: Props) {
   const project = await getCachedProjectBySlug(slug);
 
   if (!project) {
+    const page = await getCachedPageBySlug(`projekte/${slug}`);
+    if (page && page.isPublished && page.sections.length > 0) {
+      return (
+        <article className="min-h-screen bg-gray-50 dark:bg-gray-800">
+          <Breadcrumbs items={[
+            { label: 'Projekte', url: '/projekte' },
+            { label: page.title, url: `/projekte/${slug}`, isCurrent: true },
+          ]} />
+          {page.sections.map((section: any) => (
+            <SectionRenderer key={section.id} section={section} />
+          ))}
+        </article>
+      );
+    }
     notFound();
   }
 
@@ -70,6 +102,10 @@ export default async function ProjectDetailPage({ params }: Props) {
   return (
     <article className="min-h-screen bg-gray-50 dark:bg-gray-800 pb-20">
       <JsonLd data={jsonLd} />
+      <Breadcrumbs items={[
+        { label: 'Projekte', url: '/projekte' },
+        { label: project.title, url: `/projekte/${slug}`, isCurrent: true },
+      ]} />
       {/* Hero Section */}
       <div className="relative h-[40vh] md:h-[50vh] w-full bg-primary overflow-hidden">
         {project.imageUrl ? (

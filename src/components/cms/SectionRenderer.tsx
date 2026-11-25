@@ -207,6 +207,10 @@ export default function SectionRenderer({ section }: { section: any }) {
                     {item.description && (
                       <div className="text-gray-500 dark:text-gray-400 text-sm mb-4 leading-relaxed flex-grow" dangerouslySetInnerHTML={{ __html: item.description }} />
                     )}
+                    {item.email && (() => {
+                      const [user, domain] = splitEmail(item.email);
+                      return <EmailObfuscator user={user} domain={domain} showIcon={false} className="text-sm text-primary hover:underline mb-2 block" />;
+                    })()}
                     {item.linkText && (
                       <span className="text-primary text-sm flex items-center font-semibold mt-auto pt-2">
                         {item.linkText} 

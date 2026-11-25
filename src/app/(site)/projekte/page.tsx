@@ -10,6 +10,8 @@ import { Reveal, FadeIn, StaggerContainer, StaggerItem } from '@/components/ui/a
 import { ProjectSkeleton } from '@/components/skeletons/ProjectSkeleton';
 import { LocalizedText } from '@/components/common/LocalizedText';
 import { constructMetadata } from '@/lib/seo';
+import Breadcrumbs from '@/components/common/Breadcrumbs';
+import { staticBreadcrumb } from '@/lib/breadcrumbs';
 
 export async function generateMetadata() {
   const page = await getCachedPageBySlug('projekte');
@@ -34,6 +36,7 @@ export default async function ProjektePage() {
 
   return (
     <article className="min-h-screen bg-background">
+      <Breadcrumbs items={staticBreadcrumb('Projekte', '/projekte')} />
       {/* If CMS has sections, render them first */}
       {hasCmsSections && (
         <div className="mb-16">

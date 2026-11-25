@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Calendar, User, ArrowLeft, Tag } from 'lucide-react';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { LocalizedText } from '@/components/common/LocalizedText';
+import Breadcrumbs from '@/components/common/Breadcrumbs';
 
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> },
@@ -77,6 +78,10 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <main className="min-h-screen bg-white dark:bg-gray-900 pt-24 pb-20">
+        <Breadcrumbs items={[
+          { label: 'Blog', url: '/blog' },
+          { label: article.title, url: `/blog/${article.slug}`, isCurrent: true },
+        ]} />
         {/* Cover Image Header */}
         <div className="w-full h-[40vh] min-h-[300px] max-h-[500px] bg-gray-100 dark:bg-gray-800/50 relative overflow-hidden">
           {article.coverImage ? (

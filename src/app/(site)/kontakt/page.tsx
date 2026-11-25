@@ -7,6 +7,8 @@ import { FooterConfig, defaultFooterConfig } from '@/lib/site-defaults';
 import SmartContactForm from '@/components/forms/SmartContactForm';
 import SocialLinksBar from '@/components/common/SocialLinksBar';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
+import Breadcrumbs from '@/components/common/Breadcrumbs';
+import { staticBreadcrumb } from '@/lib/breadcrumbs';
 import { MapPin, Phone, Clock, ExternalLink, Share2 } from 'lucide-react';
 
 export const revalidate = 0; // always dynamic to reflect admin design updates immediately
@@ -29,9 +31,11 @@ export default async function KontaktPage() {
   const mapsUrl = contact?.mapsUrl || `https://maps.google.com/?q=${encodeURIComponent(address)}`;
 
   return (
-    <div className="py-16 bg-gray-50 dark:bg-gray-800 min-h-screen">
+    <>
+      <Breadcrumbs items={staticBreadcrumb('Kontakt', '/kontakt')} />
+      <div className="py-16 bg-gray-50 dark:bg-gray-800 min-h-screen">
       <div className="container mx-auto px-4 max-w-6xl">
-        
+
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">Kontakt & Anmeldung</h1>
           <p className="text-lg text-gray-600 dark:text-gray-400">Wir sind für Sie da. Schreiben Sie uns eine Nachricht oder rufen Sie uns an.</p>
@@ -151,5 +155,6 @@ export default async function KontaktPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

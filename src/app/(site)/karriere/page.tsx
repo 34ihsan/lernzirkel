@@ -13,6 +13,8 @@ import {
   ArrowRight
 } from 'lucide-react';
 import JobCard from '@/components/jobs/JobCard';
+import Breadcrumbs from '@/components/common/Breadcrumbs';
+import { staticBreadcrumb } from '@/lib/breadcrumbs';
 
 export const metadata = {
   title: 'Karriere | Lernzirkel Ludwigshafen e.V.',
@@ -31,6 +33,7 @@ export default async function KarrierePage() {
 
   return (
     <main className="min-h-screen bg-white dark:bg-gray-900">
+      <Breadcrumbs items={staticBreadcrumb('Karriere', '/karriere')} />
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-blue-50/50 to-white -z-10" />

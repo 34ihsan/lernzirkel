@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, Calendar, Newspaper } from 'lucide-react';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { LocalizedText } from '@/components/common/LocalizedText';
+import Breadcrumbs from '@/components/common/Breadcrumbs';
 
 export const revalidate = 60;
 
@@ -81,6 +82,10 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
   return (
     <main className="min-h-screen bg-white dark:bg-gray-900 pt-32 pb-24">
       <JsonLd data={jsonLd} />
+      <Breadcrumbs items={[
+        { label: 'Aktuelles', url: '/aktuelles' },
+        { label: news.title, url: `/aktuelles/${news.id}`, isCurrent: true },
+      ]} />
       <div className="container mx-auto px-4 max-w-4xl">
         <Link href="/aktuelles" className="inline-flex items-center text-primary hover:underline font-medium mb-8">
           <ArrowLeft size={16} className="mr-2" /> Zurück zur Übersicht
