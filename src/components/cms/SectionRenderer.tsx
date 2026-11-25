@@ -231,8 +231,8 @@ export default function SectionRenderer({ section }: { section: any }) {
           {content.imageUrl && <div className="absolute inset-0" style={overlayStyle(design?.overlayOpacity, 60)} />}
           <div className={`relative z-10 w-full ${containerWidth} mx-auto px-6 flex flex-col ${contentAlign}`}>
             {content.eyebrow && (
-              <span 
-                className="inline-block px-3 py-1 bg-white dark:bg-gray-900/20 backdrop-blur-sm rounded-full text-xs font-bold uppercase tracking-wider mb-4 text-white"
+              <span
+                className="inline-block px-3 py-1 bg-white/15 dark:bg-gray-900/20 backdrop-blur-sm border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider mb-4 text-white"
               >
                 {content.eyebrow}
               </span>
@@ -253,7 +253,7 @@ export default function SectionRenderer({ section }: { section: any }) {
             )}
 
             {content.noticeText && (
-              <div className="bg-white dark:bg-gray-900/10 backdrop-blur-sm border border-white/20 rounded-lg px-4 py-2 text-white text-sm mb-6 inline-flex items-center">
+              <div className="bg-white/15 dark:bg-gray-900/10 backdrop-blur-sm border border-white/20 rounded-lg px-4 py-2 text-white text-sm mb-6 inline-flex items-center">
                 <CheckCircle2 className="w-4 h-4 mr-2 text-green-300 shrink-0" />
                 <span>{content.noticeText}</span>
               </div>
