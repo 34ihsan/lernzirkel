@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { X, UploadCloud, Image as ImageIcon, Search, CheckCircle, Loader2 } from "lucide-react";
+import { X, UploadCloud, Image as ImageIcon, Search, CheckCircle, Loader2, Trash2 } from "lucide-react";
 import Image from "next/image";
 
 interface MediaFile {
@@ -22,6 +22,7 @@ export default function MediaLibraryModal({ isOpen, onClose, onSelect }: MediaLi
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [deletingUrl, setDeletingUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchMedia = async () => {
@@ -84,6 +85,29 @@ export default function MediaLibraryModal({ isOpen, onClose, onSelect }: MediaLi
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleDelete = async (file: MediaFile) => {
+    if (!window.confirm(`"${file.name}" dosyasını kalıcı olarak silmek istediğinize emin misiniz?`)) {
+      return;
+    }
+    setDeletingUrl(file.url);
+    try {
+      const res = await fetch(`/api/media?name=${encodeURIComponent(file.name)}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setFiles((prev) => prev.filter((f) => f.url !== file.url));
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Dosya silinirken bir hata oluştu.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Hata oluştu.");
+    } finally {
+      setDeletingUrl(null);
     }
   };
 
@@ -190,6 +214,24 @@ export default function MediaLibraryModal({ isOpen, onClose, onSelect }: MediaLi
                       <CheckCircle className="text-blue-600" size={24} />
                     </div>
                   </div>
+
+                  {/* Delete Button */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(file);
+                    }}
+                    disabled={deletingUrl === file.url}
+                    title="Görseli sil"
+                    className="absolute top-2 right-2 z-10 p-1.5 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 hover:bg-red-600 transition-all disabled:opacity-100 disabled:cursor-wait"
+                  >
+                    {deletingUrl === file.url ? (
+                      <Loader2 className="animate-spin" size={14} />
+                    ) : (
+                      <Trash2 size={14} />
+                    )}
+                  </button>
 
                   {/* File info footer */}
                   <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/70 to-transparent">

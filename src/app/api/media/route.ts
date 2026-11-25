@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server';
-import { readdir, stat } from 'fs/promises';
+import { readdir, stat, unlink } from 'fs/promises';
 import { join } from 'path';
 import { requireAdminSession } from '@/lib/auth-server';
+
+function resolveUploadDir() {
+  return process.env.UPLOADS_DIR || join(process.cwd(), 'public', 'uploads');
+}
 
 export async function GET() {
   try {
@@ -11,8 +15,8 @@ export async function GET() {
   }
 
   try {
-    const uploadDir = join(process.cwd(), 'public', 'uploads');
-    
+    const uploadDir = resolveUploadDir();
+
     try {
       const files = await readdir(uploadDir);
       
@@ -44,5 +48,32 @@ export async function GET() {
   } catch (error) {
     console.error('Media listing error:', error);
     return NextResponse.json({ error: 'Failed to list media' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    await requireAdminSession();
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const name = new URL(request.url).searchParams.get('name') || '';
+
+  // Path traversal / directory separator koruması — sadece düz dosya adına izin ver.
+  if (!name || name.includes('/') || name.includes('\\') || name.includes('..')) {
+    return NextResponse.json({ error: 'Invalid file name' }, { status: 400 });
+  }
+
+  try {
+    const filePath = join(resolveUploadDir(), name);
+    await unlink(filePath);
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    if (error.code === 'ENOENT') {
+      return NextResponse.json({ error: 'Datei nicht gefunden' }, { status: 404 });
+    }
+    console.error('Media delete error:', error);
+    return NextResponse.json({ error: 'Failed to delete media' }, { status: 500 });
   }
 }
