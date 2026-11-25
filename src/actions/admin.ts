@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { revalidatePath, revalidateTag, updateTag } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import fs from "fs";
 import path from "path";
@@ -33,7 +33,7 @@ export async function updateSiteSettings(formData: FormData) {
     },
   });
 
-  // @ts-ignore  updateTag("site-settings");
+  updateTag("site-settings");
   revalidatePath("/", "layout");
 }
 
@@ -71,7 +71,7 @@ export async function updateDesignSettings(payload: {
     },
   });
 
-  // @ts-ignore  updateTag("site-settings");
+  updateTag("site-settings");
   revalidatePath("/", "layout");
   return { success: true };
 }
@@ -93,11 +93,8 @@ export async function updateHeaderFooterSettings(headerConfig: any, footerConfig
   });
 
   // getCachedSiteSettings() bu etiketle (unstable_cache, 1 saat revalidate) önbelleğe alıyor —
-  // revalidatePath tek başına bu veri önbelleğini temizlemez, canlı sitede değişiklik 1 saate
-  // kadar gecikebilirdi. Bu Next sürümünde revalidateTag artık 2. bir 'profile' argümanı istiyor
-  // ve updateTag de bu dosyadaki diğer tüm kullanımlarda aynı sebeple devre dışı bırakılmış
-  // (bkz. aşağıdaki "@ts-ignore updateTag" satırları) — aynı tutarlılıkla burada da devre dışı.
-  // @ts-ignore  revalidateTag("site-settings");
+  // revalidatePath tek başına bu veri önbelleğini temizlemez, updateTag(tag) gerekiyor.
+  updateTag("site-settings");
   revalidatePath("/", "layout");
 }
 
@@ -389,7 +386,7 @@ export async function createAnnouncement(data: AnnouncementData) {
   const parsedData = parseAnnouncementData(data);
   const translations = await generateTranslations(data);
   await prisma.announcement.create({ data: { ...parsedData, translations } });
-  // @ts-ignore  updateTag("site-announcements");
+  updateTag("site-announcements");
   revalidatePath("/admin/announcements");
   revalidatePath("/", "layout");
 }
@@ -401,14 +398,14 @@ export async function updateAnnouncement(id: string, data: AnnouncementData) {
     where: { id },
     data: { ...parsedData, translations },
   });
-  // @ts-ignore  updateTag("site-announcements");
+  updateTag("site-announcements");
   revalidatePath("/admin/announcements");
   revalidatePath("/", "layout");
 }
 
 export async function deleteAnnouncement(id: string) {
   await prisma.announcement.delete({ where: { id } });
-  // @ts-ignore  updateTag("site-announcements");
+  updateTag("site-announcements");
   revalidatePath("/admin/announcements");
   revalidatePath("/", "layout");
 }
