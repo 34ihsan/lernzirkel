@@ -94,9 +94,27 @@ export default function MediaLibraryModal({ isOpen, onClose, onSelect }: MediaLi
     }
     setDeletingUrl(file.url);
     try {
-      const res = await fetch(`/api/media?name=${encodeURIComponent(file.name)}`, {
+      let res = await fetch(`/api/media?name=${encodeURIComponent(file.name)}`, {
         method: "DELETE",
       });
+
+      if (res.status === 409) {
+        const data = await res.json().catch(() => ({}));
+        const usages: string[] = data.usages || [];
+        const usageList = usages.map((u) => `• ${u}`).join("\n");
+        const confirmForce = window.confirm(
+          `Dikkat: Bu görsel şu anda ${usages.length} yerde kullanılıyor:\n\n${usageList}\n\n` +
+          `Yine de silerseniz bu yerlerde görsel kırık (bozuk) görünecektir. Yine de silmek istiyor musunuz?`
+        );
+        if (!confirmForce) {
+          setDeletingUrl(null);
+          return;
+        }
+        res = await fetch(`/api/media?name=${encodeURIComponent(file.name)}&force=true`, {
+          method: "DELETE",
+        });
+      }
+
       if (res.ok) {
         setFiles((prev) => prev.filter((f) => f.url !== file.url));
       } else {
