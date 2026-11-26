@@ -1346,18 +1346,18 @@ function LogoCloudSection({ content, design, sectionStyle, bgColor, textColor, p
           </div>
         )}
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 items-center">
+        <div className="flex flex-wrap justify-center gap-6">
           {(content.items || []).map((partner: any, idx: number) => {
             const PartnerWrapper = partner.linkUrl ? 'a' : 'div';
-            const wrapperProps = partner.linkUrl 
-              ? { href: partner.linkUrl, target: '_blank', rel: 'noopener noreferrer' } 
+            const wrapperProps = partner.linkUrl
+              ? { href: partner.linkUrl, target: '_blank', rel: 'noopener noreferrer' }
               : {};
 
             return (
               <PartnerWrapper
                 key={idx}
                 {...(wrapperProps as any)}
-                className="bg-white dark:bg-gray-900 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-xs hover:shadow-md dark:shadow-none hover:border-blue-200 transition-all duration-300 flex flex-col items-center justify-center text-center h-28 group"
+                className="w-36 sm:w-40 md:w-44 bg-white dark:bg-gray-900 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-xs hover:shadow-md dark:shadow-none hover:border-blue-200 transition-all duration-300 flex flex-col items-center justify-center text-center h-28 group"
               >
                 {partner.logoUrl ? (
                   <div className="w-full h-12 relative grayscale group-hover:grayscale-0 transition-all opacity-70 group-hover:opacity-100">
