@@ -1,6 +1,28 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { SESSION_COOKIE_NAME, verifySessionToken } from '@/lib/auth';
+import { getClientIp } from '@/lib/client-ip';
+
+// Nonce kullanmıyoruz (bkz. Next.js CSP rehberi): bu projede CMS bölümleri admin'den
+// gelen özel renk/arkaplan değerlerini satır-içi `style` attribute'u ile uyguluyor
+// (SectionRenderer), bu yüzden style-src için 'unsafe-inline' şart. Nonce yaklaşımı
+// ayrıca TÜM sayfaları dynamic rendering'e zorlar (statik/ISR sayfalar devre dışı kalır) —
+// bu projede birkaç sayfa bilerek statik (örn. /cookies, /praktikant), o yüzden
+// nonce'suz, sabit bir CSP tercih edildi.
+const CSP_HEADER = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://images.unsplash.com",
+  "font-src 'self' data:",
+  "connect-src 'self' https://challenges.cloudflare.com",
+  "frame-src https://challenges.cloudflare.com",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "upgrade-insecure-requests",
+].join('; ');
 
 // Basic in-memory store for rate limiting in Edge/Middleware
 const rateLimitCache = new Map<string, { count: number; expiresAt: number }>();
@@ -56,14 +78,15 @@ export async function proxy(request: NextRequest) {
   // Security Headers
   response.headers.set('X-DNS-Prefetch-Control', 'on');
   response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
-  response.headers.set('X-XSS-Protection', '1; mode=block');
-  response.headers.set('X-Frame-Options', 'SAMEORIGIN');
+  response.headers.set('X-Frame-Options', 'DENY');
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('Referrer-Policy', 'origin-when-cross-origin');
+  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=()');
+  response.headers.set('Content-Security-Policy', CSP_HEADER);
 
   // API Rate Limiting
   if (request.nextUrl.pathname.startsWith('/api/')) {
-    const ip = request.headers.get('x-forwarded-for') ?? 'unknown-ip';
+    const ip = getClientIp(request.headers);
     const rateLimit = applyRateLimit(ip, 50, 10000);
     
     if (!rateLimit.success) {
