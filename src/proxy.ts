@@ -84,6 +84,15 @@ export async function proxy(request: NextRequest) {
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=()');
   response.headers.set('Content-Security-Policy', CSP_HEADER);
 
+  // Yüklenen SVG'ler script/onload içerebilir; bir <img> kaynağı olarak kullanıldığında
+  // tarayıcı bunu çalıştırmaz, ama dosyaya DOĞRUDAN gidilirse (yeni sekmede) SVG bir HTML
+  // belgesi gibi render edilip içindeki script çalışır (stored XSS). Content-Disposition:
+  // attachment, <img>/<Image> gibi alt-kaynak isteklerini etkilemez (tarayıcılar bunu sadece
+  // üst düzey gezinmede/indirmede dikkate alır), bu yüzden logolar vb. normal çalışmaya devam eder.
+  if (/^\/uploads\/.*\.svg$/i.test(url.pathname)) {
+    response.headers.set('Content-Disposition', 'attachment');
+  }
+
   // API Rate Limiting
   if (request.nextUrl.pathname.startsWith('/api/')) {
     const ip = getClientIp(request.headers);
