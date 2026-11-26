@@ -20,6 +20,7 @@ networks:
 
 volumes:
   uploads: # kullanıcı yüklemeleri (public/uploads); kök dosya sistemi salt okunur olduğundan ayrı volume
+  depot: # Depo dokümanları + başvuru ekleri (depot-storage); public değil, aynı nedenle ayrı volume
 
 # Saldırı yüzeyi azaltma:
 #  - read_only: ele geçirilse bile kalıcı ikili/betik bırakılamaz
@@ -52,6 +53,7 @@ services:
       - data # Postgres
     volumes:
       - uploads:/app/public/uploads
+      - depot:/app/depot-storage
     tmpfs:
       - /tmp:rw,noexec,nosuid,nodev,size=128m
       # ISR/revalidate önbelleği; yeniden başlatmada sıfırlanır (kabul edilen)

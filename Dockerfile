@@ -49,9 +49,9 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/prisma ./prisma
 
 # Next.js çalışma anında .next/cache'e yazar (ISR, revalidateTag); nextjs kullanıcısı yazabilmeli
-RUN mkdir -p .next/cache public/uploads && chown -R nextjs:nodejs .next public/uploads
+RUN mkdir -p .next/cache public/uploads depot-storage && chown -R nextjs:nodejs .next public/uploads depot-storage
 # Konteyner kök dosya sistemi salt okunur çalışır (docker-compose.yml: read_only).
-# Yazılabilir yerler: /tmp ve .next/cache (tmpfs), public/uploads (kalıcı volume).
+# Yazılabilir yerler: /tmp ve .next/cache (tmpfs), public/uploads + depot-storage (kalıcı volume'ler).
 
 USER nextjs
 

@@ -6,7 +6,7 @@ import { headers } from "next/headers";
 import {
   LayoutDashboard, PaintBucket, FileText, Settings, Users,
   Image as ImageIcon, Newspaper, Megaphone, TrendingUp, Bot, Activity,
-  ClipboardCheck, LogOut, ClipboardList, QrCode, ShieldAlert, Archive
+  ClipboardCheck, LogOut, ClipboardList, QrCode, ShieldAlert, Archive, Mail
 } from "lucide-react";
 import { getAdminSession } from "@/lib/auth-server";
 import { logoutAdmin } from "@/actions/auth";
@@ -158,6 +158,12 @@ export default async function AdminLayout({
                 </li>
 
                 <li className="pt-4 pb-2 px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Büyüme & Onay (Growth)</li>
+                <li>
+                  <Link href="/admin/contact-messages" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium text-amber-300 hover:text-amber-200">
+                    <Mail size={18} />
+                    <span>İletişim Mesajları</span>
+                  </Link>
+                </li>
                 <li>
                   <Link href="/admin/registrations" className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors text-sm font-medium text-amber-300 hover:text-amber-200">
                     <ClipboardCheck size={18} />

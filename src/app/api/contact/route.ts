@@ -1,7 +1,20 @@
 import { NextResponse } from 'next/server';
+import { writeFile, mkdir } from 'fs/promises';
+import { join } from 'path';
 import prisma from '@/lib/prisma';
 import { verifyTurnstileToken } from '@/lib/turnstile';
 import { logSecurityEvent } from '@/lib/security-log';
+import { getDepotDir } from '@/lib/depot-storage';
+import { getClientIp } from '@/lib/client-ip';
+
+const ALLOWED_ATTACHMENT_TYPES = [
+  'application/pdf',
+  'application/msword', // .doc
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+  'image/jpeg',
+  'image/png',
+];
+const MAX_ATTACHMENT_SIZE = 5 * 1024 * 1024; // 5MB
 
 // Simple in-memory rate limiting (Note: in serverless environments like Vercel this is instance-scoped,
 // but works as a basic layer of protection).
@@ -11,7 +24,7 @@ const MAX_REQUESTS = 3; // Max 3 submissions per minute per IP
 
 export async function POST(req: Request) {
   try {
-    const ip = req.headers.get('x-forwarded-for') || 'unknown';
+    const ip = getClientIp(req.headers);
     
     // 1. Rate Limiting Check
     const currentTime = Date.now();
@@ -79,17 +92,29 @@ export async function POST(req: Request) {
     // 3. Process File Upload (if it exists)
     const attachment = formData.get('attachment') as File | null;
     if (attachment && attachment.size > 0) {
-      // For local development, we just save the file metadata.
-      // In a real production environment, you would upload this to an S3 bucket or local /public/uploads directory.
+      if (!ALLOWED_ATTACHMENT_TYPES.includes(attachment.type)) {
+        return NextResponse.json({ error: 'Ungültiges Dateiformat. Erlaubt sind nur PDF, DOCX, JPG und PNG.' }, { status: 400 });
+      }
+      if (attachment.size > MAX_ATTACHMENT_SIZE) {
+        return NextResponse.json({ error: 'Datei ist zu groß (maximal 5 MB erlaubt).' }, { status: 400 });
+      }
+
+      // Başvuru ekleri kişisel veri içerebileceğinden public/uploads yerine, public olarak
+      // servis edilmeyen depot-storage'a yazılıyor (sadece admin oturumuyla indirilebilir).
+      const depotDir = getDepotDir();
+      await mkdir(depotDir, { recursive: true }).catch(() => {});
+
+      const sanitizedOriginalName = attachment.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const storedFileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${sanitizedOriginalName}`;
+      const bytes = await attachment.arrayBuffer();
+      await writeFile(join(depotDir, storedFileName), Buffer.from(bytes));
+
       details.attachmentInfo = {
         name: attachment.name,
         size: attachment.size,
         type: attachment.type,
+        storedFileName,
       };
-      
-      // If we really wanted to, we could convert it to base64:
-      // const buffer = Buffer.from(await attachment.arrayBuffer());
-      // details.attachmentBase64 = buffer.toString('base64');
     }
 
     // 4. Basic Validation
