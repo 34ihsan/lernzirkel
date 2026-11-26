@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import ImageUploadInput from "@/components/admin/ImageUploadInput";
+import MediaLibraryModal from "@/components/admin/MediaLibraryModal";
 import { 
   HeaderConfig, 
   FooterConfig, 
@@ -35,6 +35,7 @@ export default function HeaderFooterEditor({ initialHeader, initialFooter }: Pro
   const [isUploadingLogo, setIsUploadingLogo] = useState(false);
   const [isUploadingFooterLogo, setIsUploadingFooterLogo] = useState(false);
   const [uploadingPartnerIdx, setUploadingPartnerIdx] = useState<number | null>(null);
+  const [libraryTarget, setLibraryTarget] = useState<'header-logo' | 'footer-logo' | number | null>(null);
 
   const handleLogoUpload = async (file: File) => {
     if (!file) return;
@@ -539,6 +540,20 @@ export default function HeaderFooterEditor({ initialHeader, initialFooter }: Pro
 
   return (
     <div className="space-y-6">
+      <MediaLibraryModal
+        isOpen={libraryTarget !== null}
+        onClose={() => setLibraryTarget(null)}
+        onSelect={(url) => {
+          if (libraryTarget === 'header-logo') {
+            setHeader({ ...header, logo: { ...header.logo, imageUrl: url } });
+          } else if (libraryTarget === 'footer-logo') {
+            setFooter({ ...footer, about: { ...footer.about, logoUrl: url, showLogo: true } });
+          } else if (typeof libraryTarget === 'number') {
+            updatePartner(libraryTarget, 'logoUrl', url);
+          }
+          setLibraryTarget(null);
+        }}
+      />
       {/* Top Header bar with Action buttons */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-200">
         <div>
@@ -969,10 +984,10 @@ export default function HeaderFooterEditor({ initialHeader, initialFooter }: Pro
                   />
                   <label className={`cursor-pointer border border-gray-300 rounded-md px-4 py-2.5 text-sm font-medium transition-colors whitespace-nowrap ${isUploadingLogo ? 'bg-gray-200 text-gray-500' : 'bg-gray-100 hover:bg-gray-200'}`}>
                     {isUploadingLogo ? 'Yükleniyor...' : 'Dosya Seç'}
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      className="hidden" 
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
                       disabled={isUploadingLogo}
                       onChange={e => {
                         const file = e.target.files?.[0];
@@ -980,8 +995,16 @@ export default function HeaderFooterEditor({ initialHeader, initialFooter }: Pro
                       }}
                     />
                   </label>
+                  <button
+                    type="button"
+                    onClick={() => setLibraryTarget('header-logo')}
+                    className="flex items-center space-x-1.5 border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-md px-3 py-2.5 text-sm font-medium transition-colors whitespace-nowrap"
+                  >
+                    <ImageIcon size={15} />
+                    <span>Kütüphaneden Seç</span>
+                  </button>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">Dosya seçebilir veya tam URL girebilirsiniz.</p>
+                <p className="text-xs text-gray-400 mt-1">Dosya seçebilir, kütüphaneden seçebilir veya tam URL girebilirsiniz.</p>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-600 mb-1">Logo / Kurum Metni</label>
@@ -2543,8 +2566,16 @@ export default function HeaderFooterEditor({ initialHeader, initialFooter }: Pro
                         }}
                       />
                     </label>
+                    <button
+                      type="button"
+                      onClick={() => setLibraryTarget('footer-logo')}
+                      className="flex items-center space-x-1.5 border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors whitespace-nowrap"
+                    >
+                      <ImageIcon size={15} />
+                      <span>Kütüphaneden Seç</span>
+                    </button>
                   </div>
-                  <p className="text-[11px] text-gray-400 mt-1">Görsel seçebilir veya /logo.png gibi bir adres belirtebilirsiniz.</p>
+                  <p className="text-[11px] text-gray-400 mt-1">Dosya seçebilir, kütüphaneden seçebilir veya /logo.png gibi bir adres belirtebilirsiniz.</p>
                 </div>
 
                 <div>
@@ -3038,10 +3069,10 @@ export default function HeaderFooterEditor({ initialHeader, initialFooter }: Pro
                             <label className={`inline-flex items-center justify-center gap-1.5 w-full border border-gray-300 rounded-lg px-3 py-2 text-xs font-semibold transition-colors cursor-pointer ${uploadingPartnerIdx === idx ? 'bg-gray-100 text-gray-400' : 'bg-white hover:bg-gray-50 text-gray-700 shadow-2xs'}`}>
                               <Upload size={14} className="text-blue-600" />
                               <span>{uploadingPartnerIdx === idx ? 'Yükleniyor...' : 'Localden Logo Seç'}</span>
-                              <input 
-                                type="file" 
-                                accept="image/*" 
-                                className="hidden" 
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
                                 disabled={uploadingPartnerIdx === idx}
                                 onChange={e => {
                                   const file = e.target.files?.[0];
@@ -3049,6 +3080,15 @@ export default function HeaderFooterEditor({ initialHeader, initialFooter }: Pro
                                 }}
                               />
                             </label>
+
+                            <button
+                              type="button"
+                              onClick={() => setLibraryTarget(idx)}
+                              className="inline-flex items-center justify-center gap-1.5 w-full border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg px-3 py-2 text-xs font-semibold transition-colors"
+                            >
+                              <ImageIcon size={14} />
+                              <span>Kütüphaneden Seç</span>
+                            </button>
 
                             {partner.logoUrl && (
                               <button
