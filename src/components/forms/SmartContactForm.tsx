@@ -12,7 +12,8 @@ export default function SmartContactForm() {
   const betreffParam = searchParams?.get('betreff');
 
   const [topic, setTopic] = useState('allgemein');
-  const [initialMessage, setInitialMessage] = useState('');
+  const [message, setMessage] = useState('');
+  const autoFilledMessageRef = useRef('');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -30,9 +31,21 @@ export default function SmartContactForm() {
       if (betreffParam.toLowerCase().includes('bewerbung') || betreffParam.toLowerCase().includes('praktikum')) {
         setTopic('bewerbung');
       }
-      setInitialMessage(betreffParam + '\n\n');
+      const prefill = betreffParam + '\n\n';
+      setMessage(prefill);
+      autoFilledMessageRef.current = prefill;
     }
   }, [betreffParam]);
+
+  const handleTopicChange = (newTopic: string) => {
+    // Clear an auto-filled "Betreff" prefill (e.g. "Initiativbewerbung") if the user
+    // switches away from Bewerbung without having edited it themselves.
+    if (newTopic !== 'bewerbung' && autoFilledMessageRef.current && message === autoFilledMessageRef.current) {
+      setMessage('');
+      autoFilledMessageRef.current = '';
+    }
+    setTopic(newTopic);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -123,9 +136,9 @@ export default function SmartContactForm() {
         {/* Topic Selection */}
         <div>
           <label className="block text-sm font-semibold text-slate-700 mb-2">Worum geht es?</label>
-          <select 
+          <select
             value={topic}
-            onChange={(e) => setTopic(e.target.value)}
+            onChange={(e) => handleTopicChange(e.target.value)}
             className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
           >
             <option value="allgemein">Allgemeine Anfrage</option>
@@ -225,12 +238,13 @@ export default function SmartContactForm() {
 
         <div>
           <label className="block text-sm font-semibold text-slate-700 mb-2">Ihre Nachricht</label>
-          <textarea 
+          <textarea
             name="message"
-            required 
+            required
             rows={4}
-            defaultValue={initialMessage}
-            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none" 
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none"
             placeholder="Wie können wir Ihnen helfen?"
           ></textarea>
         </div>
